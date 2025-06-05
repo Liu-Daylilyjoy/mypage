@@ -5,13 +5,14 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/shadcn/button"
+import { useCallback } from "react"
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme()
   const lightShadowRef = React.useRef<HTMLDivElement>(null)
   const curtainRefs = React.useRef<(HTMLDivElement | null)[]>([])
 
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     if (!lightShadowRef.current || !curtainRefs.current[0] || !curtainRefs.current[1]) return
 
     lightShadowRef.current.style.opacity = '1'
@@ -28,18 +29,18 @@ export function ModeToggle() {
       curtainRefs.current[0]!.style.animation = '';
       curtainRefs.current[1]!.style.animation = '';
     }, 5000)
-  }
+  }, [theme, setTheme])
 
   return (
     <>
-      <Button variant="ghost" size="icon" onClick={toggleTheme}>
-        <Sun className="scale-200 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-        <Moon className="absolute scale-0 rotate-90 transition-all dark:scale-200 dark:rotate-0" />
+      <Button className="opacity-70 hover:opacity-100 transition-opacity duration-300" variant="link" size="icon" onClick={toggleTheme}>
+        <Sun className="scale-210 transition-all dark:scale-0" />
+        <Moon className="absolute scale-0 transition-all dark:scale-210" />
         <span className="sr-only">Toggle theme</span>
       </Button>
       <div
         ref={lightShadowRef}
-        className="light-shadow fixed inset-0 transition-opacity duration-300 opacity-0 pointer-events-none"
+        className="light-shadow fixed inset-0 h-[100vh] w-full transition-all duration-500 opacity-0 pointer-events-none"
       >
       </div>
       <div ref={el => { curtainRefs.current[0] = el }} className="curtain curtain-left"></div>

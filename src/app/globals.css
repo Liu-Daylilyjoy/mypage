@@ -119,6 +119,9 @@
 
   body {
     @apply bg-background text-foreground;
+
+    background: linear-gradient(90deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px,
+      linear-gradient(0deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px;
   }
 }
 
@@ -144,11 +147,21 @@
   }
 
   .dark .light-shadow {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(168, 168, 168, 0.8);
   }
 
   html {
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
   }
 
   .curtain {
@@ -159,22 +172,21 @@
     z-index: 1;
     -webkit-backdrop-filter: blur(30px);
     backdrop-filter: blur(30px);
+    mix-blend-mode: darken;
+    transition: width 1s ease-in-out;
   }
 
   .curtain-left {
     left: -6vw;
     --deg: 4deg;
-    background-color: rgba(184, 181, 181, 0.654);
+    background-color: rgba(228, 224, 224, 0.774);
   }
-
-
 
   .curtain-right {
     right: -6vw;
     --deg: -4deg;
-    background-color: rgba(184, 181, 181, 0.654);
+    background-color: rgba(218, 218, 218, 0.678);
   }
-
 }
 
 @keyframes open-curtain {
