@@ -40,11 +40,10 @@ export function ModeToggle() {
       </Button>
       <div
         ref={lightShadowRef}
-        className="light-shadow fixed inset-0 h-[100vh] w-full transition-all duration-500 opacity-0 pointer-events-none"
-      >
-      </div>
-      <div ref={el => { curtainRefs.current[0] = el }} className="curtain curtain-left"></div>
-      <div ref={el => { curtainRefs.current[1] = el }} className="curtain curtain-right"></div>
+        className="light-shadow fixed inset-0 h-[120vh] w-full transition-all duration-500 opacity-0 pointer-events-none z-999"
+      ></div> 
+      <div ref={el => { curtainRefs.current[0] = el }} className="curtain curtain-left z-999"></div>
+      <div ref={el => { curtainRefs.current[1] = el }} className="curtain curtain-right z-999"></div>
     </>
   )
 }

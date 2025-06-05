@@ -147,7 +147,7 @@
   }
 
   .dark .light-shadow {
-    background-color: rgba(168, 168, 168, 0.8);
+    background-color: rgba(54, 54, 54, 0.8);
   }
 
   html {
@@ -165,13 +165,12 @@
   }
 
   .curtain {
-    position: absolute;
-    top: -10vh;
-    height: 120vh;
+    position: fixed;
+    top: -20vh;
+    height: 140vh;
     width: 0;
-    z-index: 1;
-    -webkit-backdrop-filter: blur(30px);
-    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     mix-blend-mode: darken;
     transition: width 1s ease-in-out;
   }
@@ -179,13 +178,13 @@
   .curtain-left {
     left: -6vw;
     --deg: 4deg;
-    background-color: rgba(228, 224, 224, 0.774);
+    background-color: rgba(228, 224, 224, 0.373);
   }
 
   .curtain-right {
     right: -6vw;
     --deg: -4deg;
-    background-color: rgba(218, 218, 218, 0.678);
+    background-color: rgba(218, 218, 218, 0.284);
   }
 }
 

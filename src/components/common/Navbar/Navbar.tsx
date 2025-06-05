@@ -38,8 +38,8 @@ const Navbar = () => {
       const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
 
-      // 如果滚动超过屏幕高度的一半，且鼠标不在顶部，则隐藏导航栏
-      if (scrollPosition > windowHeight / 2 && !isMouseAtTop) {
+      // 如果滚动超过屏幕高度的八分之一，且鼠标不在顶部，则隐藏导航栏
+      if (scrollPosition > windowHeight / 8 && !isMouseAtTop) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -53,8 +53,8 @@ const Navbar = () => {
         setIsVisible(true);
       } else {
         setIsMouseAtTop(false);
-        // 如果鼠标离开顶部，且滚动超过一半，则隐藏导航栏
-        if (window.scrollY > window.innerHeight / 2) {
+        // 如果鼠标离开顶部，且滚动超过八分之一，则隐藏导航栏
+        if (window.scrollY > window.innerHeight / 8) {
           setIsVisible(false);
         }
       }
@@ -71,7 +71,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 flex justify-end items-center p-4 bg-transparent transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
+      className={`fixed top-0 left-0 right-0 h-25 flex justify-end items-center px-8 bg-transparent transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}>
       <div className="absolute left-4">
         <svg className="signature" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
