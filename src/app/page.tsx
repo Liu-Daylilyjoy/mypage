@@ -149,7 +149,7 @@ export default function Home() {
     updateProgress();
 
     // 处理进度条鼠标移动
-    progressContainer.addEventListener('mousemove', (e) => {
+    const handleProgressContainerMouseMove = (e: MouseEvent) => {
       const rect = progressContainer.getBoundingClientRect();
       const percentage = (e.clientX - rect.left) / rect.width * 100;
       progressTooltip.textContent = getPageNameByProgress(percentage);
@@ -159,10 +159,10 @@ export default function Home() {
       const maxLeft = rect.width - tooltipRect.width;
       const left = Math.min(Math.max(0, e.clientX - rect.left - tooltipRect.width / 2), maxLeft);
       progressTooltip.style.left = `${left}px`;
-    });
+    };
 
     // 处理进度条点击
-    progressContainer.addEventListener('click', () => {
+    const handleProgressContainerClick = () => {
       // 更新位置
       let { section, subsection, order } = sectionIndex.get(progressTooltip.textContent!)!;
       currentSection = section;
@@ -173,17 +173,27 @@ export default function Home() {
       sections.forEach((section_, index) => {
         (section_ as HTMLElement).style.transform = `translateY(${(index - currentSection) * 100}vh)`;
         let subsections = section_.querySelectorAll('.subsection');
-        subsections.forEach((subsection_, index) => {
-          (subsection_ as HTMLElement).style.transform = `translateX(${(index - currentSubsection) * 100}vw)`;
-        });
+        if (index < currentSection) {
+          subsections.forEach((subsection_, idx) => {
+            (subsection_ as HTMLElement).style.transform = `translateX(${(idx - subsectionSize[index] + 1) * 100}vw)`;
+          });
+        } else if (index > currentSection) {
+          subsections.forEach((subsection_, idx) => {
+            (subsection_ as HTMLElement).style.transform = `translateX(${idx * 100}vw)`;
+          });
+        } else {
+          subsections.forEach((subsection_, idx) => {
+            (subsection_ as HTMLElement).style.transform = `translateX(${(idx - currentSubsection) * 100}vw)`;
+          });
+        }
       });
 
       // 更新进度条
       updateProgress();
-    });
+    };
 
     // 处理鼠标滚轮事件
-    content.addEventListener('wheel', (e) => {
+    const handleContentWheel = (e: WheelEvent) => {
       e.preventDefault(); // 阻止默认滚动行为
 
       if (isScrolling) return;
@@ -191,7 +201,7 @@ export default function Home() {
       isScrolling = true;
       setTimeout(() => {
         isScrolling = false;
-      }, 500);
+      }, 300);
 
       // 处理横向滚动
       if (subsectionSize[currentSection] > 0) {
@@ -263,38 +273,64 @@ export default function Home() {
       // 更新进度条
       updateProgress();
       // console.log(currentSection, currentSubsection);
-    }, { passive: false });
+    };
 
-    welcomePage.addEventListener('wheel', (e) => {
+    const handleWelcomePageWheel = (e: WheelEvent) => {
+      e.preventDefault(); // 阻止默认滚动行为
+
+      if (isScrolling) return;
+
+      isScrolling = true;
+      setTimeout(() => {
+        isScrolling = false;
+      }, 300);
+
       if (e.deltaY > 0) {
-        welcomePage.style.opacity = '0';
-        welcomePage.style.height = '0';
+        welcomePage.classList.add('disappear');
         progressContainer.classList.add('active');
       }
-    });
+    };
 
-    sections[0].addEventListener('wheel', (e) => {
-      if ((e as WheelEvent).deltaY < 0) {
-        welcomePage.style.opacity = '1';
-        welcomePage.style.height = '100vh';
+    const handleSections0Wheel = (e: WheelEvent) => {
+      if (e.deltaY < 0) {
+        welcomePage.classList.remove('disappear');
         progressContainer.classList.remove('active');
       }
-    });
+    };
 
-    replay.addEventListener('click', () => {
+    const handleReplayClick = () => {
       currentSection = 0;
       currentSubsection = 0;
       currentOrder = 0;
       updateProgress();
       sections.forEach((section, index) => {
         (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
+        let subsections = section.querySelectorAll('.subsection');
+        subsections.forEach((subsection, index) => {
+          (subsection as HTMLElement).style.transform = `translateX(${(index - currentSubsection) * 100}vw)`;
+        });
       });
 
-      welcomePage.style.opacity = '1';
-      welcomePage.style.height = '100vh';
+      welcomePage.classList.remove('disappear');
       progressContainer.classList.remove('active');
-    });
-  });
+    };
+
+    progressContainer.addEventListener('mousemove', handleProgressContainerMouseMove);
+    progressContainer.addEventListener('click', handleProgressContainerClick);
+    content.addEventListener('wheel', handleContentWheel);
+    welcomePage.addEventListener('wheel', handleWelcomePageWheel);
+    (sections[0] as HTMLElement).addEventListener('wheel', handleSections0Wheel);
+    replay.addEventListener('click', handleReplayClick);
+
+    return () => {
+      progressContainer.removeEventListener('mousemove', handleProgressContainerMouseMove);
+      progressContainer.removeEventListener('click', handleProgressContainerClick);
+      content.removeEventListener('wheel', handleContentWheel);
+      welcomePage.removeEventListener('wheel', handleWelcomePageWheel);
+      (sections[0] as HTMLElement).removeEventListener('wheel', handleSections0Wheel);
+      replay.removeEventListener('click', handleReplayClick);
+    };
+  }, []);
 
   return (
     // <div className="h-[200vh] mx-10 pt-25 flex flex-col">
