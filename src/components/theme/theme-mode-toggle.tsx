@@ -12,8 +12,17 @@ export function ModeToggle() {
   const lightShadowRef = React.useRef<HTMLDivElement>(null)
   const curtainRefs = React.useRef<(HTMLDivElement | null)[]>([])
 
+  // 阻止滚轮事件
+  const preventWheel = useCallback((e: any) => {
+    e.preventDefault()
+  }, [])
+
   const toggleTheme = useCallback(() => {
     if (!lightShadowRef.current || !curtainRefs.current[0] || !curtainRefs.current[1]) return
+
+    // 添加滚轮事件阻止
+    document.addEventListener('wheel', preventWheel, { passive: false })
+    document.addEventListener('touchmove', preventWheel, { passive: false })
 
     lightShadowRef.current.style.opacity = '1'
 
@@ -28,8 +37,12 @@ export function ModeToggle() {
       lightShadowRef.current!.style.opacity = '0'
       curtainRefs.current[0]!.style.animation = '';
       curtainRefs.current[1]!.style.animation = '';
+
+      // 移除滚轮事件阻止
+      document.removeEventListener('wheel', preventWheel)
+      document.removeEventListener('touchmove', preventWheel)
     }, 5000)
-  }, [theme, setTheme])
+  }, [theme, setTheme, preventWheel])
 
   return (
     <>
@@ -41,7 +54,7 @@ export function ModeToggle() {
       <div
         ref={lightShadowRef}
         className="light-shadow fixed inset-0 h-[120vh] w-full transition-all duration-500 opacity-0 pointer-events-none z-999"
-      ></div> 
+      ></div>
       <div ref={el => { curtainRefs.current[0] = el }} className="curtain curtain-left z-999"></div>
       <div ref={el => { curtainRefs.current[1] = el }} className="curtain curtain-right z-999"></div>
     </>
