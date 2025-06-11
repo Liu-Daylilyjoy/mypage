@@ -1,4 +1,4 @@
-import BlogItem, { BlogItemProps } from "@/components/common/BlogItem/BlogItem"
+import BlogItem, { BlogItemProps } from "@/components/common/Blog/BlogItem"
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress"
 
 const bloglist: BlogItemProps[]  = [

@@ -1,9 +1,15 @@
 'use client';
 
-import SkillsItem, { SkillItemProps } from "@/components/common/SkillItem/SkillItem"
+import { SkillItemProps } from "@/components/common/Skill/SkillItem"
+import SkillPage from "@/components/common/Skill/SkillPage";
+import WelcomePage from "@/components/common/Welcome/WelcomPage";
 import { useEffect, useRef } from "react";
 
-const information = {
+const information: {
+  name: string;
+  profile: string;
+  skills: SkillItemProps[];
+} = {
   name: "Liudy",
   profile: `Hello! I'm Liudy, a first-year postgraduate student with a 
   strong passion for front-end development, web design, and user interaction.`,
@@ -333,48 +339,13 @@ export default function Home() {
   }, []);
 
   return (
-    // <div className="h-[200vh] mx-10 pt-25 flex flex-col">
-    //   <div className="flex flex-col self-center">
-    //     <div className="max-w-3xl my-10 text-6xl">{information.name}</div>
-    //     <div className="max-w-3xl text-xl/loose text-primary/70 text-wrap-balance ">
-    //       <hr />
-    //       <header className="mb-10">
-    //         {information.profile}
-    //       </header>
-
-    //       <main>
-    //         <h1 className="text-2xl font-bold mb-5">My Skills</h1>
-    //         {information.skills.map((skill) => (
-    //           <SkillsItem key={skill.name} {...skill} />
-    //         ))}
-    //       </main>
-    //     </div>
-    //   </div>
-    // </div>
     <>
       <div className="welcome-page" ref={welcomePageRef}>
-        <div className="max-w-3xl mb-30 text-6xl">{information.name}</div>
-        <div className="max-w-3xl text-xl/loose text-primary/70 text-wrap-balance ">
-          <hr />
-          <div className="mb-10 text-center">
-            {information.profile}
-          </div>
-        </div>
-
-        <div className="absolute bottom-15 left-1/2 -translate-x-1/2">
-          <svg className="animate-bounce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4182" width="50" height="50">
-            <path fill="currentColor" d="M462 881V81c0-27.6 22.4-50 50-50s50 22.4 50 50v800c0 27.6-22.4 50-50 50s-50-22.4-50-50z" p-id="4183"></path>
-            <path fill="currentColor" d="M483.3 907.6l212.1-212.1c19.5-19.5 51.2-19.5 70.7 0s19.5 51.2 0 70.7L554 978.4c-19.5 19.5-51.2 19.5-70.7 0-19.6-19.6-19.6-51.2 0-70.8z" p-id="4184"></path>
-            <path fill="currentColor" d="M328.6 695.5l212.1 212.1c19.5 19.5 19.5 51.2 0 70.7s-51.2 19.5-70.7 0L257.9 766.2c-19.5-19.5-19.5-51.2 0-70.7s51.2-19.5 70.7 0z" p-id="4185"></path>
-          </svg>
-        </div>
+        <WelcomePage name={information.name} profile={information.profile} />
       </div>
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Section 1">
-          <h1 className="text-2xl font-bold mb-5">My Skills</h1>
-          {information.skills.map((skill: SkillItemProps) => (
-            <SkillsItem key={skill.name} {...skill} />
-          ))}
+          <SkillPage skills={information.skills} />
         </div>
         <div className="section">
           <div className="subsection" data-title="Section 2.1">
