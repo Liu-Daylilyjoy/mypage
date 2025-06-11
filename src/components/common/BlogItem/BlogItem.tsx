@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 export interface BlogItemProps {
   title: string;
@@ -16,4 +16,4 @@ const BlogItem: React.FC<BlogItemProps> = (blog) => {
   )
 }
 
-export default BlogItem;
+export default memo(BlogItem);

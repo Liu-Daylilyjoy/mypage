@@ -121,4 +121,4 @@ const Navbar = () => {
   )
 }
 
-export default memo(Navbar);
+export default Navbar;

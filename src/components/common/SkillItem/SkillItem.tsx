@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 export interface SkillItemProps {
   name: string;
@@ -21,4 +21,4 @@ const SkillItem: React.FC<SkillItemProps> = ({ name, level=0 }) => {
   )
 }
 
-export default SkillItem;
+export default memo(SkillItem);
