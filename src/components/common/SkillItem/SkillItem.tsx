@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface SkillItemProps {
+export interface SkillItemProps {
   name: string;
   level: number;
 }
 
-export default function SkillItem({ name, level=0 }: SkillItemProps) {
+const SkillItem: React.FC<SkillItemProps> = ({ name, level=0 }) => {
   return (
     <div className='flex w-full max-w-3xl items-center mb-4 h-10'>
       <h3 className='text-primary/80 w-32'>{name}</h3>
@@ -20,3 +20,5 @@ export default function SkillItem({ name, level=0 }: SkillItemProps) {
     </div>
   )
 }
+
+export default SkillItem;

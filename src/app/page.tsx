@@ -1,6 +1,6 @@
 'use client';
 
-import SkillsItem from "@/components/common/SkillItem/SkillItem"
+import SkillsItem, { SkillItemProps } from "@/components/common/SkillItem/SkillItem"
 import { useEffect, useRef } from "react";
 
 const information = {
@@ -372,7 +372,7 @@ export default function Home() {
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Section 1">
           <h1 className="text-2xl font-bold mb-5">My Skills</h1>
-          {information.skills.map((skill) => (
+          {information.skills.map((skill: SkillItemProps) => (
             <SkillsItem key={skill.name} {...skill} />
           ))}
         </div>

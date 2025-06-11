@@ -2,11 +2,11 @@
 
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
 import { useState, useEffect, memo, useRef } from "react";
-import NavbarItem from "./NavbarItem";
+import NavbarItem, { NavbarItemProps } from "./NavbarItem";
 import { LuGithub } from "react-icons/lu";
 import { BsWechat } from "react-icons/bs";
 
-const navbarItems = [
+const navbarItems: NavbarItemProps[] = [
   {
     title: "Home",
     href: "/"
@@ -113,7 +113,7 @@ const Navbar = () => {
         </svg>
       </div>
 
-      {navbarItems.map((item, index) => (
+      {navbarItems.map((item: NavbarItemProps, index: number) => (
         <NavbarItem key={index} title={item.title} href={item.href} icon={item.icon} />
       ))}
       <ModeToggle />

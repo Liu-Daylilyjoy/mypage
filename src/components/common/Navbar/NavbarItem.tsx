@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-interface NavbarItemProps {
+export interface NavbarItemProps {
   title?: string;
   href?: string;
   icon?: React.ReactNode;

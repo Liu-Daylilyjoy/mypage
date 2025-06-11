@@ -1,7 +1,7 @@
-import BlogItem from "@/components/common/BlogItem/BlogItem"
+import BlogItem, { BlogItemProps } from "@/components/common/BlogItem/BlogItem"
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress"
 
-const bloglist = [
+const bloglist: BlogItemProps[]  = [
   {
     title: "Blog 1",
     description: "Blog 1 content",
@@ -35,7 +35,7 @@ export default function Blog() {
       <ScrollProgress />
       <div className="px-10 pt-25">
         <div className="max-w-3xl">
-          {bloglist.map((blog) => (
+          {bloglist.map((blog: BlogItemProps) => (
             <BlogItem key={blog.title} {...blog} />
           ))}
         </div>

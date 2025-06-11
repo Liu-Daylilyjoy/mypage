@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface BlogItemProps {
+export interface BlogItemProps {
   title: string;
   description: string;
   date: string;
