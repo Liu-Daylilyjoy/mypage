@@ -1,7 +1,7 @@
 'use client'
 
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useRef } from "react";
 import NavbarItem from "./NavbarItem";
 import { LuGithub } from "react-icons/lu";
 import { BsWechat } from "react-icons/bs";
@@ -71,10 +71,42 @@ const Navbar = () => {
     };
   }, [isMouseAtTop]);
 
+  // 鼠标悬停在navbar上时禁止滚动
+  let containerRef = useRef<HTMLDivElement>(null);
+
+  const container = containerRef.current;
+
+  const preventScroll = (e: WheelEvent) => {
+    e.preventDefault();
+  };
+
+  container?.addEventListener('mouseenter', () => {
+    container?.addEventListener('wheel', preventScroll, { passive: false });
+  });
+
+  container?.addEventListener('mouseleave', () => {
+    container.removeEventListener('wheel', preventScroll);
+  });
+
   return (
     <div
-      className={`fixed top-0 left-0 right-0 h-25 flex justify-end items-center px-8 bg-transparent transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}>
+      ref={containerRef}
+      className={`
+        z-1000
+        fixed
+        top-0
+        left-0
+        right-0
+        h-25
+        flex
+        justify-end
+        items-center
+        px-8
+        bg-transparent
+        transition-transform
+        duration-300
+        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
+        `}>
       <div className="absolute left-4">
         <svg className="signature" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path strokeWidth="5" d="M1 1V114H80V40M80 40L61 26L80 7L100 26L80 40ZM125 61V114H169V61L229 114V61H200V114L254 61V1L269 114H304L328 61H311L333 185H169" />
