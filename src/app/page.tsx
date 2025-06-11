@@ -353,11 +353,28 @@ export default function Home() {
     // </div>
     <>
       <div className="welcome-page" ref={welcomePageRef}>
-        <h1>Welcome</h1>
+        <div className="max-w-3xl mb-30 text-6xl">{information.name}</div>
+        <div className="max-w-3xl text-xl/loose text-primary/70 text-wrap-balance ">
+          <hr />
+          <div className="mb-10 text-center">
+            {information.profile}
+          </div>
+        </div>
+
+        <div className="absolute bottom-15 left-1/2 -translate-x-1/2">
+          <svg className="animate-bounce" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4182" width="50" height="50">
+            <path fill="currentColor" d="M462 881V81c0-27.6 22.4-50 50-50s50 22.4 50 50v800c0 27.6-22.4 50-50 50s-50-22.4-50-50z" p-id="4183"></path>
+            <path fill="currentColor" d="M483.3 907.6l212.1-212.1c19.5-19.5 51.2-19.5 70.7 0s19.5 51.2 0 70.7L554 978.4c-19.5 19.5-51.2 19.5-70.7 0-19.6-19.6-19.6-51.2 0-70.8z" p-id="4184"></path>
+            <path fill="currentColor" d="M328.6 695.5l212.1 212.1c19.5 19.5 19.5 51.2 0 70.7s-51.2 19.5-70.7 0L257.9 766.2c-19.5-19.5-19.5-51.2 0-70.7s51.2-19.5 70.7 0z" p-id="4185"></path>
+          </svg>
+        </div>
       </div>
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Section 1">
-          <h1>Section 1</h1>
+          <h1 className="text-2xl font-bold mb-5">My Skills</h1>
+          {information.skills.map((skill) => (
+            <SkillsItem key={skill.name} {...skill} />
+          ))}
         </div>
         <div className="section">
           <div className="subsection" data-title="Section 2.1">
@@ -368,6 +385,9 @@ export default function Home() {
           </div>
           <div className="subsection" data-title="Section 2.3">
             <h1>Section 2.3</h1>
+          </div>
+          <div className="subsection" data-title="Section 2.4">
+            <h1>Section 2.4</h1>
           </div>
         </div>
         <div className="section" data-title="Section 3">
@@ -392,6 +412,7 @@ export default function Home() {
           <svg id="replay" ref={replayRef} className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1472"
             width="100" height="100">
             <path
+              fill="currentColor"
               d="M853.333333 554.666667a341.333333 341.333333 0 0 1-682.666666 22.613333 21.76 21.76 0 0 1 5.546666-15.786667 22.186667 22.186667 0 0 1 16.64-6.826666h42.666667a21.333333 21.333333 0 0 1 21.333333 19.626666A256 256 0 1 0 512 298.666667v100.693333a20.906667 20.906667 0 0 1-6.4 15.36l-8.533333 8.533333a21.333333 21.333333 0 0 1-30.293334 0L315.733333 272.64a21.76 21.76 0 0 1 0-30.293333l151.04-150.613334a21.333333 21.333333 0 0 1 30.293334 0l8.533333 8.533334a20.906667 20.906667 0 0 1 6.4 15.36V213.333333a341.333333 341.333333 0 0 1 341.333333 341.333334z"
               p-id="1473"></path>
           </svg>
