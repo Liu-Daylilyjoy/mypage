@@ -12,20 +12,22 @@ const navbarItems = [
     href: "/"
   },
   {
-    title: "About",
-    href: "/about"
+    title: "Blog",
+    href: "/blog"
   },
   {
-    title: "Contact",
-    href: "/contact"
+    title: "Thinking",
+    href: "/thinking"
   },
   {
-    href: "/wechat",
-    icon: <BsWechat size={30} />
+    title: "Photography",
+    href: "/photography"
   },
   {
-    href: "/github",
-    icon: <LuGithub size={30} />
+    icon: <a href="https://github.com/Liu-Daylilyjoy" target="_blank"><LuGithub size={30} /></a>
+  },
+  {
+    icon: <span className="wechat"><BsWechat size={30} /></span>
   }
 ]
 
