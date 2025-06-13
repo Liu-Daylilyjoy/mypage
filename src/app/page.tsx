@@ -317,7 +317,7 @@ export default function Home() {
       progressContainer.classList.remove('active');
     };
 
-    const firstSection = sections[0].querySelectorAll('.subsection')[0];
+    let firstSection = sections[0].querySelectorAll('.subsection')[0] || sections[0];
 
     progressContainer.addEventListener('mousemove', handleProgressContainerMouseMove);
     progressContainer.addEventListener('click', handleProgressContainerClick);
