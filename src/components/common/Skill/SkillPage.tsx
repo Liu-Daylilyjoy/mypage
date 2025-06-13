@@ -27,15 +27,15 @@ const SkillPage: React.FC<SkillPageProps> = ({ skills }) => {
 
     // 创建动画
     gsap.fromTo(chars,
-      { y: 0 }, // 初始位置
+      { y: 0 }, 
       {
-        y: 2, // 波峰高度
+        y: 2, 
         duration: 0.5,
         ease: "sine.inOut",
         stagger: {
-          each: 0.05, // 每个字符动画的延迟
-          repeat: -1, // 无限重复
-          yoyo: true // 来回播放动画
+          each: 0.05, 
+          repeat: -1, 
+          yoyo: true 
         }
       }
     );
