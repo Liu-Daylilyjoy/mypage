@@ -10,9 +10,9 @@ const information: {
   profile: string;
   skills: SkillItemProps[];
 } = {
-  name: "Liudy",
+  name: 'Liudy',
   profile: `Hello! I'm Liudy, a first-year postgraduate student with a 
-  strong passion for front-end development, web design, and user interaction.`,
+  strong passion for front - end development, web design, and user interaction.`,
   skills: [
     {
       name: "Java",
@@ -339,21 +339,21 @@ export default function Home() {
   return (
     <>
       <div className="welcome-page" ref={welcomePageRef}>
-        <WelcomePage name={information.name} profile={information.profile} />
+        <WelcomePage />
       </div>
       <div className="content" ref={contentRef}>
-        <div className="section" data-title="Me">
-          <div className="subsection" data-title="About Me">
-            <h1>About Me</h1>
-          </div>
+        <div className="section" data-title="About Me">
           <div className="subsection" data-title="First of me">
-            <h1>First of me</h1>
+            <h1>About me</h1>
           </div>
           <div className="subsection" data-title="Second of me">
             <h1>Second of me</h1>
           </div>
           <div className="subsection" data-title="Third of me">
-            <h1>Third of me</h1> 
+            <h1>Third of me</h1>
+          </div>
+          <div className="subsection" data-title="Fourth of me">
+            <h1>Fourth of me</h1>
           </div>
         </div>
 
