@@ -34,7 +34,7 @@ const WelcomePage = () => {
     function typeWriter() {
       if (!isDeleting && index < currentText.length) {
         // 打字阶段
-        textElement!.textContent += currentText.charAt(index);
+        textElement!.textContent = currentText.substring(0, index + 1);
         index++;
         setTimeout(typeWriter, typingSpeed);
       } else if (!isDeleting && index === currentText.length) {
@@ -70,7 +70,6 @@ const WelcomePage = () => {
       <div className="max-w-3xl w-full text-xl/loose text-primary/70 text-wrap-balance ">
         <hr />
         <div className="mb-10 text-center" ref={textRef}>
-
         </div>
       </div>
 
