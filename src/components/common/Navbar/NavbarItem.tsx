@@ -11,11 +11,11 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ title, href, icon }) => {
   return (
     <>
       {icon ? (
-        <div className="text-lg mr-8 opacity-70 hover:opacity-100 transition-opacity duration-300">
+        <div className="text-lg mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300">
           {icon}
         </div>
       ) : (
-        <Link href={href || '/'} className="text-lg mr-8 opacity-70 hover:opacity-100 transition-opacity duration-300">
+          <Link href={href || '/'} className="text-lg mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300">
           {title}
         </Link>
       )}

@@ -419,7 +419,7 @@ export default function Home() {
         </div>
       </div>
       <div className="progress-container" ref={progressContainerRef}>
-        <div className="progress-bar" ref={progressBarRef}>
+        <div className="progress-bar bg-theme-color" ref={progressBarRef}>
           <div className="progress-tooltip" ref={progressTooltipRef}></div>
         </div>
       </div>
