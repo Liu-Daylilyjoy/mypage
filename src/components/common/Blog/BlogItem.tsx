@@ -8,7 +8,7 @@ export interface BlogItemProps {
 
 const BlogItem: React.FC<BlogItemProps> = (blog) => {
   return (
-    <div className="flex justify-center mb-4 h-10">
+    <div className="mb-4 w-full bg-secondary/70">
       <h3 className="text-primary/80 w-32">{blog.title}</h3>
       <p className="text-primary/80 w-32">{blog.description}</p>
       <p className="text-primary/80 w-32">{blog.date}</p>

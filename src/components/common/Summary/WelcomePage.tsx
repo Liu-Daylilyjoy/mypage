@@ -41,15 +41,16 @@ const WelcomePage = () => {
       return quote[randomIndex];
     }
 
-    async function typeWriter() {
+    function typeWriter() {
       if (!isDeleting && index < currentText.length) {
         // 打字阶段
         textElement!.textContent = currentText.substring(0, index + 1);
         index++;
       } else if (!isDeleting && index === currentText.length) {
         // 打字完成，等待一段时间后开始删除
-        await sleep(2000);
-        isDeleting = true;
+        sleep(2000).then(() => {
+          isDeleting = true;
+        });
       } else if (isDeleting && index > 0) {
         // 删除阶段
         textElement!.textContent = currentText.substring(0, index - 1);
@@ -61,13 +62,18 @@ const WelcomePage = () => {
         textElement!.textContent = '';
         // 删除完成，重置状态并选择新的文字
         currentText = getRandomText();
-        await sleep(2000);
-        isDeleting = false;
+        sleep(2000).then(() => {
+          isDeleting = false;
+        });
       }
     }
 
     currentText = getRandomText();
-    setInterval(typeWriter, typingSpeed);
+    const interval = setInterval(typeWriter, typingSpeed);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
