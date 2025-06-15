@@ -19,44 +19,55 @@ const WelcomePage = () => {
     const textElement = textRef.current;
     if (!textElement) return;
 
+    let currentText = '';
     let index = 0;
     let isDeleting = false;
-    let typingSpeed = 50; // 打字速度
-    let deletingSpeed = 30; // 删除速度
-    let currentText = '';
+    const typingSpeed = 50; // 打字速度的倒数
+    let deletingSpeed = 3; // 删除速度（比打字速度快多少倍）
+    let randomIndex = 0;
+
+    // 等待指定时间
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
     // 随机选择一段文字
     function getRandomText() {
-      const randomIndex = Math.floor(Math.random() * quote.length);
+      let newIndex = Math.floor(Math.random() * quote.length);
+
+      while (newIndex === randomIndex) {
+        newIndex = Math.floor(Math.random() * quote.length);
+      }
+
+      randomIndex = newIndex;
       return quote[randomIndex];
     }
 
-    function typeWriter() {
+    async function typeWriter() {
       if (!isDeleting && index < currentText.length) {
         // 打字阶段
         textElement!.textContent = currentText.substring(0, index + 1);
         index++;
-        setTimeout(typeWriter, typingSpeed);
       } else if (!isDeleting && index === currentText.length) {
         // 打字完成，等待一段时间后开始删除
-        setTimeout(() => {
-          isDeleting = true;
-          typeWriter();
-        }, 2000); // 等待2秒后开始删除
+        await sleep(2000);
+        isDeleting = true;
       } else if (isDeleting && index > 0) {
         // 删除阶段
         textElement!.textContent = currentText.substring(0, index - 1);
-        index--;
-        setTimeout(typeWriter, deletingSpeed);
+        index -= deletingSpeed
+        if (index < 0) {
+          index = 0;
+        }
       } else {
+        textElement!.textContent = '';
         // 删除完成，重置状态并选择新的文字
-        isDeleting = false;
         currentText = getRandomText();
-        setTimeout(typeWriter, 1000); // 等待1秒后重新开始打字
+        await sleep(2000);
+        isDeleting = false;
       }
     }
 
-    typeWriter();
+    currentText = getRandomText();
+    setInterval(typeWriter, typingSpeed);
   }, []);
 
   return (
