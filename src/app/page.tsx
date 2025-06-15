@@ -319,6 +319,11 @@ export default function Home() {
 
     let firstSection = sections[0].querySelectorAll('.subsection')[0] || sections[0];
 
+    const preventScroll = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    progressContainer.addEventListener('wheel', preventScroll, { passive: false });
     progressContainer.addEventListener('mousemove', handleProgressContainerMouseMove);
     progressContainer.addEventListener('click', handleProgressContainerClick);
     content.addEventListener('wheel', handleContentWheel);
@@ -327,6 +332,7 @@ export default function Home() {
     replay.addEventListener('click', handleReplayClick);
 
     return () => {
+      progressContainer.removeEventListener('wheel', preventScroll);
       progressContainer.removeEventListener('mousemove', handleProgressContainerMouseMove);
       progressContainer.removeEventListener('click', handleProgressContainerClick);
       content.removeEventListener('wheel', handleContentWheel);
