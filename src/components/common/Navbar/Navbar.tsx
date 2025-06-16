@@ -71,22 +71,18 @@ const Navbar = () => {
     };
   }, [isMouseAtTop]);
 
-  // 鼠标悬停在navbar上时禁止滚动
   let containerRef = useRef<HTMLDivElement>(null);
-
+  useEffect(() => {
+    if (!containerRef.current) return;
+  // 鼠标悬停在navbar上时禁止滚动
   const container = containerRef.current;
 
   const preventScroll = (e: WheelEvent) => {
     e.preventDefault();
   };
 
-  container?.addEventListener('mouseenter', () => {
-    container?.addEventListener('wheel', preventScroll, { passive: false });
-  });
-
-  container?.addEventListener('mouseleave', () => {
-    container.removeEventListener('wheel', preventScroll);
-  });
+    container.addEventListener('wheel', preventScroll, { passive: false });
+  }, []);
 
   return (
     <div
