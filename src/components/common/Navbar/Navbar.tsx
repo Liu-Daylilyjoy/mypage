@@ -99,8 +99,9 @@ const Navbar = () => {
         items-center
         px-8
         bg-transparent
-        transition-transform
+        transition-all
         duration-300
+        hover:backdrop-blur-sm
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
         `}>
       <div className="absolute left-4">

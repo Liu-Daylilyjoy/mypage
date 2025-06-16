@@ -157,14 +157,13 @@
     width: 200px;
     aspect-ratio: 1;
     background-image: url('/image/contact/wechat_code.png');
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     opacity: 0;
     visibility: hidden;
     z-index: 100;
     margin-top: 20px;
-    border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }

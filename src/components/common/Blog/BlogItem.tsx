@@ -14,7 +14,7 @@ const BlogItem: React.FC<BlogItemProps> = (blog) => {
         <p className="text-primary/80">{blog.date}</p>
       </div>
 
-      <div className="absolute top-0 right-0 h-full w-full bg-red-400 translate-x-full transition-all duration-400 ease-in-out group-hover:translate-x-0" />
+      <div className="absolute top-0 right-0 h-full w-full bg-theme-color translate-x-full transition-all duration-400 ease-in-out group-hover:translate-x-0" />
 
       <div className="absolute top-0 right-0 h-full w-full bg-primary translate-x-full transition-all duration-600 ease-in-out group-hover:translate-x-0">
         <div className="p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
