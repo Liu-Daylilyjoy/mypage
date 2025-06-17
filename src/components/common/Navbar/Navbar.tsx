@@ -101,7 +101,7 @@ const Navbar = () => {
         bg-transparent
         transition-all
         duration-300
-        hover:backdrop-blur-sm
+        hover:backdrop-blur-[1px]
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
         `}>
       <div className="absolute left-4">
