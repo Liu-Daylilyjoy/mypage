@@ -173,8 +173,8 @@ export default function Blog() {
         backdrop-blur-sm
         opacity-0
         transition-opacity
-        duration-600
-        delay-300
+        duration-300
+        delay-100
         ${isHovered ? 'opacity-100' : 'opacity-0'}`} >
       </div>
     </>

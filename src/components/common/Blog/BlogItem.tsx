@@ -16,7 +16,7 @@ const BlogItem: React.FC<{ blog: BlogItemProps, onMouseEnter: () => void, onMous
       </div>
 
       <div className="absolute top-0 right-0 h-full w-full overflow-hidden">
-        <div className="absolute  h-full w-full bg-theme-color translate-x-full transition-all delay-300 duration-300 ease-in-out group-hover:translate-x-0" />
+        <div className="absolute  h-full w-full bg-theme-color translate-x-full transition-all delay-300 duration-200 ease-in-out group-hover:translate-x-0" />
         <div className="absolute  h-full w-full bg-primary translate-x-full transition-all delay-300 duration-500 ease-in-out group-hover:translate-x-0">
           <div className="p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <p className="text-background line-clamp-2">{blog.description}</p>
