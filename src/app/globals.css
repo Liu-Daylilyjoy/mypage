@@ -112,7 +112,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --theme-color: oklch(1 0 0);
+  --theme-color: oklch(0.8235 0.1653 90);
 }
 
 @layer base {
@@ -341,6 +341,7 @@
     transform: translateY(0);
   }
 
+  
 }
 
 @keyframes open-curtain {

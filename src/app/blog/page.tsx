@@ -1,141 +1,150 @@
+"use client"
+
 import BlogItem, { BlogItemProps } from "@/components/common/Blog/BlogItem"
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress"
+import { useMemo, useState } from "react"
 
 const bloglist: BlogItemProps[] = [
   {
-    title: "基础红石电路教程- [MC]我的世界原版(Minecraft)",
-    description: "身为一个渣渣，在学习红石电路的时候，也有过看别人红石教程的时候。但是别人的教程，很多都不是太繁琐，就是太简单（只是一些简单的电路，连逻辑门都没有）。这次决定从自己的角度出发，用最通俗的语言，来解释这个神奇的红石电路。",
+    title: "Basic Redstone Circuit Tutorial - [MC] Minecraft",
+    description: "As a beginner, I've also learned from others' redstone tutorials. However, many tutorials are either too complex or too simple (just basic circuits without logic gates). This time, I decided to explain these amazing redstone circuits from my perspective, using the most straightforward language.",
     date: "2022-01-01",
   },
   {
-    title: "居家插花艺术入门",
-    description: "想要为您的家增添一抹自然与艺术的气息吗？本教程将带您轻松走进插花的世界，从花材选择到色彩搭配，再到造型技巧，一步步教您如何用鲜花装点生活空间，提升居家格调。即使是插花新手，也能通过本教程，亲手打造出令人赞叹的精美花艺作品。",
+    title: "Introduction to Home Flower Arranging",
+    description: "Want to add a touch of nature and art to your home? This tutorial will guide you into the world of flower arranging, from selecting materials to color matching and styling techniques, teaching you how to decorate your living space with flowers and enhance your home's aesthetics. Even beginners can create stunning floral arrangements through this tutorial.",
     date: "2022-01-02",
   },
   {
-    title: "像素艺术入门",
-    description: "想亲手创作出充满复古魅力的像素画作吗？本教程将带你走进像素艺术的奇妙世界。我们将从基础概念开始，逐步学习如何用简单的方块构建出独具风格的数字图像，掌握色彩运用和构图技巧，释放你的无限创意。无论你是绘画新手还是寻求新尝试的数字艺术家，都能在本教程中找到乐趣，并创作出属于你自己的像素杰作。",
+    title: "Getting Started with Pixel Art",
+    description: "Want to create retro-style pixel art yourself? This tutorial will guide you through the fascinating world of pixel art. Starting from basic concepts, we'll learn how to build unique digital images using simple blocks, master color usage and composition techniques, and unleash your unlimited creativity. Whether you're a drawing beginner or a digital artist seeking new challenges, you'll find joy in this tutorial and create your own pixel masterpieces.",
     date: "2023-01-03",
   },
   {
-    title: "零基础个人博客部署",
-    description: "想拥有一个属于自己的博客平台，分享你的思考、经验或创意吗？本教程将手把手教你如何从零开始，快速部署一个个人博客。我们将介绍如何选择合适的平台、配置域名，并发布你的第一篇文章，让你无需任何编程基础，也能轻松搭建起一个专业且个性化的在线空间。",
+    title: "Personal Blog Deployment for Beginners",
+    description: "Want to have your own blog platform to share your thoughts, experiences, or creativity? This tutorial will guide you step by step on how to deploy a personal blog from scratch. We'll cover how to choose the right platform, configure domain names, and publish your first article, allowing you to easily build a professional and personalized online space without any programming background.",
     date: "2025-01-04",
   },
   {
-    title: "日语学习入门",
-    description: "对日语和日本文化充满好奇吗？本教程将带你从零开始，系统地学习日语。我们将涵盖基础发音、常用词汇、语法结构，并融入日本文化小知识，让你在学习语言的同时，也能深入了解这个迷人的国家。无论你是为了旅行、工作还是兴趣，本教程都能帮助你轻松迈出日语学习的第一步。",
+    title: "Japanese Language Learning for Beginners",
+    description: "Curious about Japanese language and culture? This tutorial will guide you from zero to start learning Japanese systematically. We'll cover basic pronunciation, common vocabulary, grammar structures, and incorporate Japanese cultural tidbits, allowing you to deeply understand this fascinating country while learning the language. Whether for travel, work, or interest, this tutorial will help you take your first steps in Japanese learning easily.",
     date: "2025-01-05",
   },
   {
-    title: "AI绘画入门指南",
-    description: "探索AI绘画的无限可能！本教程将带你了解主流AI绘画工具，从提示词编写到参数调整，再到后期优化，一步步教你如何创作出令人惊艳的AI艺术作品。无论你是艺术爱好者还是专业设计师，都能在这里找到创作灵感。",
+    title: "AI Art Generation Guide",
+    description: "Explore the unlimited possibilities of AI art! This tutorial will introduce you to mainstream AI art tools, from prompt writing to parameter adjustment and post-processing, teaching you step by step how to create stunning AI artworks. Whether you're an art enthusiast or professional designer, you'll find creative inspiration here.",
     date: "2024-03-15",
   },
   {
-    title: "咖啡品鉴与制作",
-    description: "走进咖啡的香醇世界！从咖啡豆的选择、烘焙到冲泡技巧，本教程将全面介绍咖啡的品鉴与制作方法。你将学习如何分辨不同产区的咖啡风味，掌握手冲、意式浓缩等专业冲泡技术，成为真正的咖啡达人。",
+    title: "Coffee Appreciation and Brewing",
+    description: "Step into the aromatic world of coffee! From coffee bean selection and roasting to brewing techniques, this tutorial will comprehensively introduce coffee appreciation and brewing methods. You'll learn to distinguish coffee flavors from different regions and master professional brewing techniques like hand drip and espresso, becoming a true coffee connoisseur.",
     date: "2024-02-20",
   },
   {
-    title: "摄影构图技巧",
-    description: "提升你的摄影水平！本教程将深入讲解摄影构图的核心原则，从黄金分割到引导线，从色彩搭配到光影运用，帮助你掌握专业摄影师的构图技巧，让你的作品更具艺术感和表现力。",
+    title: "Photography Composition Techniques",
+    description: "Elevate your photography skills! This tutorial will delve into core principles of photographic composition, from golden ratio to leading lines, from color matching to light and shadow usage, helping you master professional photographers' composition techniques to make your works more artistic and expressive.",
     date: "2024-01-10",
   },
   {
-    title: "Python数据分析实战",
-    description: "用Python玩转数据分析！本教程将带你学习使用Python进行数据处理、分析和可视化。从基础库的使用到实际项目案例，让你快速掌握数据分析的核心技能，为你的职业发展增添竞争力。",
+    title: "Practical Python Data Analysis",
+    description: "Master data analysis with Python! This tutorial will teach you how to process, analyze, and visualize data using Python. From basic library usage to practical project cases, helping you quickly grasp core data analysis skills and enhance your career competitiveness.",
     date: "2023-12-05",
   },
   {
-    title: "居家健身指南",
-    description: "在家也能练出好身材！本教程将为你提供一套完整的居家健身方案，包括无器械训练、小器械使用、饮食搭配等内容。无论你是健身新手还是老手，都能找到适合自己的训练计划。",
+    title: "Home Fitness Guide",
+    description: "Get fit at home! This tutorial will provide you with a complete home workout plan, including bodyweight exercises, small equipment usage, and dietary recommendations. Whether you're a fitness beginner or experienced, you'll find a training plan that suits you.",
     date: "2023-11-18",
   },
   {
-    title: "数字营销入门",
-    description: "掌握数字营销的核心技能！本教程将介绍SEO优化、社交媒体营销、内容营销等数字营销策略，帮助你了解如何通过网络渠道推广产品和服务，提升品牌影响力。",
+    title: "Digital Marketing Basics",
+    description: "Master core digital marketing skills! This tutorial will introduce SEO optimization, social media marketing, content marketing, and other digital marketing strategies, helping you understand how to promote products and services through online channels and enhance brand influence.",
     date: "2023-10-22",
   },
   {
-    title: "UI设计原则",
-    description: "打造优秀的用户界面！本教程将深入讲解UI设计的核心原则，包括视觉层次、色彩理论、排版技巧等，帮助你掌握专业UI设计师的必备技能，创造出既美观又实用的界面设计。",
+    title: "UI Design Principles",
+    description: "Create excellent user interfaces! This tutorial will deeply explain core UI design principles, including visual hierarchy, color theory, typography techniques, helping you master essential skills of professional UI designers and create both beautiful and functional interface designs.",
     date: "2023-09-30",
   },
   {
-    title: "理财投资基础",
-    description: "开启你的理财之旅！本教程将介绍个人理财的基本概念，包括储蓄、投资、保险等各个方面，帮助你建立正确的理财观念，实现财务自由的目标。",
+    title: "Personal Finance Basics",
+    description: "Start your financial journey! This tutorial will introduce basic concepts of personal finance, including savings, investments, insurance, and other aspects, helping you establish correct financial concepts and achieve financial freedom goals.",
     date: "2023-08-15",
   },
   {
-    title: "写作技巧提升",
-    description: "提升你的写作水平！本教程将分享写作的核心技巧，从文章结构到语言表达，从内容创作到修改润色，帮助你掌握专业写作的要领，创作出引人入胜的文章。",
+    title: "Writing Skills Enhancement",
+    description: "Improve your writing skills! This tutorial will share core writing techniques, from article structure to language expression, from content creation to editing and polishing, helping you master professional writing essentials and create engaging articles.",
     date: "2023-07-20",
   },
   {
-    title: "视频剪辑入门",
-    description: "成为视频剪辑达人！本教程将带你学习视频剪辑的基础知识和技巧，从软件使用到转场效果，从音频处理到特效添加，让你快速掌握视频制作的核心技能。",
+    title: "Video Editing Basics",
+    description: "Become a video editing expert! This tutorial will teach you basic knowledge and skills of video editing, from software usage to transition effects, from audio processing to special effects addition, helping you quickly master core video production skills.",
     date: "2023-06-25",
   },
   {
-    title: "烹饪基础技巧",
-    description: "掌握烹饪的基本功！本教程将介绍烹饪的核心技巧，包括刀工、火候控制、调味方法等，帮助你提升厨艺水平，做出美味可口的家常菜。",
+    title: "Basic Cooking Techniques",
+    description: "Master basic cooking skills! This tutorial will introduce core cooking techniques, including knife skills, heat control, seasoning methods, helping you improve your culinary skills and create delicious home-cooked meals.",
     date: "2023-05-12",
   },
   {
-    title: "时间管理方法",
-    description: "提高你的工作效率！本教程将分享实用的时间管理技巧，包括任务规划、优先级排序、专注力提升等方法，帮助你更好地平衡工作和生活。",
+    title: "Time Management Methods",
+    description: "Improve your work efficiency! This tutorial will share practical time management techniques, including task planning, priority sorting, focus enhancement methods, helping you better balance work and life.",
     date: "2023-04-18",
   },
   {
-    title: "心理健康指南",
-    description: "关注你的心理健康！本教程将介绍压力管理、情绪调节、心理调适等实用技巧，帮助你建立积极健康的心态，提升生活品质。",
+    title: "Mental Health Guide",
+    description: "Focus on your mental health! This tutorial will introduce practical techniques for stress management, emotional regulation, and psychological adjustment, helping you build a positive and healthy mindset and improve life quality.",
     date: "2023-03-22",
   },
   {
-    title: "旅行摄影技巧",
-    description: "记录旅途中的精彩瞬间！本教程将分享旅行摄影的实用技巧，包括器材选择、构图方法、光线运用等，帮助你拍出令人难忘的旅行照片。",
+    title: "Travel Photography Tips",
+    description: "Capture amazing moments during your travels! This tutorial will share practical travel photography tips, including equipment selection, composition methods, and light usage, helping you take memorable travel photos.",
     date: "2023-02-28",
   },
   {
-    title: "编程思维培养",
-    description: "培养你的编程思维！本教程将介绍编程思维的核心概念，包括算法思维、问题分解、逻辑推理等，帮助你建立系统的编程思维方式。",
+    title: "Programming Mindset Development",
+    description: "Develop your programming mindset! This tutorial will introduce core concepts of programming thinking, including algorithmic thinking, problem decomposition, logical reasoning, helping you build systematic programming thought patterns.",
     date: "2023-01-15",
   },
   {
-    title: "音乐制作入门",
-    description: "开启你的音乐创作之旅！本教程将带你了解音乐制作的基础知识，包括编曲、混音、录音等技巧，帮助你创作出属于自己的音乐作品。",
+    title: "Music Production Basics",
+    description: "Start your music creation journey! This tutorial will introduce you to basic knowledge of music production, including arrangement, mixing, recording techniques, helping you create your own musical works.",
     date: "2022-12-10",
   },
   {
-    title: "园艺种植指南",
-    description: "打造你的绿色空间！本教程将介绍园艺种植的基本知识，包括植物选择、土壤管理、浇水施肥等技巧，帮助你打造一个美丽的家庭花园。",
+    title: "Gardening Guide",
+    description: "Create your green space! This tutorial will introduce basic gardening knowledge, including plant selection, soil management, watering and fertilizing techniques, helping you create a beautiful home garden.",
     date: "2022-11-05",
   },
   {
-    title: "演讲技巧提升",
-    description: "提升你的演讲能力！本教程将分享演讲的核心技巧，包括内容组织、表达方式、肢体语言等，帮助你成为自信的演讲者。",
+    title: "Public Speaking Enhancement",
+    description: "Improve your public speaking ability! This tutorial will share core speaking techniques, including content organization, expression methods, body language, helping you become a confident speaker.",
     date: "2022-10-20",
   },
   {
-    title: "手工制作教程",
-    description: "释放你的创造力！本教程将介绍各种手工制作技巧，包括纸艺、布艺、木工等，帮助你创作出独特的手工作品。",
+    title: "Handicraft Tutorial",
+    description: "Release your creativity! This tutorial will introduce various handicraft techniques, including paper art, fabric art, woodworking, helping you create unique handmade works.",
     date: "2022-09-15",
   }
 ]
 
 export default function Blog() {
-  // 根据年份分组
-  const blogsByYear = bloglist.reduce((acc, blog) => {
-    const year = blog.date.split('-')[0];
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(blog);
-    return acc;
-  }, {} as Record<string, BlogItemProps[]>);
+  const { blogsByYear, sortedYears } = useMemo(() => {
+    // Group blogs by year
+    const blogsByYear = bloglist.reduce((acc, blog) => {
+      const year = blog.date.split('-')[0];
+      if (!acc[year]) {
+        acc[year] = [];
+      }
+      acc[year].push(blog);
+      return acc;
+    }, {} as Record<string, BlogItemProps[]>);
 
-  const sortedYears = Object.keys(blogsByYear).sort((a, b) => Number(b) - Number(a));
+    const sortedYears = Object.keys(blogsByYear).sort((a, b) => Number(b) - Number(a));
+
+    return { blogsByYear, sortedYears };
+  }, []);
+
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <>
@@ -146,11 +155,27 @@ export default function Blog() {
             <div key={year} className="mb-12 w-full">
               <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40">{year}</h2>
               {blogsByYear[year].map((blog: BlogItemProps) => (
-                <BlogItem key={blog.title} {...blog} />
+                <BlogItem key={blog.title} blog={blog} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
               ))}
             </div>
           ))}
         </div>
+      </div>
+
+      <div id="mainContent" className={
+        `fixed 
+        top-0
+        left-0
+        bottom-0
+        right-0
+        z-10
+        pointer-events-none
+        backdrop-blur-sm
+        opacity-0
+        transition-opacity
+        duration-600
+        delay-300
+        ${isHovered ? 'opacity-100' : 'opacity-0'}`} >
       </div>
     </>
   )
