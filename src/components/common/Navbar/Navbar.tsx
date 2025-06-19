@@ -74,14 +74,18 @@ const Navbar = () => {
   let containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!containerRef.current) return;
-  // 鼠标悬停在navbar上时禁止滚动
-  const container = containerRef.current;
+    // 鼠标悬停在navbar上时禁止滚动
+    const container = containerRef.current;
 
-  const preventScroll = (e: WheelEvent) => {
-    e.preventDefault();
-  };
+    const preventScroll = (e: WheelEvent) => {
+      e.preventDefault();
+    };
 
     container.addEventListener('wheel', preventScroll, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', preventScroll);
+    };
   }, []);
 
   return (
@@ -101,9 +105,10 @@ const Navbar = () => {
         bg-transparent
         transition-all
         duration-300
-        hover:backdrop-blur-[1px]
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
+        hover:bg-background/70
         `}>
+      <div className="absolute inset-0 "></div>
       <div className="absolute left-4">
         <svg className="signature" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path strokeWidth="5" d="M1 1V114H80V40M80 40L61 26L80 7L100 26L80 40ZM125 61V114H169V61L229 114V61H200V114L254 61V1L269 114H304L328 61H311L333 185H169" />

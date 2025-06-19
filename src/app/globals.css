@@ -248,6 +248,7 @@
     justify-content: center;
     align-items: center;
     transition: transform 0.5s ease;
+    overflow: hidden;
   }
 
   .subsection {
@@ -264,6 +265,10 @@
 
   h1 {
     font-size: 3rem;
+  }
+
+  h2 {
+    font-size: 2rem;
   }
 
   .content {
@@ -344,7 +349,6 @@
     transform: translateY(0);
   }
 
-  
 }
 
 @keyframes open-curtain {

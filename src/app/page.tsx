@@ -58,7 +58,6 @@ export default function Home() {
   const replayRef = useRef<SVGSVGElement>(null);
   let isScrolling = false;
   let currentOrder = 0;
-  let sectionAnimations = [];
 
   useEffect(() => {
     if (!welcomePageRef.current || !progressContainerRef.current || !progressBarRef.current || !progressTooltipRef.current || !contentRef.current || !replayRef.current) return;
@@ -284,8 +283,7 @@ export default function Home() {
       if (isScrolling) return;
 
       isScrolling = true;
-      currentOrder = 0;
-      updateProgress();
+
       setTimeout(() => {
         isScrolling = false;
       }, 300);
@@ -306,7 +304,8 @@ export default function Home() {
     const handleReplayClick = () => {
       currentSection = 0;
       currentSubsection = 0;
-      currentOrder = -1;
+      currentOrder = 0;
+      updateProgress();
       sections.forEach((section, index) => {
         (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
         let subsections = section.querySelectorAll('.subsection');
@@ -345,35 +344,88 @@ export default function Home() {
   }, []);
 
 
-  const meSectionRef = useRef<HTMLDivElement>(null);
-  useGSAP((context, contextSafe) => {
-    switch (currentOrder) {
-      case -1:
-        return;
-      case 0:
-        const split = SplitText.create('.passion-text', {
-          type: 'words'
-        });
-        const onHoverPassionText = contextSafe!(() => {
-          gsap.fromTo(split.words, {
-            color: 'var(--primary-color)',
-          }, {
-            color: 'red',
-            stagger: 0.1,
-            duration: 3
-          },);
-        });
-        meSectionRef.current?.addEventListener('mouseenter', onHoverPassionText);
-
-        return () => {
-          meSectionRef.current?.removeEventListener('mouseenter', onHoverPassionText);
-          split.revert();
-        };
-      case 1:
+  const sectionRef = useRef<HTMLDivElement[]>([]);
+  const setRef = (element: HTMLDivElement) => {
+    if (element && !sectionRef.current.includes(element)) {
+      sectionRef.current.push(element);
     }
-    
+  };
 
-  }, { dependencies: [currentOrder], scope: contentRef });
+  useGSAP((context, contextSafe) => {
+    let clearEvent = [];
+    for (let i = 0; i < sectionRef.current.length; i++) {
+      let enterHandler: () => void = () => { };
+      let leaveHandler: () => void = () => { };
+      let clear = () => { };
+      switch (i) {
+        case 0:
+          const split = SplitText.create('#about-me', {
+            type: 'words'
+          });
+
+          let tl = gsap.timeline({ paused: true });
+          tl.from('#title-me', {
+            scale: 3,
+            y: -100,
+            opacity: 0,
+            duration: 6,
+            ease: "back",
+          }).from(split.words, {
+            y: -100,
+            opacity: 0,
+            rotation: "random(-80, 80)",
+            duration: 0.7,
+            ease: "back",
+            stagger: 0.15,
+            delay: -4,
+          }).to('#me', {
+            width: '30%',
+            duration: 1,
+          }).to('#hello-world', {
+            x: -100,
+            duration: 1,
+            opacity: 1,
+            ease: "back",
+          }).to('#hello-world', {
+            opacity: 0,
+            duration: 3,
+            yoyo: true,
+            repeat: -1,
+            delay: 1,
+          });
+
+          enterHandler = contextSafe!(() => {
+            tl.resume();
+          });
+          leaveHandler = contextSafe!(() => {
+            tl.pause();
+          });
+
+          sectionRef.current[i]?.addEventListener('mouseenter', enterHandler);
+          sectionRef.current[i]?.addEventListener('mouseleave', leaveHandler);
+
+          clear = () => {
+            split.revert();
+            tl.kill();
+          };
+          break;
+        case 1:
+          break;
+
+
+
+      }
+      clearEvent.push(() => {
+        sectionRef.current[i]?.removeEventListener('mouseenter', enterHandler);
+        sectionRef.current[i]?.removeEventListener('mouseleave', leaveHandler);
+        clear();
+      });
+    }
+
+    return () => {
+      clearEvent.forEach(fn => fn());
+    };
+  }, { scope: contentRef });
 
   return (
     <>
@@ -382,17 +434,21 @@ export default function Home() {
       </div>
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Me">
-          <div className="subsection" data-title="About me" ref={meSectionRef}>
+          <div className="subsection" data-title="About me" ref={setRef}>
             <div className="max-w-3xl w-full">
-              <h1>About me</h1>
-              <span>I'm Liudy, a first-year postgraduate student with a
+              <h1 id="title-me">About me:</h1>
+              <h2 id="about-me">I'm Liudy, a first-year postgraduate student with a
                 strong passion for&nbsp;
-                <span className=" passion-text">front-end development</span>,
+                <span className="text-theme-color">front-end development</span>,
                 &nbsp;
-                <span className=" passion-text">web design</span>
+                <span className="text-theme-color">web design</span>
                 , and&nbsp;
-                <span className=" passion-text">user interaction</span>.
-              </span>
+                <span className="text-theme-color">user interaction</span>.
+              </h2>
+              <div className="flex gap-8 items-center relative">
+                <img id="me" src="/image/me/Labubu.png" alt="me" className="object-cover w-0" />
+                <span id="hello-world" className="text-4xl font-bold text-center mr-10 flex-1 opacity-0">Hello world!</span>
+              </div>
             </div>
           </div>
           <div className="subsection" data-title="Second of me">
