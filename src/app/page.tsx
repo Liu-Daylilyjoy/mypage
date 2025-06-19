@@ -4,15 +4,15 @@ import { SkillItemProps } from "@/components/common/Skill/SkillItem"
 import SkillPage from "@/components/common/Skill/SkillPage";
 import WelcomePage from "@/components/common/Summary/WelcomePage";
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
 
 const information: {
   name: string;
-  profile: string;
   skills: SkillItemProps[];
 } = {
   name: 'Liudy',
-  profile: `I'm Liudy, a first-year postgraduate student with a 
-  strong passion for front-end development, web design, and user interaction.`,
   skills: [
     {
       name: "Java",
@@ -57,6 +57,8 @@ export default function Home() {
   const contentRef = useRef<HTMLDivElement>(null);
   const replayRef = useRef<SVGSVGElement>(null);
   let isScrolling = false;
+  let currentOrder = 0;
+  let sectionAnimations = [];
 
   useEffect(() => {
     if (!welcomePageRef.current || !progressContainerRef.current || !progressBarRef.current || !progressTooltipRef.current || !contentRef.current || !replayRef.current) return;
@@ -78,7 +80,6 @@ export default function Home() {
     const subsectionSize: number[] = [];
     let currentSection = 0;
     let currentSubsection = 0;
-    let currentOrder = 0;
 
     // 添加单个分隔线
     const addSeparator = (position: number) => {
@@ -283,6 +284,8 @@ export default function Home() {
       if (isScrolling) return;
 
       isScrolling = true;
+      currentOrder = 0;
+      updateProgress();
       setTimeout(() => {
         isScrolling = false;
       }, 300);
@@ -303,8 +306,7 @@ export default function Home() {
     const handleReplayClick = () => {
       currentSection = 0;
       currentSubsection = 0;
-      currentOrder = 0;
-      updateProgress();
+      currentOrder = -1;
       sections.forEach((section, index) => {
         (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
         let subsections = section.querySelectorAll('.subsection');
@@ -342,6 +344,37 @@ export default function Home() {
     };
   }, []);
 
+
+  const meSectionRef = useRef<HTMLDivElement>(null);
+  useGSAP((context, contextSafe) => {
+    switch (currentOrder) {
+      case -1:
+        return;
+      case 0:
+        const split = SplitText.create('.passion-text', {
+          type: 'words'
+        });
+        const onHoverPassionText = contextSafe!(() => {
+          gsap.fromTo(split.words, {
+            color: 'var(--primary-color)',
+          }, {
+            color: 'red',
+            stagger: 0.1,
+            duration: 3
+          },);
+        });
+        meSectionRef.current?.addEventListener('mouseenter', onHoverPassionText);
+
+        return () => {
+          meSectionRef.current?.removeEventListener('mouseenter', onHoverPassionText);
+          split.revert();
+        };
+      case 1:
+    }
+    
+
+  }, { dependencies: [currentOrder], scope: contentRef });
+
   return (
     <>
       <div className="welcome-page" ref={welcomePageRef}>
@@ -349,10 +382,17 @@ export default function Home() {
       </div>
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Me">
-          <div className="subsection" data-title="About me">
+          <div className="subsection" data-title="About me" ref={meSectionRef}>
             <div className="max-w-3xl w-full">
               <h1>About me</h1>
-              <span>{information.profile}</span>
+              <span>I'm Liudy, a first-year postgraduate student with a
+                strong passion for&nbsp;
+                <span className=" passion-text">front-end development</span>,
+                &nbsp;
+                <span className=" passion-text">web design</span>
+                , and&nbsp;
+                <span className=" passion-text">user interaction</span>.
+              </span>
             </div>
           </div>
           <div className="subsection" data-title="Second of me">
