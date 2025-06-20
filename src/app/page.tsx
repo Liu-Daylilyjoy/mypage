@@ -365,11 +365,11 @@ export default function Home() {
 
           let tl = gsap.timeline({ paused: true });
           tl.from('#title-me', {
-            scale: 3,
-            y: -100,
+            x: -100,
             opacity: 0,
-            duration: 6,
+            duration: 2,
             ease: "back",
+            delay: 0.5,
           }).from(split.words, {
             y: -100,
             opacity: 0,
@@ -377,21 +377,21 @@ export default function Home() {
             duration: 0.7,
             ease: "back",
             stagger: 0.15,
-            delay: -4,
+            delay: -0.5,
           }).to('#me', {
             width: '30%',
             duration: 1,
-          }).to('#hello-world', {
-            x: -100,
+          }).fromTo('#hello-world', { x: 100 }, {
+            x: 0,
             duration: 1,
             opacity: 1,
             ease: "back",
           }).to('#hello-world', {
             opacity: 0,
-            duration: 3,
+            duration: 1.5,
             yoyo: true,
             repeat: -1,
-            delay: 1,
+            delay: 0.5,
           });
 
           enterHandler = contextSafe!(() => {
@@ -410,10 +410,9 @@ export default function Home() {
           };
           break;
         case 1:
+
+
           break;
-
-
-
       }
       clearEvent.push(() => {
         sectionRef.current[i]?.removeEventListener('mouseenter', enterHandler);
@@ -451,8 +450,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="subsection" data-title="Second of me">
-            <h1>Second of me</h1>
+          <div className="subsection" data-title="playing-games" ref={setRef}>
+            <div className="max-w-3xl w-full">
+
+            </div>
           </div>
           <div className="subsection" data-title="Third of me">
             <h1>Third of me</h1>
