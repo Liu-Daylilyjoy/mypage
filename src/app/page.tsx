@@ -435,7 +435,7 @@ export default function Home() {
         <div className="section" data-title="Me">
           <div className="subsection" data-title="About me" ref={setRef}>
             <div className="max-w-3xl w-full">
-              <h1 id="title-me">About me:</h1>
+              <h1 id="title-me">Dear friend:</h1>
               <h2 id="about-me">I'm Liudy, a first-year postgraduate student with a
                 strong passion for&nbsp;
                 <span className="text-theme-color">front-end development</span>,

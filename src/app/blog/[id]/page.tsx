@@ -1,13 +1,19 @@
-'use client'
+import ScrollProgress from '@/components/common/ScrollProgress/ScrollProgress'
+import { getPost } from '@/lib/posts';
+import { md } from '@/lib/utils';
 
-import { useParams } from 'next/navigation'
+export default async function ArticleDetail({ params }: { params: { id: string } }) {
+  const { id } = await params;
+  const { data, content } = getPost('blog', id);
 
-export default function ArticleDetail() {
-  const { id } = useParams()
+  const htmlConverter = md.render(content);
 
   return (
-    <div className='mx-auto px-4'>
-      <h1>This is a blog of {id}</h1>
-    </div>
+    <>
+      <ScrollProgress />
+      <div className='max-w-3xl mx-auto px-4'>
+        <div className='markdown-body' dangerouslySetInnerHTML={{ __html: htmlConverter }} />
+      </div>
+    </>
   )
 }
