@@ -33,6 +33,7 @@ db.getCollection('Blog').insertMany([
     updatedAt: new Date("2023-01-03")
   },
   {
+    _id: '68560e5713733d71f1bdd9c1',
     title: "Personal Blog Deployment for Beginners",
     description: "Want to have your own blog platform to share your thoughts, experiences, or creativity? This tutorial will guide you step by step on how to deploy a personal blog from scratch. We'll cover how to choose the right platform, configure domain names, and publish your first article, allowing you to easily build a professional and personalized online space without any programming background.",
     createdAt: new Date("2025-01-04"),

@@ -136,6 +136,10 @@
     }
   }
 
+  ol, ul, menu {
+    list-style: decimal;
+  }
+
   .signature {
     stroke-dashoffset: 1px;
     stroke-dasharray: 600px 0;
@@ -351,9 +355,6 @@
 
   .markdown-body {
     line-height: 1.8;
-    font-size: 16px;
-    padding: 2rem;
-    margin: auto;
     word-wrap: break-word;
   }
 
@@ -363,39 +364,33 @@
   .markdown-body h4,
   .markdown-body h5,
   .markdown-body h6 {
-    font-weight: bold;
-    margin: 1.5em 0 1em;
     line-height: 1.4;
-    scroll-margin-top: 80px;
   }
 
   .markdown-body h1 {
-    font-size: 2em;
-    border-bottom: 1px solid #ddd;
+    font-size: 2.5em;
     padding-bottom: 0.3em;
   }
 
   .markdown-body h2 {
-    font-size: 1.75em;
-    border-bottom: 1px solid #eee;
+    font-size: 2.2em;
     padding-bottom: 0.3em;
   }
 
   .markdown-body h3 {
-    font-size: 1.5em;
+    font-size: 1.8em;
   }
 
   .markdown-body h4 {
-    font-size: 1.25em;
+    font-size: 1.5em;
   }
 
   .markdown-body h5 {
-    font-size: 1.1em;
+    font-size: 1.3em;
   }
 
   .markdown-body h6 {
-    font-size: 1em;
-    color: #666;
+    font-size: 1.2em;
   }
 
   .markdown-body p {
@@ -413,28 +408,28 @@
   }
 
   .markdown-body blockquote {
-    border-left: 4px solid #d0d7de;
-    color: #555;
-    background-color: #f9f9f9;
+    border-left: 4px solid var(--color-theme-color);
+    color: var(--muted-foreground);
+    background-color: var(--muted);
     padding: 0.5em 1em;
     margin: 1em 0;
     font-style: italic;
   }
 
   .markdown-body code {
-    background-color: #f4f4f4;
+    background-color: var(--muted);
     padding: 0.2em 0.4em;
     border-radius: 4px;
     font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.95em;
+    font-size: 1.05em;
   }
 
   .markdown-body pre {
-    background-color: #f6f8fa;
+    background-color: var(--muted);
     padding: 1em;
     overflow-x: auto;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 1em;
     line-height: 1.6;
   }
 
@@ -448,7 +443,6 @@
   .markdown-body a {
     color: #0366d6;
     text-decoration: none;
-    border-bottom: 1px dashed #ddd;
   }
 
   .markdown-body a:hover {
@@ -469,13 +463,17 @@
 
   .markdown-body table th,
   .markdown-body table td {
-    border: 1px solid #dfe2e5;
+    border: 1px solid var(--border);
     padding: 0.6em 1em;
     text-align: left;
   }
 
+  .markdown-body table td {
+    background-color: var(--background);
+  }
+
   .markdown-body table th {
-    background-color: #f6f8fa;
+    background-color: var(--muted);
     font-weight: bold;
   }
 }
