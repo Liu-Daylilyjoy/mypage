@@ -11,8 +11,10 @@ export default async function ArticleDetail({ params }: { params: { id: string }
   return (
     <>
       <ScrollProgress />
-      <div className='max-w-3xl mx-auto px-4 pt-10 bg-background/40 border-t-2 border-theme-color'>
-        <div className='markdown-body' dangerouslySetInnerHTML={{ __html: htmlConverter }} />
+      <div className="px-20 pt-30 bg-background/60">
+        <div className='max-w-3xl mx-auto px-4 pt-10 border-t-2 border-theme-color/40'>
+          <div className='markdown-body' dangerouslySetInnerHTML={{ __html: htmlConverter }} />
+        </div>
       </div>
     </>
   )

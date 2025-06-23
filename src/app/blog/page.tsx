@@ -41,18 +41,19 @@ export default function Blog() {
   return (
     <>
       <ScrollProgress />
-      <div className="max-w-5xl flex flex-col items-center mx-auto">
-        {sortedYears.map((year) => (
-          <div key={year} className="mb-12 w-full">
-            <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40">{year}</h2>
-            {blogsByYear[year].map((blog: BlogItemProps) => (
-              <BlogItem key={blog.id} blog={blog} onClick={() => handleCardClick(blog.id)} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
-            ))}
-          </div>
-        ))}
+      <div className="px-20 pt-30">
+        <div className="max-w-5xl flex flex-col items-center mx-auto">
+          {sortedYears.map((year) => (
+            <div key={year} className="mb-12 w-full">
+              <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40">{year}</h2>
+              {blogsByYear[year].map((blog: BlogItemProps) => (
+                <BlogItem key={blog.id} blog={blog} onClick={() => handleCardClick(blog.id)} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-
-
+    
       <div id="mainContent" className={
         `fixed 
         top-0

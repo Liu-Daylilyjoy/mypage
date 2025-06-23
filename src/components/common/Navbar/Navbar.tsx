@@ -41,7 +41,7 @@ const Navbar = () => {
       const windowHeight = window.innerHeight;
 
       // 如果滚动超过屏幕高度的八分之一，且鼠标不在顶部，则隐藏导航栏
-      if (scrollPosition > windowHeight / 8 && !isMouseAtTop) {
+      if (scrollPosition > 1 && !isMouseAtTop) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -56,7 +56,7 @@ const Navbar = () => {
       } else {
         setIsMouseAtTop(false);
         // 如果鼠标离开顶部，且滚动超过八分之一，则隐藏导航栏
-        if (window.scrollY > window.innerHeight / 8) {
+        if (window.scrollY > 1) {
           setIsVisible(false);
         }
       }
