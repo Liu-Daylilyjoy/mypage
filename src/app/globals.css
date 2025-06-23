@@ -136,7 +136,9 @@
     }
   }
 
-  ol, ul, menu {
+  ol,
+  ul,
+  menu {
     list-style: decimal;
   }
 
@@ -375,6 +377,7 @@
   .markdown-body h2 {
     font-size: 2.2em;
     padding-bottom: 0.3em;
+    position: relative;
   }
 
   .markdown-body h3 {
@@ -475,6 +478,24 @@
   .markdown-body table th {
     background-color: var(--muted);
     font-weight: bold;
+  }
+
+  /* 默认隐藏锚点链接 */
+  .markdown-body .header-anchor {
+    position: absolute;
+    left: -1.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  /* 当鼠标悬停在标题上时，显示锚点链接 */
+
+  .markdown-body h2:hover>.header-anchor {
+    opacity: 1;
   }
 }
 

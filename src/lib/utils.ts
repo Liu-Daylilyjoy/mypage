@@ -55,6 +55,10 @@ const md = new MarkdownIt({
     )
   },
 }).use(MarkdownItKatex).use(MarkdownItAnchor, {
+  permalink: MarkdownItAnchor.permalink.ariaHidden({
+    placement: 'before',
+    symbol: '#'
+  }),
   slugify: customSlugify
 });
 
