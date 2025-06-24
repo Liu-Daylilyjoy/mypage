@@ -6,6 +6,8 @@ import useBlogList from "@/hook/useBlogList"
 import { useMemo, useState } from "react"
 import { parseISO, format } from 'date-fns'
 import { useRouter } from "next/navigation"
+import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
 
 export default function Blog() {
   const { data: blogList = [], isLoading } = useBlogList();
@@ -34,6 +36,17 @@ export default function Blog() {
     router.push(`/blog/${id}`)
   }
 
+  useGSAP(() => {
+    gsap.fromTo(".slide", {
+      opacity: 0,
+      y: 20,
+    }, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.2
+    })
+  }, [])
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -41,10 +54,10 @@ export default function Blog() {
   return (
     <>
       <ScrollProgress />
-      <div className="px-20 pt-30">
+      <div className="px-20 pt-30 z-9">
         <div className="max-w-5xl flex flex-col items-center mx-auto">
           {sortedYears.map((year) => (
-            <div key={year} className="mb-12 w-full">
+            <div key={year} className="mb-12 w-full slide opacity-100">
               <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40">{year}</h2>
               {blogsByYear[year].map((blog: BlogItemProps) => (
                 <BlogItem key={blog.id} blog={blog} onClick={() => handleCardClick(blog.id)} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} />
@@ -52,22 +65,21 @@ export default function Blog() {
             </div>
           ))}
         </div>
-      </div>
-    
-      <div id="mainContent" className={
-        `fixed 
-        top-0
-        left-0
-        bottom-0
-        right-0
-        z-10
-        pointer-events-none
-        backdrop-blur-sm
-        opacity-0
-        transition-opacity
-        duration-300
-        delay-100
-        ${isHovered ? 'opacity-100' : 'opacity-0'}`} >
+        <div id="mainContent" className={
+          `fixed 
+          top-0
+          left-0
+          bottom-0
+          right-0
+          z-10
+          pointer-events-none
+          backdrop-blur-sm
+          opacity-0
+          transition-opacity
+          duration-300
+          delay-100
+          ${isHovered ? 'opacity-100' : 'opacity-0'}`} >
+        </div>
       </div>
     </>
   )
