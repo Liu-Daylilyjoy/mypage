@@ -43,7 +43,7 @@ export default function Blog() {
       y: 0,
       stagger: 0.2
     })
-  }, [])
+  }, [sortedYears])
 
   if (isLoading) {
     return <div>Loading...</div>
