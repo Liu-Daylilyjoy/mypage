@@ -26,10 +26,8 @@ export default function ArticleDetail() {
 
     gsap.fromTo(".slide", {
       opacity: 0,
-      y: 20,
     }, {
       opacity: 1,
-      y: 0,
       stagger: 0.1
     })
   }, [htmlConverter])
@@ -39,7 +37,7 @@ export default function ArticleDetail() {
       <ScrollProgress />
       <div className="px-20 pt-30 bg-background/60">
         <div className='max-w-3xl mx-auto px-4'>
-          <div className="slide border-t-2 border-theme-color/40 pt-10"></div>
+          <div className="slide border-t-2 opacity-0 border-theme-color/40 pt-10"></div>
           <div className='markdown-body' ref={markdownRef} dangerouslySetInnerHTML={{ __html: htmlConverter }} />
         </div>
       </div>

@@ -3,7 +3,7 @@
 import BlogItem, { BlogItemProps } from "@/components/common/Blog/BlogItem"
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress"
 import useBlogList from "@/hook/useBlogList"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { parseISO, format } from 'date-fns'
 import { useRouter } from "next/navigation"
 import { useGSAP } from "@gsap/react"
@@ -37,10 +37,8 @@ export default function Blog() {
   useGSAP(() => {
     gsap.fromTo(".slide", {
       opacity: 0,
-      y: 20,
     }, {
       opacity: 1,
-      y: 0,
       stagger: 0.2
     })
   }, [sortedYears])
