@@ -126,6 +126,10 @@
     background: linear-gradient(90deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px,
       linear-gradient(0deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px;
   }
+
+  :focus {
+    outline: none;
+  }
 }
 
 @layer components {

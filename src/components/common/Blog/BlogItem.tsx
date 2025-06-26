@@ -1,5 +1,4 @@
 import React, { memo } from 'react';
-import { useRouter } from 'next/navigation';
 
 export interface BlogItemProps {
   id: string;

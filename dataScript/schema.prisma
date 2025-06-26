@@ -19,5 +19,14 @@ model Blog {
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  content     String @default("")
+  content     String   @default("")
+}
+
+model Thinking {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  detail    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cover     String   @default("")
 }
