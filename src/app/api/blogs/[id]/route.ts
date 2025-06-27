@@ -5,7 +5,7 @@ const matter = require('gray-matter');
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
   const fullPath = path.join(postsDir, 'blog', `${id}.md`);
   try {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
