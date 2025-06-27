@@ -69,8 +69,9 @@ export default function Thinking() {
             className='absolute transition-all break-words duration-500 bg-blue-200'
               style={{
                 width: `${itemWidth}px`
-              }}>
-            {thinking.title}
+            }}>
+            <h3 className="text-2xl font-bold">{thinking.title}</h3>
+            <p className="text-sm text-gray-500">{thinking.detail}</p>
           </div>
         ))}
       </div>

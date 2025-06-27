@@ -35,6 +35,8 @@ export default function Blog() {
   }
 
   useGSAP(() => {
+    if (sortedYears.length === 0) return;
+
     gsap.fromTo(".slide", {
       opacity: 0,
     }, {
