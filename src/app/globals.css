@@ -112,7 +112,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --theme-color: oklch(0.8235 0.1653 90);
+  --theme-color: oklch(75% 0.15 80);
 }
 
 @layer base {
@@ -214,7 +214,6 @@
     width: 0;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    mix-blend-mode: darken;
     transition: width 1s ease-in-out;
   }
 
@@ -228,6 +227,7 @@
     right: -6vw;
     --deg: -4deg;
     background-color: rgba(218, 218, 218, 0.284);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   }
 
   .welcome-page {

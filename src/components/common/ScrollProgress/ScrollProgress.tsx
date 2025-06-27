@@ -48,16 +48,16 @@ const ScrollProgress = () => {
         z-50
         p-3
         rounded-full
-        bg-primary/80
+        bg-theme-color/80
         text-primary-foreground
         shadow-lg
-        hover:bg-primary
+        hover:bg-theme-color
         hover:scale-120
         transition-all
         duration-300
+        cursor-pointer
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
       `}
-        aria-label="回到顶部"
       >
         <LuArrowUp size={24} />
       </button>

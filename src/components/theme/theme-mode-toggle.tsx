@@ -17,36 +17,26 @@ export function ModeToggle() {
     e.preventDefault()
   }, [])
 
-  const toggleTheme = useCallback(() => {
-    if (!lightShadowRef.current || !curtainRefs.current[0] || !curtainRefs.current[1]) return
-
-    // 添加滚轮事件阻止
-    document.addEventListener('wheel', preventWheel, { passive: false })
-    document.addEventListener('touchmove', preventWheel, { passive: false })
-
-    lightShadowRef.current.style.opacity = '1'
+  const toggleTheme = useCallback((theme: string | undefined) => {
+    lightShadowRef.current!.style.opacity = '1'
 
     setTimeout(() => {
       setTheme(theme === 'dark' ? 'light' : 'dark')
-    }, 2000)
+    }, 500)
 
-    curtainRefs.current[0]!.style.animation = 'open-curtain 5s ease-out 0s';
-    curtainRefs.current[1]!.style.animation = 'open-curtain 5s ease-out 0s';
+    curtainRefs.current[0]!.style.animation = 'open-curtain 2000ms ease-out 0s';
+    curtainRefs.current[1]!.style.animation = 'open-curtain 2000ms ease-out 0s';
 
     setTimeout(() => {
       lightShadowRef.current!.style.opacity = '0'
       curtainRefs.current[0]!.style.animation = '';
       curtainRefs.current[1]!.style.animation = '';
-
-      // 移除滚轮事件阻止
-      document.removeEventListener('wheel', preventWheel)
-      document.removeEventListener('touchmove', preventWheel)
-    }, 5000)
-  }, [theme, setTheme, preventWheel])
+    }, 2200)
+  }, [])
 
   return (
     <>
-      <Button className="opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300" variant="link" size="icon" onClick={toggleTheme}>
+      <Button className="opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300" variant="link" size="icon" onClick={(e) => toggleTheme(theme)}>
         <Sun className="absolute scale-210 dark:scale-0" />
         <Moon className="absolute scale-0 dark:scale-210" />
         <span className="sr-only">Toggle theme</span>
