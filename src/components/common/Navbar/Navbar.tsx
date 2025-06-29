@@ -106,7 +106,7 @@ const Navbar = () => {
         transition-all
         duration-300
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        hover:bg-background/70
+        hover:backdrop-blur-sm
         `}>
       <div className="absolute inset-0 "></div>
       <div className="absolute left-4">
