@@ -1,10 +1,11 @@
 'use client'
 
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
-import { useState, useEffect, memo, useRef } from "react";
+import { useState, useEffect, memo, useRef, useCallback } from "react";
 import NavbarItem, { NavbarItemProps } from "./NavbarItem";
 import { LuGithub } from "react-icons/lu";
 import { BsWechat } from "react-icons/bs";
+import { HamburgerMenu } from "./HamburgerMenu";
 
 const navbarItems: NavbarItemProps[] = [
   {
@@ -35,19 +36,19 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMouseAtTop, setIsMouseAtTop] = useState(false);
 
+  const handleScroll = useCallback(() => {
+    const scrollPosition = window.scrollY;
+    const windowHeight = window.innerHeight;
+
+    // 如果滚动，且鼠标不在顶部，则隐藏导航栏
+    if (scrollPosition > 1 && !isMouseAtTop) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [isMouseAtTop]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-
-      // 如果滚动超过屏幕高度的八分之一，且鼠标不在顶部，则隐藏导航栏
-      if (scrollPosition > 1 && !isMouseAtTop) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-    };
-
     const handleMouseMove = (e: MouseEvent) => {
       // 如果鼠标在屏幕顶部 100px 范围内
       if (e.clientY <= 100) {
@@ -55,7 +56,7 @@ const Navbar = () => {
         setIsVisible(true);
       } else {
         setIsMouseAtTop(false);
-        // 如果鼠标离开顶部，且滚动超过八分之一，则隐藏导航栏
+        // 如果鼠标离开顶部，且滚动，则隐藏导航栏
         if (window.scrollY > 1) {
           setIsVisible(false);
         }
@@ -69,7 +70,7 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [isMouseAtTop]);
+  }, []);
 
   let containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -92,7 +93,7 @@ const Navbar = () => {
     <div
       ref={containerRef}
       className={`
-        z-1000
+        z-50
         fixed
         top-0
         left-0
@@ -106,18 +107,21 @@ const Navbar = () => {
         transition-all
         duration-300
         ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        hover:backdrop-blur-sm
+        navbar-blur
         `}>
-      <div className="absolute inset-0 "></div>
       <div className="absolute left-4">
-        <svg className="signature" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="signature max-md:hidden" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path strokeWidth="5" d="M1 1V114H80V40M80 40L61 26L80 7L100 26L80 40ZM125 61V114H169V61L229 114V61H200V114L254 61V1L269 114H304L328 61H311L333 185H169" />
         </svg>
+        <div className="md:hidden">
+          <HamburgerMenu menuItems={navbarItems} />
+        </div>
       </div>
-
-      {navbarItems.map((item: NavbarItemProps, index: number) => (
-        <NavbarItem key={index} title={item.title} href={item.href} icon={item.icon} />
-      ))}
+      <div className="max-md:hidden flex items-center">
+        {navbarItems.map((item: NavbarItemProps, index: number) => (
+          <NavbarItem key={index} title={item.title} href={item.href} icon={item.icon} />
+        ))}
+      </div>
       <ModeToggle />
     </div>
   )

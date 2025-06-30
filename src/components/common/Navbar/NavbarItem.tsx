@@ -15,7 +15,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ title, href, icon }) => {
           {icon}
         </div>
       ) : (
-          <Link href={href || '/'} className="text-lg mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300">
+          <Link href={href || '/'} className="text-lg mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300 origin-left">
           {title}
         </Link>
       )}
