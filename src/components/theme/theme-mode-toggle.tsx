@@ -26,7 +26,7 @@ export function ModeToggle() {
 
   return (
     <>
-      <Button className="opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300" variant="link" size="icon" onClick={(e) => toggleTheme(theme)}>
+      <Button className="-z-1 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300" variant="link" size="icon" onClick={(e) => toggleTheme(theme)}>
         <Sun className="absolute scale-210 dark:scale-0" />
         <Moon className="absolute scale-0 dark:scale-210" />
         <span className="sr-only">Toggle theme</span>

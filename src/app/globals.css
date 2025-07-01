@@ -497,6 +497,23 @@
   .markdown-body h2:hover>.header-anchor {
     opacity: 1;
   }
+
+  .circle-overlay {
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--color-sidebar-accent);
+    transform: scale(0);
+    transition: transform 0.3s ease-out;
+    pointer-events: none;
+  }
+
+  .circle-overlay.is-active {
+    transform: scale(200);
+    pointer-events: auto;
+  }
 }
 
 @keyframes grow {
