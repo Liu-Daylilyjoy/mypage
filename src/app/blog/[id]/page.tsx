@@ -40,7 +40,7 @@ export default function ArticleDetail() {
       slideAnimation.kill();
       expandAnimation.kill();
     }
-  }, [markdownRef.current, htmlConverter])
+  }, [markdownRef, htmlConverter])
 
   return (
     <>

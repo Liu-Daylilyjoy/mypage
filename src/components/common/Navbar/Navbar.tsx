@@ -80,7 +80,7 @@ const Navbar = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('wheel', preventScroll);
     };
-  }, [containerRef.current, isOpen, isMouseAtTop]);
+  }, [containerRef, isOpen, isMouseAtTop]);
 
   return (
     <div
