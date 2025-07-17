@@ -1,7 +1,7 @@
 'use client'
 
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
-import { useState, useEffect, memo, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import NavbarItem, { NavbarItemProps } from "./NavbarItem";
 import { LuGithub } from "react-icons/lu";
 import { BsWechat } from "react-icons/bs";
@@ -38,38 +38,37 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   let containerRef = useRef<HTMLDivElement>(null);
 
-  const preventScroll = (e: WheelEvent) => {
-    e.preventDefault();
-  };
-
-  const handleScroll = () => {
-    const scrollPosition = window.scrollY;
-
-    // 如果滚动，且鼠标不在顶部，且菜单未展开，则隐藏导航栏
-    if (scrollPosition > 1 && !isMouseAtTop) {
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
-  }
-
-  const handleMouseMove = (e: MouseEvent) => {
-    // 如果鼠标在屏幕顶部 100px 范围内
-    if (e.clientY <= 100) {
-      setIsMouseAtTop(true);
-      setIsVisible(true);
-      containerRef.current?.classList.add('show');
-    } else {
-      setIsMouseAtTop(false);
-      // 如果鼠标离开顶部，且菜单未展开，则隐藏导航栏
-      if (window.scrollY > 1) {
-        setIsVisible(isOpen);
-      }
-    }
-  };
-
   useEffect(() => {
     if (!containerRef.current) return;
+
+    const preventScroll = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    const handleScroll = () => {
+      // 如果滚动，且鼠标不在顶部，且菜单未展开，则隐藏导航栏
+      if (window.scrollY > 1 && !isMouseAtTop) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // 如果鼠标在屏幕顶部 100px 范围内
+      if (e.clientY <= 100) {
+        setIsMouseAtTop(true);
+        setIsVisible(true);
+      } else {
+        setIsMouseAtTop(false);
+        // 如果鼠标离开顶部，则隐藏导航栏
+        if (window.scrollY > 1) {
+          // 移动端打开菜单是,禁用menu位移
+          setIsVisible(isOpen);
+        }
+      }
+    }
+
     // 鼠标悬停在navbar上时禁止滚动
     const container = containerRef.current;
     container.addEventListener('wheel', preventScroll, { passive: false });
@@ -81,7 +80,7 @@ const Navbar = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('wheel', preventScroll);
     };
-  }, [containerRef.current]);
+  }, [containerRef.current, isOpen, isMouseAtTop]);
 
   return (
     <div
