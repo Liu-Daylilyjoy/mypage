@@ -47,7 +47,10 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
 
   return (
     <div key={thinking.id} className="break-inside-avoid mb-10">
-      <img src={cover || '/image/loading/loading.png'} alt='header cover' className="w-full h-auto" loading="lazy" />
+      {
+        cover ? <img src={cover} alt='header cover' className="w-full h-auto" loading="lazy" />
+        : <div className="w-full h-auto flex justify-center items-center gap-2"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" />Loading cover...</div>
+      }
       <h3 className="text-2xl font-bold text-center mt-2">{thinking.title}</h3>
       <p className="text-sm text-gray-500 mt-2">{thinking.detail}</p>
     </div>
