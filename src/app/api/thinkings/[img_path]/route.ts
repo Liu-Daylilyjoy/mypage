@@ -9,9 +9,12 @@ export async function GET(req: Request, { params }: { params: { img_path: string
 
   try {
     const fileContents = await fs.readFile(fullPath);
-    const base64 = fileContents.toString('base64');
 
-    return Response.json({ data: `data:image/jpeg;base64,${base64}` });
+    return new Response(fileContents, {
+      headers: {
+        'Content-Type': 'image/jpeg',
+      },
+    });
   } catch (error) {
     console.log(error);
     return Response.json({ error: 'Failed to fetch img' }, { status: 500 });

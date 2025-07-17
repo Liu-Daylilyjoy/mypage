@@ -153,6 +153,11 @@
     }
   }
 
+  .thinking {
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
+  }
+
   ol,
   ul,
   menu {

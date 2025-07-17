@@ -3,9 +3,8 @@
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress";
 import ThinkingItem, { ThinkingItemProps } from "@/components/common/Thinking/ThinkingItem";
 import useThinkingList from "@/hook/useThinkingList";
-import { useEffect, useRef } from "react";
-
-const itemWidth = 300;
+import { useRef } from "react";
+import { imageWidth } from "@/config/ImageConfig";
 
 export default function Thinking() {
   const { data: thinkingList = [], isLoading } = useThinkingList();
@@ -16,9 +15,9 @@ export default function Thinking() {
     <>
       <ScrollProgress />
       <div className="px-20 pt-30">
-        <div className="max-w-5xl w-[90%] mx-auto relative" ref={divContainer}
+        <div className="max-w-5xl w-[90%] mx-auto relative thinking" ref={divContainer}
           style={{
-            columns: `${itemWidth}px auto`,
+            columns: `${imageWidth}px auto`,
           }}
         >
           {thinkingList.map((thinking: ThinkingItemProps) => (

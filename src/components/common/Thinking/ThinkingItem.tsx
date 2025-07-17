@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { imageWidth } from "@/config/ImageConfig";
+import { loadImageFromBlob } from "@/lib/utils";
 
 export interface ThinkingItemProps {
   id: string;
@@ -14,8 +16,31 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
   useEffect(() => {
     const fetchCover = async () => {
       const response = await fetch(`/api/thinkings/${thinking.cover}`);
-      const data = await response.json();
-      setCover(data.data);
+      const blob = await response.blob();
+
+      const img = await loadImageFromBlob(blob);
+      const aspectRatio = img.height / img.width;
+      const targetWidth = imageWidth*2;
+      const targetHeight = Math.round(targetWidth * aspectRatio);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas not supported');
+      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            setCover(url);
+          }
+        },
+        'image/jpeg',
+        0.7
+      );
     }
     fetchCover();
   }, []);
