@@ -46,8 +46,7 @@ const Navbar = () => {
     };
 
     const handleScroll = () => {
-      // 如果滚动，且鼠标不在顶部，且菜单未展开，则隐藏导航栏
-      if (window.scrollY > 1 && !isMouseAtTop) {
+      if (window.scrollY > 1) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -80,7 +79,7 @@ const Navbar = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('wheel', preventScroll);
     };
-  }, [containerRef, isOpen, isMouseAtTop]);
+  }, [isOpen]);
 
   return (
     <div
