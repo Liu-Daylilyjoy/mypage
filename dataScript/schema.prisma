@@ -30,3 +30,11 @@ model Thinking {
   updatedAt DateTime @updatedAt
   cover     String   @default("")
 }
+
+model Photo {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  path        String   @default("")
+}

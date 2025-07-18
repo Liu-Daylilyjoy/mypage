@@ -3,8 +3,8 @@ const path = require('path');
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
-export async function GET(req: Request, { params }: { params: { img_path: string } }) {
-  const { img_path: imgPath } = await params;
+export async function GET(req: Request, { params }: { params: { imgPath: string } }) {
+  const { imgPath } = await params;
   const fullPath = path.join(postsDir, 'thinking', imgPath);
 
   try {
