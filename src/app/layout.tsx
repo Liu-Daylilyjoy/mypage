@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from 'next/font/local'
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import Navbar from "@/components/common/Navbar/Navbar";
 
 const myFont = localFont({
   src: '../../public/font/Aurora-2.ttf',
@@ -32,7 +31,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
         </ThemeProvider>
       </body>
