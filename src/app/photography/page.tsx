@@ -2,7 +2,6 @@
 
 import usePhotoList from "@/hook/usePhotoList";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
 
 // 高性能无限滑动参考了
 // https://github.com/JIEJOE-WEB-Tutorial/008-02-infinite-scrolling-canvas/blob/main/infinite%20scrolling%20canvas.html
@@ -31,6 +30,7 @@ export default function Photography() {
 
     let imgData: any[] = [];
     let movable = false;
+    let clickable = true;
 
     for (let i = 0; i < imageNumber; i++) {
       let img = new Image();
@@ -101,24 +101,51 @@ export default function Photography() {
       });
     }
 
-    function showImageFullscreen(img: HTMLImageElement) {
+    function showImageFullscreen(img: any) {
       const viewer = document.createElement('div');
       viewer.style.position = 'fixed';
       viewer.style.top = '0';
       viewer.style.left = '0';
       viewer.style.width = '100vw';
       viewer.style.height = '100vh';
-      viewer.style.background = 'rgba(0,0,0,0.95)';
+      viewer.style.background = 'rgba(0,0,0,0.65)';
       viewer.style.display = 'flex';
       viewer.style.alignItems = 'center';
       viewer.style.justifyContent = 'center';
+      viewer.style.flexDirection = 'column';
+      viewer.style.gap = '10px';
       viewer.style.zIndex = '9999';
 
       const imgEl = document.createElement('img');
-      imgEl.src = img.src;
+      imgEl.src = img.img.src;
       imgEl.style.maxWidth = '90%';
-      imgEl.style.maxHeight = '90%';
+      imgEl.style.maxHeight = '70%';
       viewer.appendChild(imgEl);
+
+      const title = document.createElement('h2');
+      title.style.maxWidth = '40%';
+      title.style.color = 'white';
+      title.style.fontSize = '20px';
+      title.style.fontWeight = 'bold';
+      title.textContent = photoList[img.i].title;
+      viewer.appendChild(title);
+
+      const description = document.createElement('div');
+      description.style.textIndent = '2em';
+      description.style.maxWidth = '40%';
+      description.style.color = 'white';
+      description.style.fontSize = '16px';
+      description.style.fontWeight = 'normal';
+      description.textContent = photoList[img.i].description;
+      viewer.appendChild(description);
+
+      const date = document.createElement('span');
+      date.style.color = 'var(--theme-color)';
+      date.style.fontSize = '14px';
+      date.style.fontWeight = 'normal';
+      date.textContent = new Date(photoList[img.i].createdAt).toLocaleDateString();
+      date.style.marginTop = '10px';
+      viewer.appendChild(date);
 
       document.body.appendChild(viewer);
 
@@ -133,7 +160,7 @@ export default function Photography() {
           y >= img.y && y < img.y + imgHeight
         );
 
-        if (img) showImageFullscreen(img.img);
+        if (img) showImageFullscreen(img);
     }
 
     let mouseDown = (e: MouseEvent) => {
@@ -142,14 +169,31 @@ export default function Photography() {
 
     let mouseUp = (e: MouseEvent) => {
       movable = false;
-      findImg(e.x, e.y);
+      if (clickable) findImg(e.x, e.y);
     }
 
     let mouseLeave = () => {
       movable = false;
     }
 
+    function debounce(delay: number) {
+      let timer: any = null;
+
+      return function () {
+        clearTimeout(timer); // 清除上一个定时器
+        timer = setTimeout(() => {
+          clickable = true;
+        }, delay);
+      };
+    }
+
+    let debounceFindImg = debounce(100);
+
     let mouseMove = (e: MouseEvent) => {
+      if (e.movementX !== 0 || e.movementY !== 0) {
+        clickable = false;
+        debounceFindImg();
+      }
       if (movable) {
         move(e.movementX, e.movementY);
       }
