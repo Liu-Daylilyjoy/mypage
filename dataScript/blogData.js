@@ -40,6 +40,7 @@ db.getCollection('Blog').insertMany([
     updatedAt: new Date("2025-01-04")
   },
   {
+    _id: '6858b9849b01a2760fe17963',
     title: "Japanese Language Learning for Beginners",
     description: "Curious about Japanese language and culture? This tutorial will guide you from zero to start learning Japanese systematically. We'll cover basic pronunciation, common vocabulary, grammar structures, and incorporate Japanese cultural tidbits, allowing you to deeply understand this fascinating country while learning the language. Whether for travel, work, or interest, this tutorial will help you take your first steps in Japanese learning easily.",
     createdAt: new Date("2025-01-05"),

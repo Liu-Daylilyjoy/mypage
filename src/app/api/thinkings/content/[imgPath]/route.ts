@@ -10,9 +10,21 @@ export async function GET(req: Request, { params }: { params: { imgPath: string 
   try {
     const fileContents = await fs.readFile(fullPath);
 
+    // Determine content type based on file extension
+    const ext = path.extname(imgPath).toLowerCase();
+    let contentType = 'image/jpeg';
+
+    if (ext === '.png') {
+      contentType = 'image/png';
+    } else if (ext === '.gif') {
+      contentType = 'image/gif';
+    } else if (ext === '.webp') {
+      contentType = 'image/webp';
+    }
+
     return new Response(fileContents, {
       headers: {
-        'Content-Type': 'image/jpeg',
+        'Content-Type': contentType,
       },
     });
   } catch (error) {

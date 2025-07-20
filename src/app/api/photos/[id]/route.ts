@@ -3,16 +3,16 @@ import prismadb from "@/lib/prismadb";
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    
-    const blog = await prismadb.blog.findUnique({
+
+    const photo = await prismadb.photo.findUnique({
       where: { id }
     });
 
-    if (!blog) {
-      return Response.json({ error: "Blog not found" }, { status: 404 });
+    if (!photo) {
+      return Response.json({ error: "Photo not found" }, { status: 404 });
     }
 
-    return Response.json(blog);
+    return Response.json(photo);
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
@@ -23,22 +23,22 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   try {
     const { id } = await params;
     const body = await req.json();
-    const { title, description, content } = body;
+    const { title, description, path } = body;
 
     if (!title || !description) {
       return Response.json({ error: "Title and description are required" }, { status: 400 });
     }
 
-    const blog = await prismadb.blog.update({
+    const photo = await prismadb.photo.update({
       where: { id },
       data: {
         title,
         description,
-        content: content || ""
+        path: path || ""
       }
     });
 
-    return Response.json(blog);
+    return Response.json(photo);
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
@@ -48,14 +48,14 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    
-    await prismadb.blog.delete({
+
+    await prismadb.photo.delete({
       where: { id }
     });
 
-    return Response.json({ message: "Blog deleted successfully" });
+    return Response.json({ message: "Photo deleted successfully" });
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
-}
+} 

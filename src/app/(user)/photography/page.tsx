@@ -34,7 +34,7 @@ export default function Photography() {
 
     for (let i = 0; i < imageNumber; i++) {
       let img = new Image();
-      img.src = `/api/photos/${photoList[i].path}`;
+      img.src = `/api/photos/content/${photoList[i].path}`;
       img.onload = () => {
         let col = i % maxColumn;
         let row = Math.floor(i / maxColumn);

@@ -212,14 +212,17 @@
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
-    /* Firefox */
     -ms-overflow-style: none;
-    /* IE and Edge */
   }
 
   html::-webkit-scrollbar {
     display: none;
-    /* Chrome, Safari and Opera */
+  }
+
+  /* 模态框的滚动条样式 */
+  .modal-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
   }
 
   .welcome-page {
@@ -521,6 +524,21 @@
   .circle-overlay.is-active {
     transform: scale(200);
     pointer-events: auto;
+  }
+
+  .rotate-3d {
+    transform-style: preserve-3d;
+    animation: rotateY 1s linear infinite;
+  }
+}
+
+@keyframes rotateY {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg);
   }
 }
 

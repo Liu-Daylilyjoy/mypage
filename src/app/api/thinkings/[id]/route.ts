@@ -3,16 +3,16 @@ import prismadb from "@/lib/prismadb";
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    
-    const blog = await prismadb.blog.findUnique({
+
+    const thinking = await prismadb.thinking.findUnique({
       where: { id }
     });
 
-    if (!blog) {
-      return Response.json({ error: "Blog not found" }, { status: 404 });
+    if (!thinking) {
+      return Response.json({ error: "Thinking not found" }, { status: 404 });
     }
 
-    return Response.json(blog);
+    return Response.json(thinking);
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
@@ -23,22 +23,22 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   try {
     const { id } = await params;
     const body = await req.json();
-    const { title, description, content } = body;
+    const { title, detail, cover } = body;
 
-    if (!title || !description) {
-      return Response.json({ error: "Title and description are required" }, { status: 400 });
+    if (!title || !detail) {
+      return Response.json({ error: "Title and detail are required" }, { status: 400 });
     }
 
-    const blog = await prismadb.blog.update({
+    const thinking = await prismadb.thinking.update({
       where: { id },
       data: {
         title,
-        description,
-        content: content || ""
+        detail,
+        cover: cover || ""
       }
     });
 
-    return Response.json(blog);
+    return Response.json(thinking);
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
@@ -48,14 +48,14 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    
-    await prismadb.blog.delete({
+
+    await prismadb.thinking.delete({
       where: { id }
     });
 
-    return Response.json({ message: "Blog deleted successfully" });
+    return Response.json({ message: "Thinking deleted successfully" });
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
-}
+} 

@@ -15,7 +15,7 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
 
   useEffect(() => {
     const fetchCover = async () => {
-      const response = await fetch(`/api/thinkings/${thinking.cover}`);
+      const response = await fetch(`/api/thinkings/content/${thinking.cover}`);
       const blob = await response.blob();
 
       const img = await loadImageFromBlob(blob);
@@ -49,7 +49,7 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
     <div key={thinking.id} className="break-inside-avoid mb-10">
       {
         cover ? <img src={cover} alt='header cover' className="w-full h-auto" loading="lazy" />
-        : <div className="w-full h-auto flex justify-center items-center gap-2"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" />Loading cover...</div>
+        : <div className="w-full h-auto flex justify-center items-center gap-2"><div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>Loading cover...</div>
       }
       <h3 className="text-2xl font-bold text-center mt-2">{thinking.title}</h3>
       <p className="text-sm text-gray-500 mt-2">{thinking.detail}</p>
