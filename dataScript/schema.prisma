@@ -38,3 +38,9 @@ model Photo {
   createdAt   DateTime @default(now())
   path        String   @default("")
 }
+
+model PageVisitCount {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  page  String @unique
+  count Int
+}

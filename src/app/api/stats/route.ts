@@ -2,17 +2,21 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET(req: Request) {
   try {
-    // 并行获取所有类型的数量
-    const [blogsCount, thinkingsCount, photosCount] = await Promise.all([
+    const [blogsCount, thinkingsCount, photosCount, visitStats] = await Promise.all([
       prismadb.blog.count(),
       prismadb.thinking.count(),
-      prismadb.photo.count()
+      prismadb.photo.count(),
+      prismadb.pageVisitCount.findMany({})
     ]);
 
     return Response.json({
       blogs: blogsCount,
       thinkings: thinkingsCount,
-      photos: photosCount
+      photos: photosCount,
+      visitStats: visitStats.map((stat: { page: string; count: number }) => ({
+        page: stat.page,
+        count: stat.count
+      }))
     });
   } catch (error) {
     console.log(error);

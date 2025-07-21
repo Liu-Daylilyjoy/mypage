@@ -1,4 +1,5 @@
 import Navbar from "@/components/common/Navbar/Navbar";
+import VisitTracker from "@/components/common/Stats/VisitTracker";
 
 export default function UserLayout({
   children,
@@ -8,6 +9,7 @@ export default function UserLayout({
   return (
     <>
       <Navbar />
+      <VisitTracker />
       {children}
     </>
   )

@@ -4,37 +4,11 @@ import { useEffect, useState } from "react";
 import { FileText, Lightbulb, Camera, RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import DashboardStats from "@/components/common/Stats/DashboardStats";
-
-interface Stats {
-  blogs: number;
-  thinkings: number;
-  photos: number;
-}
+import useStats from "@/hook/useStats";
 
 export default function AdminPage() {
-  const [stats, setStats] = useState<Stats>({ blogs: 0, thinkings: 0, photos: 0 });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/stats');
-        const data = await response.json();
-
-        setStats({
-          blogs: data.blogs || 0,
-          thinkings: data.thinkings || 0,
-          photos: data.photos || 0
-        });
-      } catch (error) {
-        console.error('Failed to fetch stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStats();
-  }, []);
+  const { data: stats, isLoading: loading, mutate } = useStats();
+  const [refreshing, setRefreshing] = useState(false);
 
   const quickActions = [
     {
@@ -69,31 +43,41 @@ export default function AdminPage() {
         <h1 className="text-3xl font-bold">Admin</h1>
         <p className="text-muted-foreground mt-2">Welcome back, this is your personal website admin backend</p>
         <div className="mt-4">
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
+            onClick={async () => {
+              setRefreshing(true);
+              await mutate();
+              setRefreshing(false);
+            }}
+            disabled={refreshing}
           >
-            <RefreshCcw size={16} />
-            Refresh
-          </Link>
+            {refreshing ? (
+              <span className="animate-spin"><RefreshCcw size={16} /></span>
+            ) : (
+              <RefreshCcw size={16} />
+            )}
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border">
-        <div className="bg-gray-100 md:bg-transparent p-6 flex items-center">
+        <div className="bg-sidebar md:bg-transparent p-6 flex items-center">
           <p className="text-lg font-medium text-muted-foreground md:w-32 w-64">Blogs:</p>
-          <p className="text-5xl font-bold">{stats.blogs}</p>
+          <p className="text-5xl font-bold">{stats?.blogs ?? 0}</p>
         </div>
 
         <div className="bg-transparent px-6 flex items-center">
           <p className="text-lg font-medium text-muted-foreground md:w-32 w-64">Thinkings:</p>
-          <p className="text-5xl font-bold">{stats.thinkings}</p>
+          <p className="text-5xl font-bold">{stats?.thinkings ?? 0}</p>
         </div>
 
-        <div className="bg-gray-100 md:bg-transparent p-6 flex items-center">
+        <div className="bg-sidebar md:bg-transparent p-6 flex items-center">
           <p className="text-lg font-medium text-muted-foreground md:w-32 w-64">Photos:</p>
-          <p className="text-5xl font-bold">{stats.photos}</p>
+          <p className="text-5xl font-bold">{stats?.photos ?? 0}</p>
         </div>
       </div>
 
@@ -123,17 +107,7 @@ export default function AdminPage() {
       {/* Dashboard Statistics */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Statistics</h2>
-        <DashboardStats period="30d" />
-      </div>
-
-      {/* Recent Activity */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">最近活动</h2>
-        <div className="bg-card p-6 rounded-lg border border-border">
-          <p className="text-muted-foreground">
-            暂无最近活动记录
-          </p>
-        </div>
+        <DashboardStats />
       </div>
     </div>
   );
