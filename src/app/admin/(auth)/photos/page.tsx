@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Eye, Search, Image } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
@@ -47,6 +47,19 @@ export default function PhotosPage() {
   const handleCloseModal = () => {
     setSelectedPhoto(null);
   };
+
+  // 模态框展开时,阻止背景页面滚动
+  useEffect(() => {
+    if (selectedPhoto) {
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+    }
+
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [selectedPhoto]);
 
   const filteredPhotos = photos.filter((photo: Photo) =>
     photo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -192,7 +205,7 @@ export default function PhotosPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm pointer-events-auto"
             onClick={handleCloseModal}
           />
 

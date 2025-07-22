@@ -114,7 +114,7 @@ export default function ThinkingsPage() {
           </div>
         ) : (
           filteredThinkings.map((thinking: Thinking) => (
-            <div key={thinking.id} className="bg-card border border-border overflow-hidden shadow-secondary hover:shadow-lg transition-shadow break-inside-avoid mb-6">
+            <div key={thinking.id} className="bg-card border border-border overflow-hidden shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all break-inside-avoid mb-6">
               {/* Cover Image */}
               <div className="bg-muted flex items-center justify-center overflow-hidden">
                 {thinking.cover ? (
@@ -135,10 +135,10 @@ export default function ThinkingsPage() {
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                <h3 className="font-semibold text-lg mb-2">
                   {thinking.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                <p className="text-sm text-muted-foreground mb-4">
                   {thinking.detail}
                 </p>
 
@@ -149,14 +149,6 @@ export default function ThinkingsPage() {
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-2">
-                  <Link
-                    href={`/thinking/${thinking.id}`}
-                    target="_blank"
-                    className="p-2 hover:bg-accent rounded-md transition-colors"
-                    title="View"
-                  >
-                    <Eye size={16} />
-                  </Link>
                   <Link
                     href={`/admin/thinkings/edit/${thinking.id}`}
                     className="p-2 hover:bg-accent rounded-md transition-colors"

@@ -10,7 +10,7 @@ export const adminImageConfig = {
   // 摄影作品图片
   photo: {
     targetWidth: 600,
-    quality: 0.9,
+    quality: 0.3,
   },
   // 预览图片
   preview: {
