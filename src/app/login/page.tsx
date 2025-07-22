@@ -13,6 +13,10 @@ export default function AdminLoginPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      setError("Please enter both username and password.");
+      return;
+    }
     setLoading(true);
     setError("");
     const res = await signIn("credentials", {
@@ -30,34 +34,46 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <form onSubmit={handleSubmit} style={{ minWidth: 320, padding: 32, border: "1px solid #eee", borderRadius: 8, background: "#fff", boxShadow: "0 2px 8px #0001" }}>
-        <h2 style={{ textAlign: "center", marginBottom: 24 }}>Login</h2>
-        <div style={{ marginBottom: 16 }}>
-          <label>Username</label>
+    <div className="min-h-screen flex items-center justify-center bg-secondary/70">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm flex flex-col gap-6 border-none bg-transparent p-0"
+      >
+        <h2 className="text-center mb-2 tracking-wider font-bold text-2xl select-none">
+          Admin
+        </h2>
+        <div>
+          <label className="block font-medium mb-1">Username</label>
           <input
+            className="w-full border-0 border-b border-primary/30 focus:border-primary focus:ring-0 py-2 px-0 transition-colors duration-200"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
             autoComplete="username"
-            required
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
           />
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>Password</label>
+        <div>
+          <label className="block font-medium mb-1">Password</label>
           <input
+            className="w-full border-0 border-b border-primary/30 focus:border-primary focus:ring-0 py-2 px-0 transition-colors duration-200"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             autoComplete="current-password"
-            required
-            style={{ width: "100%", padding: 8, marginTop: 4 }}
           />
         </div>
-        {error && <div style={{ color: "red", marginBottom: 12 }}>{error}</div>}
-        <button type="submit" disabled={loading} style={{ width: "100%", padding: 10, background: "#222", color: "#fff", border: 0, borderRadius: 4 }}>
-          {loading ? "Logging in..." : "Login"}
+        {error && (
+          <div className="flex items-center gap-2 bg-gradient-to-r from-theme-color to-transparent px-4 py-2 font-medium">
+            <span className="text-lg">⚠️</span>
+            {error}
+          </div>
+        )}
+        <button
+          type="submit"
+          className="w-full py-3 mt-2 text-secondary font-bold text-lg transition-all duration-200 bg-primary hover:bg-primary/80 disabled:cursor-not-allowed disabled:bg-primary/80 disabled:text-secondary/80 rounded-md"
+          disabled={loading}
+        >
+          {loading ? "Logging..." : "Login"}
         </button>
       </form>
     </div>
