@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { loadImageFromBlob } from "@/lib/utils";
 import { Image } from "lucide-react";
 
@@ -22,6 +22,7 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
   const [compressedSrc, setCompressedSrc] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const prevCompressedSrc = useRef<string>('');
 
   useEffect(() => {
     const compressImage = async () => {
@@ -75,15 +76,16 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
 
     // Cleanup function to revoke object URL
     return () => {
-      if (compressedSrc) {
-        URL.revokeObjectURL(compressedSrc);
+      if (prevCompressedSrc.current) {
+        URL.revokeObjectURL(prevCompressedSrc.current);
       }
+      prevCompressedSrc.current = compressedSrc;
     };
   }, [src, targetWidth, quality]);
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center bg-muted w-full h-full py-4'>
+      <div className='flex items-center justify-center w-full h-full py-4'>
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );

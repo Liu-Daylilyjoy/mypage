@@ -1,5 +1,6 @@
 "use client"
 
+import { imageSize } from "@/config/ImageConfig";
 import usePhotoList from "@/hook/usePhotoList";
 import { useEffect, useRef } from "react";
 
@@ -20,10 +21,10 @@ export default function Photography() {
     let maxColumn = 6;
     let maxRow = Math.ceil(imageNumber / maxColumn);
 
-    let imgWidth = 300;
-    let imgHeight = 300;
+    let imgWidth = imageSize.width;
+    let imgHeight = imageSize.height;
 
-    let imgMargin = 150;
+    let imgMargin = imageSize.margin;
 
     let totalWidth = maxColumn * (imgWidth + imgMargin) - imgMargin;
     let totalHeight = maxRow * (imgHeight + imgMargin) - imgMargin;
@@ -32,8 +33,10 @@ export default function Photography() {
     let movable = false;
     let clickable = true;
 
+    let imgs: HTMLImageElement[] = [];
     for (let i = 0; i < imageNumber; i++) {
       let img = new Image();
+      imgs.push(img);
       img.src = `/api/photos/content/${photoList[i].path}`;
       img.onload = () => {
         let col = i % maxColumn;
@@ -45,7 +48,7 @@ export default function Photography() {
         // 裁剪图片，保持比例
         let imgAspect = img.width / img.height;
         let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
-        
+
         if (imgAspect > 1) {
           sWidth = img.height;
           sx = (img.width - sWidth) / 2;
@@ -155,12 +158,12 @@ export default function Photography() {
 
     let findImg = (x: number, y: number) => {
       // 遍历所有图片，找出鼠标xy坐标处于图片内部的那张图片
-        let img = imgData.find(img =>
-          x >= img.x && x < img.x + imgWidth &&
-          y >= img.y && y < img.y + imgHeight
-        );
+      let img = imgData.find(img =>
+        x >= img.x && x < img.x + imgWidth &&
+        y >= img.y && y < img.y + imgHeight
+      );
 
-        if (img) showImageFullscreen(img);
+      if (img) showImageFullscreen(img);
     }
 
     let mouseDown = (e: MouseEvent) => {
@@ -212,6 +215,7 @@ export default function Photography() {
       canvas.removeEventListener('mouseup', mouseUp);
       canvas.removeEventListener('mouseleave', mouseLeave);
       canvas.removeEventListener('mousemove', mouseMove);
+      imgs.forEach(img => { img.onload = null; });
     }
   }, [photoList]);
 

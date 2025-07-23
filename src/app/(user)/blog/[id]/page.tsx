@@ -5,21 +5,23 @@ import useBlog from '@/hook/useBlog';
 import { md } from '@/lib/utils';
 import gsap from 'gsap';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 
 export default function ArticleDetail() {
   const { id } = useParams();
   const { data } = useBlog(id as string);
   const markdownRef = useRef<HTMLDivElement>(null)
 
-  const htmlConverter = md.render(data?.content || '');
+  const htmlConverter = useMemo(() =>
+    md.render(data?.content || ''
+  ), [data?.content]);
 
   useEffect(() => {
     if (!markdownRef.current || !htmlConverter) return;
-    
+
     const children = markdownRef.current.children;
     for (let i = 0; i < children.length; i++) {
-      (children[i] as HTMLElement).classList.add('slide');
+      (children[i] as HTMLElement).classList.toggle('slide');
     }
 
     let slideAnimation = gsap.fromTo(".slide", {
@@ -40,7 +42,7 @@ export default function ArticleDetail() {
       slideAnimation.kill();
       expandAnimation.kill();
     }
-  }, [markdownRef, htmlConverter])
+  }, [htmlConverter])
 
   return (
     <>

@@ -1,4 +1,8 @@
-export const imageWidth = 300;
+export const imageSize = {
+  width: 300,
+  height: 300,
+  margin: 150,
+}
 
 // 管理后台图片压缩配置
 export const adminImageConfig = {
