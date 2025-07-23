@@ -19,7 +19,6 @@ export async function GET(req: Request) {
       }))
     });
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 } 

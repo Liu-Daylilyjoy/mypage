@@ -28,7 +28,6 @@ export async function GET(req: Request, { params }: { params: { imgPath: string 
       },
     });
   } catch (error) {
-    console.log(error);
     return Response.json({ error: 'Failed to fetch img' }, { status: 500 });
   }
 }

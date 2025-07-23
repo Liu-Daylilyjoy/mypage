@@ -12,7 +12,6 @@ export async function GET(req: Request) {
 
     return Response.json(photos);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -40,7 +39,6 @@ export async function POST(req: Request) {
 
     return Response.json(photo);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

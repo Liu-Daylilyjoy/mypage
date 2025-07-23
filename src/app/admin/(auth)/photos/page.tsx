@@ -210,7 +210,7 @@ export default function PhotosPage() {
           />
 
           {/* Modal Content */}
-          <div className="relative max-w-4xl max-h-[90vh] w-full bg-transparent shadow-2xl overflow-y-auto modal-scrollbar">
+          <div className="relative max-w-4xl max-h-[90vh] w-full bg-transparent shadow-2xl overflow-y-auto scrollbar">
             {/* Header */}
             <div className="flex items-center justify-between p-4">
               <div>

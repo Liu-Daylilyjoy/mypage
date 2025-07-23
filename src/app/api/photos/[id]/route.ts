@@ -16,7 +16,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     return Response.json(photo);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -46,7 +45,6 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
     return Response.json(photo);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -65,7 +63,6 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
 
     return Response.json({ message: "Photo deleted successfully" });
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 } 

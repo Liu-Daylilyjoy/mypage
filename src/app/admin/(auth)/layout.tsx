@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Toaster } from "sonner";
 
 const adminNavItems = [
   {
@@ -50,6 +51,7 @@ export default function AdminLayout({
 
   return (
     <div className="min-h-screen bg-background">
+      <Toaster position="top-right" />
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div

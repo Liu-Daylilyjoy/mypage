@@ -121,6 +121,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    @apply caret-theme-color;
   }
 
   img {
@@ -219,8 +220,7 @@
     display: none;
   }
 
-  /* 模态框的滚动条样式 */
-  .modal-scrollbar {
+  .scrollbar {
     scrollbar-width: thin;
     scrollbar-color: var(--muted-foreground) transparent;
   }
@@ -357,6 +357,10 @@
   .markdown-body {
     line-height: 1.8;
     word-wrap: break-word;
+  }
+
+  .markdown-body hr {
+    margin-bottom: 1em;
   }
 
   .markdown-body h1,

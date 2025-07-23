@@ -16,7 +16,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
     return Response.json(blog);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -29,7 +28,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   try {
     const { id } = await params;
     const body = await req.json();
-    const { title, description, content } = body;
+    const { title, description } = body;
 
     if (!title || !description) {
       return Response.json({ error: "Title and description are required" }, { status: 400 });
@@ -40,13 +39,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       data: {
         title,
         description,
-        content: content || ""
+        updatedAt: new Date()
       }
     });
 
     return Response.json(blog);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -65,7 +63,6 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
 
     return Response.json({ message: "Blog deleted successfully" });
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

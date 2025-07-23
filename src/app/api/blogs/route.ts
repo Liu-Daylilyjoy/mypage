@@ -40,7 +40,6 @@ export async function POST(req: Request) {
 
     return Response.json(blog);
   } catch (error) {
-    console.log(error);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

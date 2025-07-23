@@ -159,7 +159,7 @@ export default function BlogsPage() {
                           <Eye size={16} />
                         </Link>
                         <Link
-                          href={`/admin/blogs/${blog.id}/edit`}
+                          href={`/admin/blogs/edit/${blog.id}`}
                           className="p-2 hover:bg-accent rounded-md transition-colors"
                           title="Edit"
                         >
