@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   }
   try {
     const body = await req.json();
-    const { title, description, content } = body;
+    const { title, description } = body;
 
     if (!title || !description) {
       return Response.json({ error: "Title and description are required" }, { status: 400 });
@@ -34,7 +34,8 @@ export async function POST(req: Request) {
       data: {
         title,
         description,
-        content: content || ""
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     });
 

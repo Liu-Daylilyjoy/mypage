@@ -5,6 +5,9 @@ import { Plus, Edit, Trash2, Eye, Search } from "lucide-react";
 import Link from "next/link";
 import useBlogList from "@/hook/useBlogList";
 import { mutate } from "swr";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Blog {
   id: string;
@@ -19,6 +22,11 @@ export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const { data: blogs = [], isLoading: loading } = useBlogList();
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [creating, setCreating] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this blog?')) return;
@@ -40,6 +48,33 @@ export default function BlogsPage() {
     }
   };
 
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreating(true);
+    try {
+      const response = await fetch('/api/blogs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setShowModal(false);
+        setTitle("");
+        setDescription("");
+        toast.success('Blog created successfully!');
+        mutate('/api/blogs'); // 列表自动刷新
+        router.push(`/admin/blogs/edit/${data.id}`);
+      } else {
+        toast.error('Failed to create blog');
+      }
+    } catch (error) {
+      toast.error('Failed to create blog');
+    } finally {
+      setCreating(false);
+    }
+  };
+
   const filteredBlogs = blogs.filter((blog: Blog) =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     blog.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,7 +93,7 @@ export default function BlogsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div> 
+        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
       </div>
     );
   }
@@ -72,13 +107,56 @@ export default function BlogsPage() {
           <p className="text-muted-foreground mt-2">Manage your blog articles</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="/admin/blogs/new"
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <Plus size={16} />
-            New Blog
-          </Link>
+          <Dialog open={showModal} onOpenChange={setShowModal}>
+            <DialogTrigger asChild>
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              >
+                <Plus size={16} />
+                New Blog
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md rounded-sm" showCloseButton={false}>
+              <DialogHeader>
+                <DialogTitle>New Blog</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreate} className="flex flex-col gap-4 mt-4">
+                <input
+                  type="text"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  className="border border-border rounded-md px-3 py-2 bg-background text-base focus:outline-none focus:ring-2 focus:ring-theme-color"
+                  placeholder="title"
+                  required
+                />
+                <textarea
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  className="border border-border rounded-md px-3 py-2 bg-background text-base focus:outline-none focus:ring-2 focus:ring-theme-color resize-none"
+                  placeholder="description"
+                  rows={3}
+                  required
+                />
+                <DialogFooter className="flex justify-end gap-9 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="px-4 py-2 rounded-md box-content border border-border bg-background hover:bg-accent transition-colors"
+                    disabled={creating}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+                    disabled={creating || !title || !description}
+                  >
+                    {creating ? 'Creating...' : 'Create'}
+                  </button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
