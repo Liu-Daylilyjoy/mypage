@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, X, ArrowLeft, Upload, Image, Home } from "lucide-react";
+import { Save, X, ArrowLeft, Upload, Image as ImageIcon, Home } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
 import { adminImageConfig } from "@/config/ImageConfig";
@@ -177,9 +177,9 @@ export default function NewPhotoPage() {
                         src={formData.path}
                         alt="照片预览"
                         className="w-full h-full object-cover"
-                        targetWidth={adminImageConfig.preview.targetWidth}
-                        quality={adminImageConfig.preview.quality}
-                        fallbackIcon={<Image size={48} className="text-muted-foreground" />}
+                        targetWidth={adminImageConfig.photo.targetWidth}
+                        quality={adminImageConfig.photo.quality}
+                        fallbackIcon={<ImageIcon size={48} className="text-muted-foreground" />}
                       />
                     </div>
                   </div>
@@ -193,7 +193,7 @@ export default function NewPhotoPage() {
             <h2 className="text-lg font-semibold mb-4">图片上传</h2>
             <div className="space-y-4">
               <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
-                <Image size={48} className="mx-auto mb-4 text-muted-foreground" />
+                <ImageIcon size={48} className="mx-auto mb-4 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground mb-4">
                   拖拽图片到此处或点击上传
                 </p>

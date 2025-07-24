@@ -23,7 +23,7 @@ const WelcomePage = () => {
     let index = 0;
     let isDeleting = false;
     const typingSpeed = 50; // 打字速度的倒数
-    let deletingSpeed = 3; // 删除速度（比打字速度快多少倍）
+    const deletingSpeed = 3; // 删除速度（比打字速度快多少倍）
     let randomIndex = 0;
 
     // 等待指定时间

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { loadImageFromBlob } from "@/lib/utils";
-import { Image } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
 
 interface CompressedImageProps {
   src: string;
@@ -17,14 +18,15 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
   className = "",
   targetWidth = 300,
   quality = 0.7,
-  fallbackIcon = <Image size={48} />
+  fallbackIcon = <ImageIcon size={48} />
 }) => {
-  const [compressedSrc, setCompressedSrc] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const prevCompressedSrc = useRef<string>('');
+  const [url, setUrl] = useState<string>('');
+  const prevCompressedSrc = useRef<string | null>(null);
 
   useEffect(() => {
+    let compressedSrc: string | null = null;
     const compressImage = async () => {
       try {
         setLoading(true);
@@ -53,8 +55,8 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              const url = URL.createObjectURL(blob);
-              setCompressedSrc(url);
+              compressedSrc = URL.createObjectURL(blob);
+              setUrl(compressedSrc);
             } else {
               setError(true);
             }
@@ -63,8 +65,7 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
           'image/jpeg',
           quality
         );
-      } catch (err) {
-        console.error('Image compression failed:', err);
+      } catch {
         setError(true);
         setLoading(false);
       }
@@ -100,11 +101,13 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
   }
 
   return (
-    <img
-      src={compressedSrc}
+    <Image
+      src={url}
       alt={alt}
       className={className}
       loading="lazy"
+      width={targetWidth}
+      height={targetWidth}
     />
   );
 };

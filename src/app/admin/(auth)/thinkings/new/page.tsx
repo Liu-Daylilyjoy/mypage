@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, X, ArrowLeft, Upload, Home } from "lucide-react";
+import { Save, X, ArrowLeft, Upload, Home, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
 import { adminImageConfig } from "@/config/ImageConfig";
@@ -156,9 +156,9 @@ export default function NewThinkingPage() {
                         src={formData.cover}
                         alt="封面预览"
                         className="w-full h-32 object-cover rounded-lg mt-2"
-                        targetWidth={adminImageConfig.preview.targetWidth}
-                        quality={adminImageConfig.preview.quality}
-                        fallbackIcon={<Image size={32} className="text-muted-foreground" />}
+                        targetWidth={adminImageConfig.thinking.targetWidth}
+                        quality={adminImageConfig.thinking.quality}
+                        fallbackIcon={<ImageIcon size={32} className="text-muted-foreground" />}
                       />
                     </div>
                   </div>

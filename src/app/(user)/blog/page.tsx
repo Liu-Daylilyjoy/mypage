@@ -8,15 +8,16 @@ import { parseISO, format } from 'date-fns'
 import { useRouter } from "next/navigation"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
+import Maple3D from "@/components/common/Loading/Maple3D"
 
 export default function Blog() {
   const { data: blogList = [], isLoading } = useBlogList();
 
   const { blogsByYear, sortedYears } = useMemo(() => {
     // Group blogs by year
-    const blogsByYear = blogList.reduce((acc: any, blog: any) => {
-      let date = parseISO(blog.createdAt);
-      let year = date.getFullYear();
+    const blogsByYear = blogList.reduce((acc: Record<string, BlogItemProps[]>, blog: BlogItemProps) => {
+      const date = parseISO(blog.createdAt);
+      const year = date.getFullYear();
       if (!acc[year]) {
         acc[year] = [];
       }
@@ -27,7 +28,7 @@ export default function Blog() {
     const sortedYears = Object.keys(blogsByYear).sort((a, b) => Number(b) - Number(a));
 
     return { blogsByYear, sortedYears };
-  }, [blogList]);
+  }, [blogList.length]);
 
   const router = useRouter();
   const handleCardClick = (id: string) => {
@@ -46,7 +47,7 @@ export default function Blog() {
   }, [sortedYears])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Maple3D />
   }
 
   return (

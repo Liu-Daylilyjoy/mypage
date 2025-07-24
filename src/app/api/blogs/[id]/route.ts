@@ -1,33 +1,29 @@
 import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/config/AuthConfig";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-
-    const blog = await prismadb.blog.findUnique({
-      where: { id }
-    });
-
+    const blog = await prismadb.blog.findUnique({ where: { id } });
     if (!blog) {
       return Response.json({ error: "Blog not found" }, { status: 404 });
     }
-
     return Response.json(blog);
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const { id } = await params;
-    const body = await req.json();
+    const body = await request.json();
     const { title, description } = body;
 
     if (!title || !description) {
@@ -44,25 +40,21 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     });
 
     return Response.json(blog);
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const { id } = await params;
-
-    await prismadb.blog.delete({
-      where: { id }
-    });
-
+    await prismadb.blog.delete({ where: { id } });
     return Response.json({ message: "Blog deleted successfully" });
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

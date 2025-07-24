@@ -1,6 +1,6 @@
 'use client'
 
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, ResponsiveContainer, Label } from 'recharts';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, ResponsiveContainer } from 'recharts';
 import { Eye } from "lucide-react";
 import useStats from "@/hook/useStats";
 import { useMemo } from "react";
@@ -38,7 +38,7 @@ const DashboardStats: React.FC = () => {
                     borderRadius: '8px',
                     color: 'hsl(var(--foreground))',
                   }}
-                  formatter={(value: any) => value?.toLocaleString?.()}
+                  formatter={(value: number) => value?.toLocaleString?.()}
                   labelFormatter={(label: string) => `page: ${label}`}
                 />
                 <Radar name="Visits" dataKey="count" stroke="var(--theme-color)" fill="var(--theme-color)" fillOpacity={0.3} />

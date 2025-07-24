@@ -1,8 +1,8 @@
 import prismadb from "@/lib/prismadb";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/config/AuthConfig";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const photos = await prismadb.photo.findMany({
       orderBy: {
@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     });
 
     return Response.json(photos);
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     });
 
     return Response.json(photo);
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

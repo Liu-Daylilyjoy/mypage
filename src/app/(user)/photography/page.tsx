@@ -15,38 +15,38 @@ export default function Photography() {
     if (!photoContainerRef.current) return;
 
     const canvas = photoContainerRef.current;
-    let content = canvas.getContext('2d');
+    const content = canvas.getContext('2d');
 
-    let imageNumber = photoList.length;
-    let maxColumn = 6;
-    let maxRow = Math.ceil(imageNumber / maxColumn);
+    const imageNumber = photoList.length;
+    const maxColumn = 6;
+    const maxRow = Math.ceil(imageNumber / maxColumn);
 
-    let imgWidth = imageSize.width;
-    let imgHeight = imageSize.height;
+    const imgWidth = imageSize.width;
+    const imgHeight = imageSize.height;
 
-    let imgMargin = imageSize.margin;
+    const imgMargin = imageSize.margin;
 
-    let totalWidth = maxColumn * (imgWidth + imgMargin) - imgMargin;
-    let totalHeight = maxRow * (imgHeight + imgMargin) - imgMargin;
+    const totalWidth = maxColumn * (imgWidth + imgMargin) - imgMargin;
+    const totalHeight = maxRow * (imgHeight + imgMargin) - imgMargin;
 
-    let imgData: any[] = [];
+    const imgData: { img: HTMLImageElement, x: number, y: number, i: number }[] = [];
     let movable = false;
     let clickable = true;
 
-    let imgs: HTMLImageElement[] = [];
+    const imgs: HTMLImageElement[] = [];
     for (let i = 0; i < imageNumber; i++) {
-      let img = new Image();
+      const img = new Image();
       imgs.push(img);
       img.src = `/api/photos/content/${photoList[i].path}`;
       img.onload = () => {
-        let col = i % maxColumn;
-        let row = Math.floor(i / maxColumn);
+        const col = i % maxColumn;
+        const row = Math.floor(i / maxColumn);
 
-        let x = col * (imgWidth + imgMargin);
-        let y = row * (imgHeight + imgMargin);
+        const x = col * (imgWidth + imgMargin);
+        const y = row * (imgHeight + imgMargin);
 
         // 裁剪图片，保持比例
-        let imgAspect = img.width / img.height;
+        const imgAspect = img.width / img.height;
         let sx = 0, sy = 0, sWidth = img.width, sHeight = img.height;
 
         if (imgAspect > 1) {
@@ -66,7 +66,7 @@ export default function Photography() {
       };
     }
 
-    let resize = () => {
+    const resize = () => {
       canvas.width = canvas.clientWidth;
       canvas.height = canvas.clientHeight;
 
@@ -76,7 +76,7 @@ export default function Photography() {
       }
     }
 
-    let move = (x: number, y: number) => {
+    const move = (x: number, y: number) => {
       content!.clearRect(0, 0, canvas.width, canvas.height);
       imgData.forEach((img) => {
         img.x += x;
@@ -90,7 +90,7 @@ export default function Photography() {
         if (img.y < -imgHeight)
           img.y += totalHeight + imgMargin;
 
-        let imgAspect = img.img.width / img.img.height;
+        const imgAspect = img.img.width / img.img.height;
         let sx = 0, sy = 0, sWidth = img.img.width, sHeight = img.img.height;
 
         if (imgAspect > 1) {
@@ -104,7 +104,7 @@ export default function Photography() {
       });
     }
 
-    function showImageFullscreen(img: any) {
+    const showImageFullscreen = (img: { img: HTMLImageElement, i: number }) => {
       const viewer = document.createElement('div');
       viewer.style.position = 'fixed';
       viewer.style.top = '0';
@@ -156,9 +156,9 @@ export default function Photography() {
     }
 
 
-    let findImg = (x: number, y: number) => {
+    const findImg = (x: number, y: number) => {
       // 遍历所有图片，找出鼠标xy坐标处于图片内部的那张图片
-      let img = imgData.find(img =>
+      const img = imgData.find(img =>
         x >= img.x && x < img.x + imgWidth &&
         y >= img.y && y < img.y + imgHeight
       );
@@ -166,21 +166,21 @@ export default function Photography() {
       if (img) showImageFullscreen(img);
     }
 
-    let mouseDown = (e: MouseEvent) => {
+    const mouseDown = () => {
       movable = true;
     }
 
-    let mouseUp = (e: MouseEvent) => {
+    const mouseUp = (e: MouseEvent) => {
       movable = false;
       if (clickable) findImg(e.x, e.y);
     }
 
-    let mouseLeave = () => {
+    const mouseLeave = () => {
       movable = false;
     }
 
-    function debounce(delay: number) {
-      let timer: any = null;
+    const debounce = (delay: number) => {
+      let timer: NodeJS.Timeout | undefined = undefined;
 
       return function () {
         clearTimeout(timer); // 清除上一个定时器
@@ -190,9 +190,9 @@ export default function Photography() {
       };
     }
 
-    let debounceFindImg = debounce(100);
+    const debounceFindImg = debounce(100);
 
-    let mouseMove = (e: MouseEvent) => {
+    const mouseMove = (e: MouseEvent) => {
       if (e.movementX !== 0 || e.movementY !== 0) {
         clickable = false;
         debounceFindImg();

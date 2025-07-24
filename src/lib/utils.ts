@@ -45,7 +45,7 @@ const md = new MarkdownIt({
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
           "</code></pre>"
         );
-      } catch (_) { }
+      } catch { }
     }
 
     return (

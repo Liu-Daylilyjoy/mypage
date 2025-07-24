@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FileText, Lightbulb, Camera, RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import DashboardStats from "@/components/common/Stats/DashboardStats";
 import useStats from "@/hook/useStats";
+import Maple3D from "@/components/common/Loading/Maple3D";
 
 export default function AdminPage() {
   const { data: stats, isLoading: loading, mutate } = useStats();
@@ -30,9 +31,7 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
-      </div>
+      <Maple3D />
     );
   }
 

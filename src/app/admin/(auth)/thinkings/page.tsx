@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from "react";
-import { Plus, Edit, Trash2, Eye, Search, Image } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
 import { adminImageConfig } from "@/config/ImageConfig";
 import useThinkingList from "@/hook/useThinkingList";
 import { mutate } from "swr";
+import Maple3D from "@/components/common/Loading/Maple3D";
 
 interface Thinking {
   id: string;
@@ -58,9 +59,7 @@ export default function ThinkingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
-      </div>
+      <Maple3D />
     );
   }
 
@@ -124,11 +123,11 @@ export default function ThinkingsPage() {
                     className="w-full h-full object-cover"
                     targetWidth={adminImageConfig.thinking.targetWidth}
                     quality={adminImageConfig.thinking.quality}
-                    fallbackIcon={<Image size={48} />}
+                    fallbackIcon={<ImageIcon size={48} />}
                   />
                 ) : (
                   <div className="flex items-center justify-center text-muted-foreground">
-                    <Image size={48} />
+                    <ImageIcon size={48} />
                   </div>
                 )}
               </div>

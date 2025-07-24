@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
+import Image from "next/image"; 
 
 const information: {
   name: string;
@@ -56,8 +57,6 @@ export default function Home() {
   const progressTooltipRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const replayRef = useRef<SVGSVGElement>(null);
-  let isScrolling = false;
-  let currentOrder = 0;
 
   useEffect(() => {
     if (!welcomePageRef.current || !progressContainerRef.current || !progressBarRef.current || !progressTooltipRef.current || !contentRef.current || !replayRef.current) return;
@@ -70,6 +69,9 @@ export default function Home() {
     const content = contentRef.current;
     const replay = replayRef.current;
     const sections = document.querySelectorAll('.section');
+
+    let isScrolling = false;
+    let currentOrder = 0;
 
     // 计算每个section的进度比例
     const sectionProgress = 100 / sections.length;
@@ -92,7 +94,7 @@ export default function Home() {
       let count = 0;
       // 为每个section添加分隔线
       for (let i = 0; i < sections.length; i++) {
-        let subsections = sections[i].querySelectorAll('.subsection');
+        const subsections = sections[i].querySelectorAll('.subsection');
         if (subsections.length > 0) {
           const subsectionProgress = sectionProgress / subsections.length;
           for (let j = 0; j < subsections.length; j++) {
@@ -127,14 +129,13 @@ export default function Home() {
 
     // 更新进度条
     const updateProgress = () => {
-      let percentage = sectionLength[currentOrder + 1];
-      progressBar.style.width = `${percentage}%`;
+      progressBar.style.width = `${sectionLength[currentOrder + 1]}%`;
     };
 
     // 初始化section位置
     sections.forEach((section, index) => {
       (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
-      let subsections = section.querySelectorAll('.subsection');
+      const subsections = section.querySelectorAll('.subsection');
       subsections.forEach((subsection, index) => {
         (subsection as HTMLElement).style.transform = `translateX(${index * 100}vw)`;
       });
@@ -166,7 +167,7 @@ export default function Home() {
     // 处理进度条点击
     const handleProgressContainerClick = () => {
       // 更新位置
-      let { section, subsection, order } = sectionIndex.get(progressTooltip.textContent!)!;
+      const { section, subsection, order } = sectionIndex.get(progressTooltip.textContent!)!;
       currentSection = section;
       currentSubsection = subsection;
       currentOrder = order;
@@ -174,7 +175,7 @@ export default function Home() {
       // 更新section位置
       sections.forEach((section_, index) => {
         (section_ as HTMLElement).style.transform = `translateY(${(index - currentSection) * 100}vh)`;
-        let subsections = section_.querySelectorAll('.subsection');
+        const subsections = section_.querySelectorAll('.subsection');
         if (index < currentSection) {
           subsections.forEach((subsection_, idx) => {
             (subsection_ as HTMLElement).style.transform = `translateX(${(idx - subsectionSize[index] + 1) * 100}vw)`;
@@ -207,7 +208,7 @@ export default function Home() {
 
       // 处理横向滚动
       if (subsectionSize[currentSection] > 0) {
-        let subsections = sections[currentSection].querySelectorAll('.subsection');
+        const subsections = sections[currentSection].querySelectorAll('.subsection');
         // console.log(sections.length, subsections.length);
         if (e.deltaY > 0) {
           // 向下滚动，向右移动
@@ -308,7 +309,7 @@ export default function Home() {
       updateProgress();
       sections.forEach((section, index) => {
         (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
-        let subsections = section.querySelectorAll('.subsection');
+        const subsections = section.querySelectorAll('.subsection');
         subsections.forEach((subsection, index) => {
           (subsection as HTMLElement).style.transform = `translateX(${(index - currentSubsection) * 100}vw)`;
         });
@@ -318,7 +319,7 @@ export default function Home() {
       progressContainer.classList.remove('active');
     };
 
-    let firstSection = sections[0].querySelectorAll('.subsection')[0] || sections[0];
+    const firstSection = sections[0].querySelectorAll('.subsection')[0] || sections[0];
 
     const preventScroll = (e: WheelEvent) => {
       e.preventDefault();
@@ -352,7 +353,7 @@ export default function Home() {
   };
 
   useGSAP((context, contextSafe) => {
-    let clearEvent = [];
+    const clearEvent: (() => void)[] = [];
     for (let i = 0; i < sectionRef.current.length; i++) {
       let enterHandler: () => void = () => { };
       let leaveHandler: () => void = () => { };
@@ -363,7 +364,7 @@ export default function Home() {
             type: 'words'
           });
 
-          let tl = gsap.timeline({ paused: true });
+          const tl = gsap.timeline({ paused: true });
           tl.from('#title-me', {
             x: -100,
             opacity: 0,
@@ -445,7 +446,7 @@ export default function Home() {
                 <span className="text-theme-color">user interaction</span>.
               </h2>
               <div className="flex gap-8 items-center relative">
-                <img id="me" src="/image/me/Labubu.png" alt="me" className="object-cover w-0" />
+                <Image id="me" src="/image/me/Labubu.png" alt="me" width={200} height={200} className="object-cover w-0" />
                 <span id="hello-world" className="text-4xl font-bold text-center mr-10 flex-1 opacity-0">Hello world!</span>
               </div>
             </div>

@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
-const path = require('path');
+import fs from 'fs/promises';
+import path from 'path';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
-export async function GET(req: Request, { params }: { params: { imgPath: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ imgPath: string }> }) {
   const { imgPath } = await params;
   const fullPath = path.join(postsDir, 'thinking', imgPath);
 
@@ -27,7 +27,7 @@ export async function GET(req: Request, { params }: { params: { imgPath: string 
         'Content-Type': contentType,
       },
     });
-  } catch (error) {
+  } catch {
     return Response.json({ error: 'Failed to fetch img' }, { status: 500 });
   }
 }

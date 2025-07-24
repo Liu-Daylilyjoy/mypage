@@ -16,9 +16,4 @@ export const adminImageConfig = {
     targetWidth: 600,
     quality: 0.3,
   },
-  // 预览图片
-  preview: {
-    targetWidth: 300,
-    quality: 0.8,
-  }
 };

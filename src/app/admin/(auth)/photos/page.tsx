@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Eye, Search, Image } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, Search, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
 import { adminImageConfig } from "@/config/ImageConfig";
 import usePhotoList from "@/hook/usePhotoList";
 import { mutate } from "swr";
+import Maple3D from "@/components/common/Loading/Maple3D";
+import Image from "next/image";
 
 interface Photo {
   id: string;
@@ -35,7 +37,7 @@ export default function PhotosPage() {
       } else {
         alert('Delete failed');
       }
-    } catch (error) {
+    } catch {
       alert('Delete failed');
     }
   };
@@ -78,9 +80,7 @@ export default function PhotosPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
-      </div>
+      <Maple3D /> 
     );
   }
 
@@ -144,11 +144,11 @@ export default function PhotosPage() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     targetWidth={adminImageConfig.photo.targetWidth}
                     quality={adminImageConfig.photo.quality}
-                    fallbackIcon={<Image size={48} />}
+                    fallbackIcon={<ImageIcon size={48} />}
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    <Image size={48} />
+                    <ImageIcon size={48} />
                   </div>
                 )}
 
@@ -221,10 +221,12 @@ export default function PhotosPage() {
 
             {/* Image */}
             <div className="flex items-center justify-center p-4">
-              <img
+              <Image
                 src={`/api/photos/content/${selectedPhoto.path}`}
                 alt={selectedPhoto.title}
                 className="max-w-full max-h-[70vh] object-contain"
+                width={adminImageConfig.photo.targetWidth}
+                height={adminImageConfig.photo.targetWidth}
               />
             </div>
 

@@ -5,7 +5,7 @@ export interface SkillItemProps {
   level: number;
 }
 
-const SkillItem: React.FC<SkillItemProps> = forwardRef<HTMLDivElement, SkillItemProps>((skill, ref) => {
+const SkillItem: React.FC<SkillItemProps> = memo(forwardRef<HTMLDivElement, SkillItemProps>((skill, ref) => {
   return (
     <div ref={ref} className='flex w-full max-w-3xl items-center mb-4 h-10'>
       <h3 className='text-primary/80 w-32'>{skill.name}</h3>
@@ -22,6 +22,6 @@ const SkillItem: React.FC<SkillItemProps> = forwardRef<HTMLDivElement, SkillItem
       </div>
     </div>
   )
-});
+}));
 
-export default memo(SkillItem);
+export default SkillItem;

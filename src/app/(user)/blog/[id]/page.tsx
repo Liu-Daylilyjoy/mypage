@@ -24,14 +24,14 @@ export default function ArticleDetail() {
       (children[i] as HTMLElement).classList.toggle('slide');
     }
 
-    let slideAnimation = gsap.fromTo(".slide", {
+    const slideAnimation = gsap.fromTo(".slide", {
       opacity: 0,
     }, {
       opacity: 1,
       stagger: 0.1
     })
 
-    let expandAnimation = gsap.fromTo(".expand", {
+    const expandAnimation = gsap.fromTo(".expand", {
       width: "0%",
     }, {
       width: "100%",

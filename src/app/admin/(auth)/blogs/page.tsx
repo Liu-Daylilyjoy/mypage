@@ -8,6 +8,7 @@ import { mutate } from "swr";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Maple3D from "@/components/common/Loading/Maple3D";
 
 interface Blog {
   id: string;
@@ -20,7 +21,6 @@ interface Blog {
 
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteId, setDeleteId] = useState<string | null>(null);
   const { data: blogs = [], isLoading: loading } = useBlogList();
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
@@ -39,11 +39,10 @@ export default function BlogsPage() {
       if (response.ok) {
         // 重新获取数据以更新列表
         mutate('/api/blogs');
-        setDeleteId(null);
       } else {
         alert('Delete failed');
       }
-    } catch (error) {
+    } catch {
       alert('Delete failed');
     }
   };
@@ -68,7 +67,7 @@ export default function BlogsPage() {
       } else {
         toast.error('Failed to create blog');
       }
-    } catch (error) {
+    } catch {
       toast.error('Failed to create blog');
     } finally {
       setCreating(false);
@@ -92,9 +91,7 @@ export default function BlogsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
-      </div>
+      <Maple3D />
     );
   }
 

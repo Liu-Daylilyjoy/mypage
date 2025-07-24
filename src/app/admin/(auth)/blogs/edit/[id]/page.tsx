@@ -7,6 +7,7 @@ import { md } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import { toast } from "sonner";
+import Maple3D from "@/components/common/Loading/Maple3D";
 
 export default function BlogEditPage() {
   const { id } = useParams();
@@ -47,9 +48,7 @@ export default function BlogEditPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="rotate-3d"><img src="/image/loading/loading.svg" alt="loading" className="w-10 h-10" /></div>
-      </div>
+      <Maple3D />
     );
   }
 
@@ -73,7 +72,7 @@ export default function BlogEditPage() {
       } else {
         toast.warning('Title or Description is empty!');
       }
-    } catch (e) {
+    } catch {
       toast.error('Failed to save!');
     } finally {
       setSaving(false);

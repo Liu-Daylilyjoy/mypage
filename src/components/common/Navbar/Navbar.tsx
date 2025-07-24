@@ -36,7 +36,7 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMouseAtTop, setIsMouseAtTop] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  let containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;

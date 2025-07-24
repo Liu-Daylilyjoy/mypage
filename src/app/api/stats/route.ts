@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const [blogsCount, thinkingsCount, photosCount, visitStats] = await Promise.all([
       prismadb.blog.count(),
@@ -18,7 +18,7 @@ export async function GET(req: Request) {
         count: stat.count
       }))
     });
-  } catch (error) {
+  } catch {
     return Response.json({ error: "Internal Server Error" }, { status: 500 });
   }
 } 
