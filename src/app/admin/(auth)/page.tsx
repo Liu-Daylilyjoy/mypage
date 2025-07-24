@@ -14,7 +14,7 @@ export default function AdminPage() {
   const quickActions = [
     {
       title: "Write Blog",
-      href: "/admin/blogs/new",
+      href: "/admin/blogs?quickCreate=true",
       icon: <FileText size={24} className="text-blue-500" />,
     },
     {

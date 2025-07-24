@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Eye, Search } from "lucide-react";
 import Link from "next/link";
 import useBlogList from "@/hook/useBlogList";
 import { mutate } from "swr";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Maple3D from "@/components/common/Loading/Maple3D";
 
 interface Blog {
@@ -27,23 +27,35 @@ export default function BlogsPage() {
   const [description, setDescription] = useState("");
   const [creating, setCreating] = useState(false);
   const router = useRouter();
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const quickCreate = useSearchParams().get('quickCreate') === 'true';
+
+  useEffect(() => {
+    if (quickCreate) {
+      setShowModal(true);
+    }
+  }, [quickCreate]);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this blog?')) return;
-
+    setDeleting(true);
     try {
       const response = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
-        // 重新获取数据以更新列表
         mutate('/api/blogs');
+        toast.success('Blog deleted successfully!');
       } else {
-        alert('Delete failed');
+        toast.error('Delete failed');
       }
     } catch {
-      alert('Delete failed');
+      toast.error('Delete failed');
+    } finally {
+      setDeleting(false);
+      setDeleteId(null);
     }
   };
 
@@ -88,12 +100,6 @@ export default function BlogsPage() {
       minute: '2-digit'
     });
   };
-
-  if (loading) {
-    return (
-      <Maple3D />
-    );
-  }
 
   return (
     <div className="space-y-6">
@@ -170,7 +176,7 @@ export default function BlogsPage() {
       </div>
 
       {/* Blogs List */}
-      <div className="bg-card rounded-lg border border-border overflow-hidden">
+      {loading ? <Maple3D /> : <div className="bg-card rounded-lg border border-border overflow-hidden">
         {filteredBlogs.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-muted-foreground">
@@ -241,7 +247,7 @@ export default function BlogsPage() {
                           <Edit size={16} />
                         </Link>
                         <button
-                          onClick={() => handleDelete(blog.id)}
+                          onClick={() => setDeleteId(blog.id)}
                           className="p-2 hover:bg-accent rounded-md transition-colors text-destructive"
                           title="Delete"
                         >
@@ -253,14 +259,43 @@ export default function BlogsPage() {
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
-      </div>
+            </div>
+          )}
+        </div>
+      }
 
       {/* Stats */}
       <div className="text-sm text-muted-foreground">
         Total <span className="font-bold text-primary">{filteredBlogs.length}</span> blog articles
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={!!deleteId} onOpenChange={(open) => { if (!open) setDeleteId(null); }}>
+        <DialogContent className="max-w-sm rounded-sm" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Delete Blog</DialogTitle>
+          </DialogHeader>
+          <div className="py-2">Are you sure you want to delete this blog?</div>
+          <DialogFooter className="flex justify-end gap-4 mt-2">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md box-content border border-border bg-background hover:bg-accent transition-colors"
+              onClick={() => setDeleteId(null)}
+              disabled={deleting}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md bg-destructive text-white hover:bg-destructive/60 transition-colors disabled:opacity-50"
+              onClick={() => deleteId && handleDelete(deleteId)}
+              disabled={deleting}
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 
