@@ -31,23 +31,28 @@ export default function ThinkingsPage() {
   const fileInputRefs = useRef<{ [id: string]: HTMLInputElement | null }>({});
   const [imgRefreshMap, setImgRefreshMap] = useState<{ [id: string]: number }>({});
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this thinking?')) return;
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setDeleteLoading(true);
+    const toastId = toast.loading('Deleting...');
     try {
-      const response = await fetch(`/api/thinkings/${id}`, {
+      const response = await fetch(`/api/thinkings/${deleteId}`, {
         method: 'DELETE',
       });
-
       if (response.ok) {
-        // 重新获取数据以更新列表
         mutate('/api/thinkings');
+        toast.success('Delete success', { id: toastId });
+        setDeleteId(null);
       } else {
-        alert('Failed to delete');
+        toast.error('Delete failed', { id: toastId });
       }
-    } catch (error) {
-      console.error('Failed to delete thinking:', error);
-      alert('Failed to delete');
+    } catch {
+      toast.error('Delete failed', { id: toastId });
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -128,7 +133,7 @@ export default function ThinkingsPage() {
                 {thinking.cover ? (
                   <CompressedImage
                     key={imgRefreshMap[thinking.id]}
-                    src={`/api/thinkings/content/${thinking.cover}`}
+                    src={thinking.cover.startsWith('http') ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
                     alt={thinking.title}
                     className="w-full h-full object-cover"
                     targetWidth={adminImageConfig.thinking.targetWidth}
@@ -160,7 +165,8 @@ export default function ThinkingsPage() {
                     const formData = new FormData();
                     formData.append('file', file);
                     try {
-                      const res = await fetch(`/api/thinkings/content/${thinking.cover}/${thinking.id}`, {
+                      const imgPath = thinking.cover.startsWith('http') ? file.name : thinking.cover;
+                      const res = await fetch(`/api/thinkings/content/${imgPath}/${thinking.id}`, {
                         method: 'POST',
                         body: formData,
                       });
@@ -210,7 +216,7 @@ export default function ThinkingsPage() {
                     <Edit size={16} />
                   </button>
                   <button
-                    onClick={() => handleDelete(thinking.id)}
+                    onClick={() => setDeleteId(thinking.id)}
                     className="p-2 hover:bg-accent rounded-md transition-colors text-destructive"
                     title="Delete"
                   >
@@ -297,6 +303,34 @@ export default function ThinkingsPage() {
               </button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* 删除 Dialog */}
+      <Dialog open={!!deleteId} onOpenChange={open => { if (!open) setDeleteId(null); }}>
+        <DialogContent className="max-w-xs rounded-sm" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Delete Thinking</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">Are you sure you want to delete this thinking?</div>
+          <DialogFooter>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md border border-border bg-background hover:bg-accent transition-colors"
+              onClick={() => setDeleteId(null)}
+              disabled={deleteLoading}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md bg-destructive text-white hover:bg-destructive/60 transition-colors disabled:opacity-50"
+              onClick={handleDelete}
+              disabled={deleteLoading}
+            >
+              {deleteLoading ? 'Deleting...' : 'Delete'}
+            </button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

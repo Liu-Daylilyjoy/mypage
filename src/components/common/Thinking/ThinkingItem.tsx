@@ -13,7 +13,7 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
   return (
     <div key={thinking.id} className="break-inside-avoid mb-10">
       <CompressedImage
-        src={`/api/thinkings/content/${thinking.cover}`}
+        src={thinking.cover.startsWith('http') ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
         alt="header cover"
         className="w-full h-auto"
         targetWidth={imageSize.width * 2}

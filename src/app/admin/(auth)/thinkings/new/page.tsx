@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Save, X, ArrowLeft, Upload, Home, Image as ImageIcon } from "lucide-react";
+import { Save, X, Upload } from "lucide-react";
 import Link from "next/link";
-import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
-import { adminImageConfig } from "@/config/ImageConfig";
+import { toast } from "sonner";
 
 export default function NewThinkingPage() {
   const router = useRouter();
@@ -15,28 +14,49 @@ export default function NewThinkingPage() {
     detail: "",
     cover: ""
   });
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // 预览图片
+  const handleCoverSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCoverFile(file);
+    setFormData(prev => ({
+      ...prev,
+      cover: URL.createObjectURL(file)
+    }));
+  };
+
+  // 表单提交：先提交文本，再上传图片
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const response = await fetch('/api/thinkings', {
+      // 1. 提交文本，获取id
+      const res = await fetch('/api/thinkings', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: formData.title, detail: formData.detail, cover: formData.cover }),
       });
+      if (!res.ok) throw new Error('Create thinking failed');
+      const { id } = await res.json();
 
-      if (response.ok) {
-        router.push('/admin/thinkings');
-      } else {
-        alert('创建失败');
+      // 2. 上传图片（如果有）
+      if (coverFile) {
+        const formDataObj = new FormData();
+        formDataObj.append('file', coverFile);
+        const imgRes = await fetch(`/api/thinkings/content/${coverFile.name}/${id}`, {
+          method: 'POST',
+          body: formDataObj,
+        });
+        if (!imgRes.ok) throw new Error('Upload image failed');
       }
+
+      toast.success('Create thinking success');
+      router.push('/admin/thinkings');
     } catch (error) {
-      console.error('Failed to create thinking:', error);
-      alert('创建失败');
+      toast.error(`Create thinking failed: ${error}`);
     } finally {
       setLoading(false);
     }
@@ -49,37 +69,34 @@ export default function NewThinkingPage() {
     }));
   };
 
+  // 校验图片链接是否合法
+  function isValidImageUrl(url: string) {
+    if (!url) return false;
+    // 本地 object URL
+    if (url.startsWith('blob:')) return true;
+    // http(s) 图片链接
+    try {
+      const u = new URL(url);
+      return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link
-            href="/admin/thinkings"
-            className="flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md transition-colors"
-          >
-            <ArrowLeft size={16} />
-            返回
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold">新建思考</h1>
-            <p className="text-muted-foreground mt-2">创建新的思考记录</p>
-          </div>
+          <h1 className="text-3xl font-bold">New Thinking</h1>
         </div>
         <div className="flex items-center gap-2">
-          <Link
-            href="/admin"
-            className="flex items-center gap-2 px-3 py-2 bg-muted text-muted-foreground rounded-lg hover:bg-accent transition-colors"
-          >
-            <Home size={16} />
-            首页
-          </Link>
           <Link
             href="/admin/thinkings"
             className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-accent transition-colors"
           >
             <X size={16} />
-            取消
+            Cancel
           </Link>
           <button
             onClick={handleSubmit}
@@ -87,104 +104,88 @@ export default function NewThinkingPage() {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={16} />
-            {loading ? '保存中...' : '保存'}
+            {loading ? 'Saving...' : 'Save'}
           </button>
         </div>
       </div>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Basic Info */}
-          <div className="space-y-6">
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h2 className="text-lg font-semibold mb-4">基本信息</h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    标题 *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) => handleChange('title', e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    placeholder="输入思考标题"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    封面图片URL
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={formData.cover}
-                      onChange={(e) => handleChange('cover', e.target.value)}
-                      className="flex-1 px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                      placeholder="输入图片URL"
-                    />
-                    <button
-                      type="button"
-                      className="px-3 py-2 border border-border rounded-lg hover:bg-accent transition-colors"
-                      title="上传图片"
-                    >
-                      <Upload size={16} />
-                    </button>
-                  </div>
-                </div>
+          <div className="bg-card p-6">
+            <div className="space-y-12">
+              <div>
+                <label className="block text-lg font-medium mb-2">Title<span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => handleChange('title', e.target.value)}
+                  className="w-full px-3 py-2 border border-border bg-background focus:outline-none focus:ring-2 focus:ring-theme-color"
+                  placeholder="Enter the title"
+                  required
+                />
               </div>
-            </div>
-
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h2 className="text-lg font-semibold mb-4">预览</h2>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-medium">标题</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {formData.title || '未设置'}
-                  </p>
-                </div>
-                {formData.cover && (
-                  <div>
-                    <h3 className="font-medium">封面</h3>
-                    <div className="relative">
-                      <CompressedImage
-                        src={formData.cover}
-                        alt="封面预览"
-                        className="w-full h-32 object-cover rounded-lg mt-2"
-                        targetWidth={adminImageConfig.thinking.targetWidth}
-                        quality={adminImageConfig.thinking.quality}
-                        fallbackIcon={<ImageIcon size={32} className="text-muted-foreground" />}
-                      />
-                    </div>
-                  </div>
-                )}
+              <div>
+                <label className="block text-lg font-medium mb-2">Detail<span className="text-red-500">*</span></label>
+                <textarea
+                  value={formData.detail}
+                  onChange={(e) => handleChange('detail', e.target.value)}
+                  className="w-full h-100 px-3 py-2 border border-border bg-background focus:outline-none focus:ring-2 focus:ring-theme-color resize-none"
+                  placeholder="Enter your thinking"
+                  rows={12}
+                  required
+                />
               </div>
             </div>
           </div>
 
-          {/* Right Column - Content */}
-          <div className="bg-card p-6 rounded-lg border border-border">
-            <h2 className="text-lg font-semibold mb-4">思考内容</h2>
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                详细内容 *
-              </label>
-              <textarea
-                value={formData.detail}
-                onChange={(e) => handleChange('detail', e.target.value)}
-                className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
-                placeholder="输入您的思考内容"
-                rows={20}
-                required
+          <div className="border-l bg-card p-6 flex flex-col gap-6">
+            <h2 className="text-lg font-semibold mb-4">Cover Image</h2>
+            <div className="flex gap-2 items-center">
+              <input
+                type="text"
+                value={formData.cover}
+                onChange={e => {
+                  setFormData(prev => ({
+                    ...prev,
+                    cover: e.target.value
+                  }));
+                  setCoverFile(null); // 清空本地文件
+                }}
+                className="flex-1 px-3 py-2 border border-border bg-background focus:outline-none focus:ring-2 focus:ring-theme-color"
+                placeholder="Select image file or type a url"
               />
-              <p className="text-xs text-muted-foreground mt-2">
-                记录您的想法、感悟或灵感
-              </p>
+              <button
+                type="button"
+                className="px-3 py-3 border border-border bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                title="Upload image"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Upload size={16} />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleCoverSelect}
+              />
+            </div>
+            <h3 className="font-medium my-4">Cover Preview</h3>
+            <div className="h-full flex items-center justify-center">
+              {isValidImageUrl(formData.cover) ? (
+                <div className="relative h-90">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={formData.cover}
+                    alt="error"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : formData.cover ? (
+                <span className="text-red-500">Invalid image url</span>
+              ) : (
+                <span className="text-muted-foreground">No image selected</span>
+              )}
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { loadImageFromBlob } from "@/lib/utils";
 import { Image as ImageIcon } from "lucide-react";
-import Image from "next/image";
 
 interface CompressedImageProps {
   src: string;
@@ -101,13 +100,12 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
   }
 
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={url}
       alt={alt}
       className={className}
       loading="lazy"
-      width={targetWidth}
-      height={targetWidth}
     />
   );
 };
