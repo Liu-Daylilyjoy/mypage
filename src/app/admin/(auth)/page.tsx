@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react";
-import { FileText, Lightbulb, Camera, RefreshCcw } from "lucide-react";
+import { FileText, Lightbulb, Camera, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import DashboardStats from "@/components/common/Stats/DashboardStats";
 import useStats from "@/hook/useStats";
@@ -23,7 +23,7 @@ export default function AdminPage() {
       icon: <Lightbulb size={24} className="text-yellow-500" />,
     },
     {
-      title: "Update Photo",
+      title: "Upload Photo",
       href: "/admin/photos/new",
       icon: <Camera size={24} className="text-green-500" />,
     }
@@ -53,9 +53,9 @@ export default function AdminPage() {
             disabled={refreshing}
           >
             {refreshing ? (
-              <span className="animate-spin"><RefreshCcw size={16} /></span>
+              <span className="animate-spin"><RefreshCw size={16} /></span>
             ) : (
-              <RefreshCcw size={16} />
+              <RefreshCw size={16} />
             )}
             {refreshing ? 'Refreshing...' : 'Refresh'}
           </button>

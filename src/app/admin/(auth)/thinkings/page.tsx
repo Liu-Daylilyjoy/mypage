@@ -1,13 +1,16 @@
 'use client'
 
 import { useState } from "react";
-import { Plus, Edit, Trash2, Search, Image as ImageIcon } from "lucide-react";
+import { Plus, Edit, Trash2, Search, Image as ImageIcon, Upload } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
 import { adminImageConfig } from "@/config/ImageConfig";
 import useThinkingList from "@/hook/useThinkingList";
 import { mutate } from "swr";
 import Maple3D from "@/components/common/Loading/Maple3D";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
+import { toast } from "sonner";
+import { useRef } from "react";
 
 interface Thinking {
   id: string;
@@ -21,6 +24,12 @@ interface Thinking {
 export default function ThinkingsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { data: thinkings = [], isLoading: loading } = useThinkingList();
+  const [editThinking, setEditThinking] = useState<Thinking | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDetail, setEditDetail] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
+  const fileInputRefs = useRef<{ [id: string]: HTMLInputElement | null }>({});
+  const [imgRefreshMap, setImgRefreshMap] = useState<{ [id: string]: number }>({});
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this thinking?')) return;
@@ -114,10 +123,11 @@ export default function ThinkingsPage() {
         ) : (
           filteredThinkings.map((thinking: Thinking) => (
             <div key={thinking.id} className="bg-card border border-border overflow-hidden shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all break-inside-avoid mb-6">
-              {/* Cover Image */}
-              <div className="bg-muted flex items-center justify-center overflow-hidden">
+              {/* Cover Image with upload on hover */}
+              <div className="relative group bg-muted flex items-center justify-center overflow-hidden">
                 {thinking.cover ? (
                   <CompressedImage
+                    key={imgRefreshMap[thinking.id]}
                     src={`/api/thinkings/content/${thinking.cover}`}
                     alt={thinking.title}
                     className="w-full h-full object-cover"
@@ -126,10 +136,50 @@ export default function ThinkingsPage() {
                     fallbackIcon={<ImageIcon size={48} />}
                   />
                 ) : (
-                  <div className="flex items-center justify-center text-muted-foreground">
+                  <div className="flex items-center justify-center text-muted-foreground w-full h-40">
                     <ImageIcon size={48} />
                   </div>
                 )}
+                {/* 上传按钮，仅 hover 时显示 */}
+                <button
+                  type="button"
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => fileInputRefs.current[thinking.id]?.click()}
+                  style={{ pointerEvents: 'auto' }}
+                >
+                  <Upload size={32} className="text-white" />
+                </button>
+                <input
+                  ref={el => { fileInputRefs.current[thinking.id] = el; }}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    if (!e.target.files || !e.target.files[0]) return;
+                    const file = e.target.files[0];
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    try {
+                      const res = await fetch(`/api/thinkings/content/${thinking.cover}/${thinking.id}`, {
+                        method: 'POST',
+                        body: formData,
+                      });
+                      if (res.ok) {
+                        await mutate('/api/thinkings');
+                        setImgRefreshMap(prev => ({
+                          ...prev,
+                          [thinking.id]: Date.now()
+                        }));
+                        toast.success('Uploaded successfully');
+                      } else {
+                        const text = await res.json();
+                        toast.error(`Upload failed: ${text.error}`);
+                      }
+                    } catch {
+                      toast.error('Upload failed');
+                    }
+                  }}
+                />
               </div>
 
               {/* Content */}
@@ -148,13 +198,17 @@ export default function ThinkingsPage() {
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-2">
-                  <Link
-                    href={`/admin/thinkings/edit/${thinking.id}`}
+                  <button
                     className="p-2 hover:bg-accent rounded-md transition-colors"
                     title="Edit"
+                    onClick={() => {
+                      setEditThinking(thinking);
+                      setEditTitle(thinking.title);
+                      setEditDetail(thinking.detail);
+                    }}
                   >
                     <Edit size={16} />
-                  </Link>
+                  </button>
                   <button
                     onClick={() => handleDelete(thinking.id)}
                     className="p-2 hover:bg-accent rounded-md transition-colors text-destructive"
@@ -173,6 +227,78 @@ export default function ThinkingsPage() {
       <div className="text-sm text-muted-foreground">
         Total {filteredThinkings.length} thinking records
       </div>
+
+      {/* 编辑 Dialog */}
+      <Dialog open={!!editThinking} onOpenChange={open => { if (!open) setEditThinking(null); }}>
+        <DialogContent className="max-w-md rounded-sm" showCloseButton={false} >
+          <DialogHeader>
+            <DialogTitle>Edit Thinking</DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={async e => {
+              e.preventDefault();
+              if (!editThinking) return;
+              setEditLoading(true);
+              try {
+                const response = await fetch(`/api/thinkings/${editThinking.id}`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ title: editTitle, detail: editDetail }),
+                });
+                if (response.ok) {
+                  mutate('/api/thinkings');
+                  setEditThinking(null);
+                  toast.success('Updated successfully');
+                } else {
+                  const text = await response.json();
+                  toast.error(`Failed to update: ${text.error}`);
+                }
+              } catch {
+                toast.error('Failed to update');
+              } finally {
+                setEditLoading(false);
+              }
+            }}
+            className="flex flex-col gap-4 mt-4"
+          >
+            <input
+              type="text"
+              value={editTitle}
+              tabIndex={-1}
+              onChange={e => setEditTitle(e.target.value)}
+              className="border border-border rounded-md px-3 py-2 bg-background text-base focus:outline-none focus:ring-2 focus:ring-theme-color"
+              placeholder="Title"
+              required
+            />
+            <textarea
+              tabIndex={-1}
+              value={editDetail}
+              onChange={e => setEditDetail(e.target.value)}
+              className="border border-border rounded-md px-3 py-2 bg-background text-base focus:outline-none focus:ring-2 focus:ring-theme-color resize-none"
+              placeholder="Detail"
+              rows={5}
+              required
+            />
+            <DialogFooter className="flex justify-end gap-9 mt-2">
+              <button
+                type="button"
+                onClick={() => setEditThinking(null)}
+                className="px-4 py-2 rounded-md box-content border border-border bg-background hover:bg-accent transition-colors"
+                disabled={editLoading}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+                disabled={editLoading || !editTitle || !editDetail}
+              >
+                {editLoading ? 'Saving...' : 'Save'}
+              </button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

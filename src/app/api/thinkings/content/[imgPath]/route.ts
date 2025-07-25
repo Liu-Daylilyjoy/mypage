@@ -1,5 +1,5 @@
+import path from "path";
 import fs from 'fs/promises';
-import path from 'path';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 

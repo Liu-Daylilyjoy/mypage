@@ -28,7 +28,7 @@ export default function Blog() {
     const sortedYears = Object.keys(blogsByYear).sort((a, b) => Number(b) - Number(a));
 
     return { blogsByYear, sortedYears };
-  }, [blogList.length]);
+  }, [blogList]);
 
   const router = useRouter();
   const handleCardClick = (id: string) => {

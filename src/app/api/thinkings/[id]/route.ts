@@ -16,7 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -24,13 +24,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { id } = await params;
     const body = await request.json();
-    const { title, detail, cover } = body;
+    const { title, detail } = body;
     if (!title || !detail) {
       return Response.json({ error: "Title and detail are required" }, { status: 400 });
     }
     const thinking = await prismadb.thinking.update({
       where: { id },
-      data: { title, detail, cover: cover || "" }
+      data: { title, detail }
     });
     return Response.json(thinking);
   } catch {
