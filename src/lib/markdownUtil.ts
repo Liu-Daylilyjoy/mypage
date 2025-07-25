@@ -1,20 +1,10 @@
-import { clsx, type ClassValue } from "clsx";
 import MarkdownIt from "markdown-it";
 import MarkdownItKatex from "markdown-it-katex";
 import MarkdownItAnchor from "markdown-it-anchor";
 import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark.css";
-
 import bash from "highlight.js/lib/languages/bash";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
-
-
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
 
 hljs.registerLanguage("bash", bash);
 hljs.registerLanguage("javascript", javascript);
@@ -62,13 +52,4 @@ const md = new MarkdownIt({
   slugify: customSlugify
 });
 
-function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = URL.createObjectURL(blob);
-  });
-}
-
-export { md, loadImageFromBlob }
+export { md }

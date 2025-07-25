@@ -2,7 +2,7 @@
 
 import ScrollProgress from '@/components/common/ScrollProgress/ScrollProgress'
 import useBlog from '@/hook/useBlog';
-import { md } from '@/lib/utils';
+import { md } from '@/lib/markdownUtil';
 import gsap from 'gsap';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useMemo } from 'react';
@@ -14,7 +14,7 @@ export default function ArticleDetail() {
 
   const htmlConverter = useMemo(() =>
     md.render(data?.content || ''
-  ), [data?.content]);
+    ), [data?.content]);
 
   useEffect(() => {
     if (!markdownRef.current || !htmlConverter) return;

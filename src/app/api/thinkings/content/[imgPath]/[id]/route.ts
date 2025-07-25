@@ -1,15 +1,13 @@
-import { authOptions } from '@/config/AuthConfig';
 import fs from 'fs/promises';
-import { getServerSession } from 'next-auth';
 import path from 'path';
 import prismadb from '@/lib/prismadb';
+import { adminAuth } from '@/lib/serverAuth';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
 export async function POST(req: Request, { params }: { params: Promise<{ imgPath: string, id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await adminAuth()) {
+    return Response.redirect("/login");
   }
   const { id, imgPath: cover } = await params;
 
@@ -39,8 +37,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ imgPath
       // 删掉原图片
       const oldPath = path.join(postsDir, 'thinking', cover);
       try {
-        await fs.access(oldPath); 
-        await fs.unlink(oldPath); 
+        await fs.access(oldPath);
+        await fs.unlink(oldPath);
       } catch { }
     }
 

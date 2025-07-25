@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/config/AuthConfig";
+import { adminAuth } from "@/lib/serverAuth";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -17,9 +16,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await adminAuth()) {
+    return Response.redirect("/login");
   }
   try {
     const { id } = await params;
@@ -39,9 +37,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await adminAuth()) {
+    return Response.redirect("/login");
   }
   try {
     const { id } = await params;

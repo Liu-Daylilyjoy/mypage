@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { loadImageFromBlob } from "@/lib/utils";
+import { loadImageFromBlob } from "@/lib/blobUtil";
 import { Image as ImageIcon } from "lucide-react";
 
 interface CompressedImageProps {

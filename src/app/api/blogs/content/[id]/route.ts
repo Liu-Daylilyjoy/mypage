@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
-import { authOptions } from '@/config/AuthConfig';
-import { getServerSession } from 'next-auth';
+import { adminAuth } from '@/lib/serverAuth';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
@@ -20,9 +19,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!await adminAuth()) {
+    return Response.redirect("/login");
   }
   const { id } = await params;
   const { content } = await request.json();

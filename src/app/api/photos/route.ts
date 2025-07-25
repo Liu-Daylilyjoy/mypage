@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/config/AuthConfig";
+import { adminAuth } from "@/lib/serverAuth";
 
 export async function GET() {
   try {
@@ -17,8 +16,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
+  if (!await adminAuth()) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {

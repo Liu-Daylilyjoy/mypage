@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import useBlog from "@/hook/useBlog";
-import { md } from "@/lib/utils";
+import { md } from "@/lib/markdownUtil";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import { toast } from "sonner";
