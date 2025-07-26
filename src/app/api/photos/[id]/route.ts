@@ -1,8 +1,7 @@
 import prismadb from "@/lib/prismadb";
 import { adminAuth } from "@/lib/serverAuth";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const photo = await prismadb.photo.findUnique({ where: { id } });
@@ -15,9 +14,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!await adminAuth()) {
-    return NextResponse.redirect("/login");
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const { id } = await params;
@@ -36,9 +35,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!await adminAuth()) {
-    return NextResponse.redirect("/login");
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const { id } = await params;

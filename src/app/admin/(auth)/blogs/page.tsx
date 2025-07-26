@@ -48,8 +48,14 @@ export default function BlogsPage() {
       if (response.ok) {
         mutate('/api/blogs');
         toast.success('Blog deleted successfully!');
+
+        fetch(`/api/blogs/content/${id}`, { method: 'DELETE' });
       } else {
-        toast.error('Delete failed');
+        if (response.status === 401) {
+          router.push('/login');
+        } else {
+          toast.error('Delete failed');
+        }
       }
     } catch {
       toast.error('Delete failed');
@@ -77,7 +83,11 @@ export default function BlogsPage() {
         mutate('/api/blogs'); // 列表自动刷新
         router.push(`/admin/blogs/edit/${data.id}`);
       } else {
-        toast.error('Failed to create blog');
+        if (response.status === 401) {
+          router.push('/login');
+        } else {
+          toast.error('Failed to create blog');
+        }
       }
     } catch {
       toast.error('Failed to create blog');
@@ -259,9 +269,9 @@ export default function BlogsPage() {
                 ))}
               </tbody>
             </table>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
       }
 
       {/* Stats */}

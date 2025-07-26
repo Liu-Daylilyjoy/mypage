@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import useBlog from "@/hook/useBlog";
 import { md } from "@/lib/markdownUtil";
 import Link from "next/link";
@@ -16,7 +16,7 @@ export default function BlogEditPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [saving, setSaving] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     if (data?.content) setContent(data.content);
   }, [data?.content]);
@@ -69,8 +69,13 @@ export default function BlogEditPage() {
       ]);
       if (metaRes.ok && contentRes.ok) {
         toast.success('Success!');
+        router.push('/admin/blogs');
       } else {
-        toast.warning('Title or Description is empty!');
+        if (metaRes.status === 401 || contentRes.status === 401) {
+          router.push('/login');
+        } else {
+          toast.warning('Title or Description is empty!');
+        }
       }
     } catch {
       toast.error('Failed to save!');

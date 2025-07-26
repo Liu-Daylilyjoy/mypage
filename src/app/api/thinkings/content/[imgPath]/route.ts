@@ -1,5 +1,6 @@
 import path from "path";
 import fs from 'fs/promises';
+import { adminAuth } from "@/lib/serverAuth";
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
@@ -30,4 +31,16 @@ export async function GET(req: Request, { params }: { params: Promise<{ imgPath:
   } catch {
     return Response.json({ error: 'Failed to fetch img' }, { status: 500 });
   }
+}
+
+export async function DELETE(req: Request, { params }: { params: Promise<{ imgPath: string }> }) {
+  if (!await adminAuth()) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { imgPath } = await params;
+  const fullPath = path.join(postsDir, 'thinking', imgPath);
+  try {
+    await fs.unlink(fullPath);
+  } catch { }
+  return Response.json({ success: true });
 }

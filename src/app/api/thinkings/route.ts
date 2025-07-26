@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
 import { adminAuth } from "@/lib/serverAuth";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -18,7 +17,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   if (!await adminAuth()) {
-    return NextResponse.redirect("/login");
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const body = await req.json();

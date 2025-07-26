@@ -1,7 +1,6 @@
 import prismadb from "@/lib/prismadb";
-import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { page } = body;

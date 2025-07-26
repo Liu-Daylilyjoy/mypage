@@ -2,13 +2,12 @@ import fs from 'fs/promises';
 import path from 'path';
 import prismadb from '@/lib/prismadb';
 import { adminAuth } from '@/lib/serverAuth';
-import { NextResponse } from 'next/server';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
 export async function POST(req: Request, { params }: { params: Promise<{ imgPath: string, id: string }> }) {
   if (!await adminAuth()) {
-    return NextResponse.redirect("/login");
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id, imgPath: cover } = await params;
 

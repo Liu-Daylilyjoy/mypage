@@ -11,6 +11,7 @@ import Maple3D from "@/components/common/Loading/Maple3D";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
 import { toast } from "sonner";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
 interface Thinking {
   id: string;
@@ -33,7 +34,8 @@ export default function ThinkingsPage() {
 
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
+  const [deleteImgPath, setDeleteImgPath] = useState<string | null>(null);
+  const router = useRouter();
   const handleDelete = async () => {
     if (!deleteId) return;
     setDeleteLoading(true);
@@ -45,12 +47,19 @@ export default function ThinkingsPage() {
       if (response.ok) {
         mutate('/api/thinkings');
         toast.success('Delete success', { id: toastId });
+
+        await fetch(`/api/thinkings/content/${deleteImgPath}`, { method: 'DELETE' });
         setDeleteId(null);
+        setDeleteImgPath(null);
       } else {
-        toast.error('Delete failed', { id: toastId });
+        if (response.status === 401) {
+          router.push('/login');
+        } else {
+          toast.error('Delete failed', { id: toastId });
+        }
       }
-    } catch {
-      toast.error('Delete failed', { id: toastId });
+    } catch (error) {
+      toast.error(`Delete failed: ${error}`);
     } finally {
       setDeleteLoading(false);
     }
@@ -178,8 +187,12 @@ export default function ThinkingsPage() {
                         }));
                         toast.success('Uploaded successfully');
                       } else {
-                        const text = await res.json();
-                        toast.error(`Upload failed: ${text.error}`);
+                        if (res.status === 401) {
+                          router.push('/login');
+                        } else {
+                          const text = await res.json();
+                          toast.error(`Upload failed: ${text.error}`);
+                        }
                       }
                     } catch {
                       toast.error('Upload failed');
@@ -216,7 +229,10 @@ export default function ThinkingsPage() {
                     <Edit size={16} />
                   </button>
                   <button
-                    onClick={() => setDeleteId(thinking.id)}
+                    onClick={() => {
+                      setDeleteId(thinking.id);
+                      setDeleteImgPath(thinking.cover);
+                    }}
                     className="p-2 hover:bg-accent rounded-md transition-colors text-destructive"
                     title="Delete"
                   >
@@ -256,8 +272,12 @@ export default function ThinkingsPage() {
                   setEditThinking(null);
                   toast.success('Updated successfully');
                 } else {
-                  const text = await response.json();
-                  toast.error(`Failed to update: ${text.error}`);
+                  if (response.status === 401) {
+                    router.push('/login');
+                  } else {
+                    const text = await response.json();
+                    toast.error(`Failed to update: ${text.error}`);
+                  }
                 }
               } catch {
                 toast.error('Failed to update');

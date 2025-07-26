@@ -39,7 +39,11 @@ export default function NewThinkingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: formData.title, detail: formData.detail, cover: formData.cover }),
       });
-      if (!res.ok) throw new Error('Create thinking failed');
+      if (res.status === 401) {
+        router.push('/login');
+      } else if (!res.ok) {
+        throw new Error('Create thinking failed');
+      }
       const { id } = await res.json();
 
       // 2. 上传图片（如果有）
