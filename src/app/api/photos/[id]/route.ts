@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import { adminAuth } from "@/lib/serverAuth";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!await adminAuth()) {
-    return Response.redirect("/login");
+    return NextResponse.redirect("/login");
   }
   try {
     const { id } = await params;
@@ -38,7 +38,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!await adminAuth()) {
-    return Response.redirect("/login");
+    return NextResponse.redirect("/login");
   }
   try {
     const { id } = await params;

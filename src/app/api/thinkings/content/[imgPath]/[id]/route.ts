@@ -2,12 +2,13 @@ import fs from 'fs/promises';
 import path from 'path';
 import prismadb from '@/lib/prismadb';
 import { adminAuth } from '@/lib/serverAuth';
+import { NextResponse } from 'next/server';
 
 const postsDir = path.join(process.cwd(), 'src', 'posts');
 
 export async function POST(req: Request, { params }: { params: Promise<{ imgPath: string, id: string }> }) {
   if (!await adminAuth()) {
-    return Response.redirect("/login");
+    return NextResponse.redirect("/login");
   }
   const { id, imgPath: cover } = await params;
 

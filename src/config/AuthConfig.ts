@@ -23,10 +23,10 @@ export const authOptions: AuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 60,
+    maxAge: 60 * 5,
   },
   jwt: {
-    maxAge: 60,
+    maxAge: 60 * 5,
     // 密钥自动从 .env 读取 NEXTAUTH_SECRET
   },
   pages: {
