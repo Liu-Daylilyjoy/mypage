@@ -21,13 +21,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   try {
     const { id } = await params;
     const body = await request.json();
-    const { title, description, path } = body;
+    const { title, description, path, shotTime, shotPlace } = body;
     if (!title || !description) {
       return Response.json({ error: "Title and description are required" }, { status: 400 });
     }
     const photo = await prismadb.photo.update({
       where: { id },
-      data: { title, description, path: path || "" }
+      data: { title, description, path: path || "", shotTime, shotPlace }
     });
     return Response.json(photo);
   } catch {

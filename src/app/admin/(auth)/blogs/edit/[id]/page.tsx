@@ -85,9 +85,9 @@ export default function BlogEditPage() {
   };
 
   return (
-    <div className="h-screen bg-background -mt-6">
+    <div className="h-screen bg-background -mt-6 relative">
       {/* 工具栏 */}
-      <div className="flex items-center gap-8 absolute left-[50%] -translate-x-[50%] md:top-2 top-4 z-100">
+      <div className="flex items-center gap-8 absolute left-[50%] -translate-x-[50%] md:-translate-y-11 -translate-y-13 z-100">
         <Link href="/admin/blogs" className={`whitespace-nowrap flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors`}
         >
           <ArrowLeft size={16} />

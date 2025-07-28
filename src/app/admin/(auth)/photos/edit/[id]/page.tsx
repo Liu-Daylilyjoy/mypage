@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChevronUpIcon, Save, Upload, X } from "lucide-react";
+import { ArrowLeft, ChevronUpIcon, Save, Upload, X } from "lucide-react";
 import { toast } from "sonner";
+import Maple3D from "@/components/common/Loading/Maple3D";
 import Image from "next/image";
 import { ChevronDownIcon } from "lucide-react"
 
@@ -16,18 +17,55 @@ import {
   PopoverTrigger,
 } from "@/components/ui/shadcn/popover"
 
-export default function NewPhotoPage() {
+interface Photo {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  shotTime: Date;
+  shotPlace: string;
+}
+
+export default function PhotoEditPage() {
+  const { id } = useParams();
   const router = useRouter();
+  const [photo, setPhoto] = useState<Photo | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [shotTime, setShotTime] = useState<Date | undefined>(new Date());
+  const [shotTime, setShotTime] = useState<Date | undefined>(undefined);
   const [shotPlace, setShotPlace] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
-  const [time, setTime] = useState<string | undefined>(new Date().toLocaleTimeString());
+  const [time, setTime] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchPhoto = async () => {
+      try {
+        const response = await fetch(`/api/photos/${id}`);
+        if (response.ok) {
+          const photoData = await response.json();
+          setPhoto(photoData);
+          setTitle(photoData.title);
+          setDescription(photoData.description);
+          setShotTime(new Date(photoData.shotTime));
+          setShotPlace(photoData.shotPlace || '');
+          setTime(new Date(photoData.shotTime).toLocaleTimeString());
+        } else {
+          toast.error('Failed to load photo');
+        }
+      } catch (error) {
+        toast.error(`Failed to load photo: ${error}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPhoto();
+  }, [id]);
 
   useEffect(() => {
     return () => {
@@ -46,33 +84,35 @@ export default function NewPhotoPage() {
     try {
       setSaving(true);
 
-      // 1. 提交文本，获取id
-      const response = await fetch('/api/photos', {
-        method: 'POST',
+      const response = await fetch(`/api/photos/${id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title,
           description,
           shotTime,
           shotPlace,
+          path: photo!.path
         }),
       });
 
-      if (response.status === 401) {
-        router.push('/login');
-        return;
-      } else if (!response.ok) {
-        throw new Error('Create photo failed');
+      if (response.ok) {
+        toast.success('Updated successfully!');
+      } else {
+        if (response.status === 401) {
+          router.push('/login');
+        } else {
+          toast.error('Failed to update photo');
+        }
       }
 
-      const { id } = await response.json();
-
-      // 2. 上传图片（如果有）
+      // 更新图片
+      let newImgPath = '';
       if (selectedFile) {
         const formData = new FormData();
         formData.append('file', selectedFile);
 
-        const uploadResponse = await fetch(`/api/photos/content/${selectedFile.name}/${id}`, {
+        const uploadResponse = await fetch(`/api/photos/content/${photo!.path}/${id}`, {
           method: 'POST',
           body: formData,
         });
@@ -82,16 +122,15 @@ export default function NewPhotoPage() {
             router.push('/login');
             return;
           } else {
-            throw new Error('Upload image failed');
+            toast.error('Failed to upload image');
+            return;
           }
         }
+        newImgPath = (await uploadResponse.json()).newImgPath;
       }
-
-      toast.success('Create photo success');
-
-      router.push('/admin/photos')
+      router.push(`/admin/photos?refreshId=${id}&newPath=${newImgPath}`);
     } catch (error) {
-      toast.error(`Create photo failed: ${error}`);
+      toast.error(`Failed to update photo: ${error}`);
     } finally {
       setSaving(false);
     }
@@ -106,17 +145,36 @@ export default function NewPhotoPage() {
     setSelectedFile(file);
   };
 
+  if (loading) {
+    return <Maple3D />;
+  }
+
+  if (!photo) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Photo not found</h2>
+          <Link
+            href="/admin/photos"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Back to Photos
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <h1 className="text-3xl font-bold">Upload Photo</h1>
-        </div>
-        <div className="flex items-center gap-2">
+        <h1 className="text-3xl font-bold">Edit Photo</h1>
+        <div className="flex items-center gap-4">
           <Link
             href="/admin/photos"
-            className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg hover:bg-accent transition-colors"
+            className="flex items-center gap-2 px-3 py-2 border border-border rounded-lg text-sm hover:bg-accent transition-colors"
             onClick={() => {
               if (previewImage) {
                 URL.revokeObjectURL(previewImage);
@@ -132,9 +190,10 @@ export default function NewPhotoPage() {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={16} />
-            {saving ? 'Saving...' : 'Save'}
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
+
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -144,7 +203,15 @@ export default function NewPhotoPage() {
             {previewImage ? (
               <Image
                 src={previewImage}
-                alt="Preview"
+                alt={photo?.title || 'Preview'}
+                className="w-full aspect-square object-cover border border-border"
+                width={1000}
+                height={1000}
+              />
+            ) : photo?.path ? (
+              <Image
+                src={`/api/photos/content/${photo.path}?t=${Date.now()}`}
+                alt={photo.title}
                 className="w-full aspect-square object-cover border border-border"
                 width={1000}
                 height={1000}
@@ -152,6 +219,7 @@ export default function NewPhotoPage() {
             ) : (
               <div className="w-full aspect-square bg-muted border border-border flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
+                  <Upload size={48} className="mx-auto mb-2" />
                   <p>No image uploaded</p>
                 </div>
               </div>

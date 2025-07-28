@@ -9,36 +9,63 @@ import usePhotoList from "@/hook/usePhotoList";
 import { mutate } from "swr";
 import Maple3D from "@/components/common/Loading/Maple3D";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/shadcn/dialog";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Photo {
   id: string;
   title: string;
   description: string;
   path: string;
-  createdAt: string;
+  shotTime: string;
+  shotPlace: string;
 }
 
 export default function PhotosPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const { data: photos = [], isLoading: loading } = usePhotoList();
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [photoToDeletePath, setPhotoToDeletePath] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this photo?')) return;
+  const searchParams = useSearchParams();
+  const refreshId = searchParams.get('refreshId');
+  const newPath = searchParams.get('newPath');
 
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    setDeleteLoading(true);
+    const toastId = toast.loading('Deleting...');
     try {
-      const response = await fetch(`/api/photos/${id}`, {
+      const response = await fetch(`/api/photos/${deleteId}`, {
         method: 'DELETE',
       });
-
       if (response.ok) {
-        // 重新获取数据以更新列表
         mutate('/api/photos');
+        toast.success('Delete success', { id: toastId });
+
+        if (photoToDeletePath) {
+          await fetch(`/api/photos/content/${photoToDeletePath}`, {
+            method: 'DELETE'
+          });
+        }
+
+        setDeleteId(null);
       } else {
-        alert('Delete failed');
+        if (response.status === 401) {
+          router.push('/login');
+        } else {
+          toast.error('Delete failed', { id: toastId });
+        }
       }
-    } catch {
-      alert('Delete failed');
+    } catch (error) {
+      toast.error(`Delete failed: ${error}`);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -80,7 +107,7 @@ export default function PhotosPage() {
 
   if (loading) {
     return (
-      <Maple3D /> 
+      <Maple3D />
     );
   }
 
@@ -139,7 +166,7 @@ export default function PhotosPage() {
               <div className="aspect-square bg-muted relative overflow-hidden">
                 {photo.path ? (
                   <CompressedImage
-                    src={`/api/photos/content/${photo.path}`}
+                    src={refreshId === photo.id ? `/api/photos/content/${newPath}` : `/api/photos/content/${photo.path}`}
                     alt={photo.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     targetWidth={adminImageConfig.photo.targetWidth}
@@ -169,7 +196,10 @@ export default function PhotosPage() {
                     <Edit size={16} className="text-white" />
                   </Link>
                   <button
-                    onClick={() => handleDelete(photo.id)}
+                    onClick={() => {
+                      setDeleteId(photo.id);
+                      setPhotoToDeletePath(photo.path);
+                    }}
                     className="p-2 bg-white/20 backdrop-blur-sm rounded-md hover:bg-white/30 transition-colors text-destructive"
                     title="Delete"
                   >
@@ -187,8 +217,11 @@ export default function PhotosPage() {
                   {photo.description}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {formatDate(photo.createdAt)}
+                  {formatDate(photo.shotTime)}
                 </p>
+                <span className="text-xs text-muted-foreground">
+                  {photo.shotPlace}
+                </span>
               </div>
             </div>
           ))
@@ -232,11 +265,47 @@ export default function PhotosPage() {
 
             {/* Footer */}
             <div className="p-4 text-sm text-right text-theme-color">
-              Created: {formatDate(selectedPhoto.createdAt)}
+              Created: {formatDate(selectedPhoto.shotTime)}
+              <span className="ml-2">
+                {selectedPhoto.shotPlace}
+              </span>
             </div>
           </div>
         </div>
       )}
+
+      {/* 删除 Dialog */}
+      <Dialog open={!!deleteId} onOpenChange={open => { if (!open) setDeleteId(null); }}>
+        <DialogContent className="max-w-xs rounded-sm" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Delete Photo</DialogTitle>
+          </DialogHeader>
+          <div className="py-4">Are you sure you want to delete this photo?</div>
+          <DialogFooter>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md border border-border bg-background hover:bg-accent transition-colors"
+              onClick={
+                () => {
+                  setDeleteId(null);
+                  setPhotoToDeletePath(null);
+                }
+              }
+              disabled={deleteLoading}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 rounded-md bg-destructive text-white hover:bg-destructive/60 transition-colors disabled:opacity-50"
+              onClick={handleDelete}
+              disabled={deleteLoading}
+            >
+              {deleteLoading ? 'Deleting...' : 'Delete'}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 
