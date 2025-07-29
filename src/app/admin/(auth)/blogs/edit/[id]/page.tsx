@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import useBlog from "@/hook/useBlog";
 import { md } from "@/lib/markdownUtil";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
@@ -11,17 +10,15 @@ import Maple3D from "@/components/common/Loading/Maple3D";
 
 export default function BlogEditPage() {
   const { id } = useParams();
-  const { data, isLoading } = useBlog(id as string);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [saving, setSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  useEffect(() => {
-    if (data?.content) setContent(data.content);
-  }, [data?.content]);
 
   useEffect(() => {
+    setIsLoading(true);
     const html = document.documentElement;
     const originalOverflow = html.style.overflow;
     html.style.overflow = 'hidden';
@@ -36,6 +33,18 @@ export default function BlogEditPage() {
       setDescription(blogData.description);
     }
     getBlog();
+
+    const getBlogContent = async () => {
+      const blog = await fetch(`/api/blogs/content/${id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const blogData = await blog.json();
+      if (blogData.content) setContent(blogData.content);
+      setIsLoading(false);
+    }
+    getBlogContent();
+
     return () => {
       html.style.overflow = originalOverflow;
     };
@@ -140,7 +149,16 @@ export default function BlogEditPage() {
         {/* 右侧预览 */}
         <div className="w-1/2 p-6 flex flex-col">
           <div className="mb-2 text-lg font-bold">Markdown</div>
-          <div ref={previewRef} className="markdown-body overflow-auto scrollbar flex-1" dangerouslySetInnerHTML={{ __html: html }} />
+          <div ref={previewRef}
+            className="markdown-body overflow-auto scrollbar flex-1"
+            onScroll={() => {
+              const textarea = textareaRef.current;
+              const preview = previewRef.current;
+              if (!textarea || !preview) return;
+              const percent = preview.scrollTop / (preview.scrollHeight - preview.clientHeight);
+              textarea.scrollTop = percent * (textarea.scrollHeight - textarea.clientHeight);
+            }}
+            dangerouslySetInnerHTML={{ __html: html }} />
         </div>
       </div>
     </div>

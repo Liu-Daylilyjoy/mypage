@@ -23,10 +23,11 @@ export const authOptions: AuthOptions = {
   ],
   session: {
     strategy: "jwt",
-    maxAge: 60 * 30,
+    maxAge: 60 * 10,
+    updateAge: 60,
   },
   jwt: {
-    maxAge: 60 * 30,
+    maxAge: 60 * 10,
     // 密钥自动从 .env 读取 NEXTAUTH_SECRET
   },
   pages: {
@@ -40,6 +41,11 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }: { token: JWT, user: User }) {
       if (user) {
         token.user = user;
+      }
+      // 每次调用时更新 token 的过期时间
+      if (token) {
+        token.iat = Math.floor(Date.now() / 1000);
+        token.exp = Math.floor(Date.now() / 1000) + (60 * 10);
       }
       return token;
     },

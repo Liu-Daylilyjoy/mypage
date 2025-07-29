@@ -1,20 +1,29 @@
 "use client"
 
 import ScrollProgress from '@/components/common/ScrollProgress/ScrollProgress'
-import useBlog from '@/hook/useBlog';
 import { md } from '@/lib/markdownUtil';
 import gsap from 'gsap';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 
 export default function ArticleDetail() {
   const { id } = useParams();
-  const { data } = useBlog(id as string);
+  const [content, setContent] = useState("");
   const markdownRef = useRef<HTMLDivElement>(null)
 
-  const htmlConverter = useMemo(() =>
-    md.render(data?.content || ''
-    ), [data?.content]);
+  const htmlConverter = useMemo(() => md.render(content || ''), [content]);
+
+  useEffect(() => {
+    const getBlogContent = async () => {
+      const blog = await fetch(`/api/blogs/content/${id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const blogData = await blog.json();
+      setContent(blogData.content);
+    }
+    getBlogContent();
+  }, [id]);
 
   useEffect(() => {
     if (!markdownRef.current || !htmlConverter) return;
