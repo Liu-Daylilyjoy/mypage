@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Plus, Edit, Trash2, Eye, Search, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import CompressedImage from "@/components/common/CompressedImage/CompressedImage";
@@ -23,7 +23,7 @@ interface Photo {
   shotPlace: string;
 }
 
-export default function PhotosPage() {
+function PhotosPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const { data: photos = [], isLoading: loading } = usePhotoList();
@@ -309,3 +309,11 @@ export default function PhotosPage() {
     </div>
   );
 } 
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Maple3D />}>
+      <PhotosPage />
+    </Suspense>
+  )
+}

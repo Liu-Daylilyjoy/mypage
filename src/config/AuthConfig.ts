@@ -36,17 +36,32 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }: { session: Session, token: JWT }) {
       session.user = { name: (token.user as { name?: string })?.name ?? null };
+
+      // 将 token 的过期时间同步到 session
+      if (token.exp) {
+        session.expires = new Date(token.exp as number * 1000).toISOString();
+      }
+
       return session;
     },
     async jwt({ token, user }: { token: JWT, user: User }) {
       if (user) {
         token.user = user;
-      }
-      // 每次调用时更新 token 的过期时间
-      if (token) {
         token.iat = Math.floor(Date.now() / 1000);
-        token.exp = Math.floor(Date.now() / 1000) + (60 * 10);
+        token.exp = Math.floor(Date.now() / 1000) + (60 * 10); 
       }
+
+      if (token) {
+        const now = Math.floor(Date.now() / 1000);
+        const currentExp = token.exp as number;
+
+        // 如果 token 即将过期，则延长过期时间
+        if (currentExp && (currentExp - now) < 60 * 5) {
+          token.iat = now;
+          token.exp = now + (60 * 10); 
+        }
+      }
+
       return token;
     },
   },

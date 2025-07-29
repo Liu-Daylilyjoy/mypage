@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
 import {
   FileText,
@@ -14,8 +14,9 @@ import {
   ChevronRight
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Toaster } from "sonner";
+import { useSession } from "next-auth/react";
 
 const adminNavItems = [
   {
@@ -48,6 +49,27 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const pathname = usePathname();
+
+  const { data: session, status, update } = useSession();
+  if (status === "unauthenticated") {
+    redirect("/login");
+  }
+
+  useEffect(() => {
+    if (!session) return;
+
+    // 每5分钟刷新一次 session
+    const interval = setInterval(async () => {
+      try {
+        await update();
+        console.log('Session refreshed at:', new Date().toLocaleString());
+      } catch (error) {
+        console.error('Failed to refresh session:', error);
+      }
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [session, update]);
 
   return (
     <div className="min-h-screen bg-background">

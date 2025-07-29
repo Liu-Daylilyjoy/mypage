@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Plus, Edit, Trash2, Eye, Search } from "lucide-react";
 import Link from "next/link";
 import useBlogList from "@/hook/useBlogList";
@@ -19,7 +19,7 @@ interface Blog {
   updatedAt: string;
 }
 
-export default function BlogsPage() {
+function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const { data: blogs = [], isLoading: loading } = useBlogList();
   const [showModal, setShowModal] = useState(false);
@@ -308,4 +308,12 @@ export default function BlogsPage() {
       </Dialog>
     </div>
   );
-} 
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Maple3D />}>
+      <BlogsPage />
+    </Suspense>
+  )
+}

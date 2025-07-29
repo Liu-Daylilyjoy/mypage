@@ -1,9 +1,7 @@
-import { redirect } from "next/navigation";
-import { adminAuth } from "@/lib/serverAuth";
+'use client'
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  if (!await adminAuth()) {
-    redirect("/login");
-  }
-  return <>{children}</>;
+import { SessionProvider } from "next-auth/react";
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return <SessionProvider>{children}</SessionProvider>;
 } 
