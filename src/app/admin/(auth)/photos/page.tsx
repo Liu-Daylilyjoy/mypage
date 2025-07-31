@@ -166,7 +166,7 @@ function PhotosPage() {
               <div className="aspect-square bg-muted relative overflow-hidden">
                 {photo.path ? (
                   <CompressedImage
-                    src={refreshId === photo.id ? `/api/photos/content/${newPath}` : `/api/photos/content/${photo.path}`}
+                    src={(newPath && refreshId === photo.id) ? `/api/photos/content/${newPath}` : `/api/photos/content/${photo.path}`}
                     alt={photo.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     targetWidth={adminImageConfig.photo.targetWidth}
@@ -308,7 +308,7 @@ function PhotosPage() {
       </Dialog>
     </div>
   );
-} 
+}
 
 export default function Page() {
   return (

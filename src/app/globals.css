@@ -129,8 +129,24 @@
     user-select: none;
   }
 
+  @font-face {
+    font-family: 'AutoFont';
+    src: url('/font/Aurora-2.ttf') format('woff2');
+    unicode-range: U+0000-00FF;
+    /* 拉丁字符 */
+  }
+
+  @font-face {
+    font-family: 'AutoFont';
+    src: url('/font/LXGWWenKaiMono-Light.ttf') format('woff2');
+    unicode-range: U+4E00-9FFF, U+3040-309F, U+30A0-30FF, U+FF00-FFEF;
+    /* 常用汉字 + 平假名 + 片假名 + 全角字符 */
+  }
+
   body {
     @apply bg-background text-foreground;
+
+    font-family: 'AutoFont';
 
     background: linear-gradient(90deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px,
       linear-gradient(0deg, color-mix(in oklch, var(--foreground) 15%, transparent) 1px, transparent 1px 90px) 50% 50% / 90px 90px;

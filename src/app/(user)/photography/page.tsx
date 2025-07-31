@@ -1,15 +1,45 @@
 "use client"
 
+import Maple3D from "@/components/common/Loading/Maple3D";
 import { imageSize } from "@/config/ImageConfig";
 import usePhotoList from "@/hook/usePhotoList";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // 高性能无限滑动参考了
 // https://github.com/JIEJOE-WEB-Tutorial/008-02-infinite-scrolling-canvas/blob/main/infinite%20scrolling%20canvas.html
 
 export default function Photography() {
-  const { data: photoList = [], isLoading } = usePhotoList();
+  const { data: photoList = [] } = usePhotoList();
   const photoContainerRef = useRef<HTMLCanvasElement>(null);
+  const [drawing, setDrawing] = useState(true);
+
+  // 计算最优的列数，使得行列之积尽可能接近totalImages
+  const calculateOptimalColumns = useCallback((totalImages: number): number => {
+    if (totalImages <= 0) return 1;
+
+    const sqrt = Math.sqrt(totalImages);
+    const candidates = [
+      Math.floor(sqrt),
+      Math.ceil(sqrt),
+      Math.floor(sqrt) - 1,
+      Math.ceil(sqrt) + 1
+    ].filter(col => col > 0);
+
+    let bestColumns = candidates[0];
+    let bestDiff = Math.abs(totalImages - bestColumns * Math.ceil(totalImages / bestColumns));
+
+    for (const col of candidates) {
+      const rows = Math.ceil(totalImages / col);
+      const product = col * rows;
+      const diff = Math.abs(totalImages - product);
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        bestColumns = col;
+      }
+    }
+
+    return Math.max(2, Math.min(8, bestColumns));
+  }, []);
 
   useEffect(() => {
     if (!photoContainerRef.current) return;
@@ -18,7 +48,8 @@ export default function Photography() {
     const content = canvas.getContext('2d');
 
     const imageNumber = photoList.length;
-    const maxColumn = 6;
+
+    const maxColumn = calculateOptimalColumns(imageNumber);
     const maxRow = Math.ceil(imageNumber / maxColumn);
 
     const imgWidth = imageSize.width;
@@ -63,6 +94,10 @@ export default function Photography() {
           sx, sy, sWidth, sHeight,
           x, y, imgWidth, imgHeight
         );
+
+        if (i === imageNumber - 1) {
+          setDrawing(false);
+        }
       };
     }
 
@@ -146,9 +181,16 @@ export default function Photography() {
       date.style.color = 'var(--theme-color)';
       date.style.fontSize = '14px';
       date.style.fontWeight = 'normal';
-      date.textContent = new Date(photoList[img.i].createdAt).toLocaleDateString();
+      date.textContent = new Date(photoList[img.i].shotTime).toLocaleDateString();
       date.style.marginTop = '10px';
       viewer.appendChild(date);
+
+      const place = document.createElement('span');
+      place.style.color = 'var(--theme-color)';
+      place.style.fontSize = '14px';
+      place.style.fontWeight = 'normal';
+      place.textContent = photoList[img.i].shotPlace;
+      viewer.appendChild(place);
 
       document.body.appendChild(viewer);
 
@@ -198,11 +240,12 @@ export default function Photography() {
         debounceFindImg();
       }
       if (movable) {
-        move(e.movementX, e.movementY);
+        move(e.movementX * 2, e.movementY * 2);
       }
     }
 
     resize();
+
     window.addEventListener('resize', resize);
     canvas.addEventListener('mousedown', mouseDown);
     canvas.addEventListener('mouseup', mouseUp);
@@ -217,15 +260,12 @@ export default function Photography() {
       canvas.removeEventListener('mousemove', mouseMove);
       imgs.forEach(img => { img.onload = null; });
     }
-  }, [photoList]);
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  }, [photoList, calculateOptimalColumns]);
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] overflow-hidden">
-      <canvas className="absolute w-full h-full cursor-pointer" ref={photoContainerRef}></canvas>
+      {drawing && <Maple3D />}
+      <canvas className={`absolute w-full h-full cursor-pointer ${drawing ? 'invisible pointer-events-none' : ''}`} ref={photoContainerRef}></canvas>
     </div>
   )
 }

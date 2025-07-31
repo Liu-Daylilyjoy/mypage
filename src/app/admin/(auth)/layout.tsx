@@ -48,7 +48,12 @@ export default function AdminLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const pathname = usePathname();
+  let pathname = usePathname();
+
+  const pathnameArray = pathname.split('/');
+  if (pathnameArray.length > 3) {
+    pathname = pathnameArray.slice(0, 3).join('/');
+  }
 
   const { data: session, status, update } = useSession();
   if (status === "unauthenticated") {

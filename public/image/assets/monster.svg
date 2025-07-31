@@ -1,0 +1,37 @@
+<svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <defs>
+    <style>
+      .monster-body {
+        fill: #FF6B6B;
+        animation: body-wiggle 2s ease-in-out infinite;
+        transform-origin: 512px 512px;
+      }
+      .monster-eyes {
+        fill: #000;
+      }
+      .tentacle {
+        fill: #FF6B6B;
+        animation: tentacle-wiggle 1.5s ease-in-out infinite;
+        transform-origin: 512px 512px;
+      }
+      @keyframes body-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(3deg); }
+        75% { transform: rotate(-3deg); }
+      }
+      @keyframes tentacle-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(8deg); }
+      }
+    </style>
+  </defs>
+  
+  <!-- 怪物身体主体 -->
+  <path class="monster-body" d="M863.93 819.21V455.69a352 352 0 1 0-704 0v368a31.72 31.72 0 0 0 0.19 3.53 96 96 0 0 0 192-2.5V824a32 32 0 0 1 64 0v0.74a96 96 0 0 0 192 0v-0.75a32 32 0 0 1 64 0v0.72a96 96 0 0 0 192-0.41c-0.05-1.62-0.12-3.3-0.19-5.09z"/>
+  
+  <!-- 触手部分 -->
+  <path class="tentacle" d="M768.07 856.31a32 32 0 0 1-32-31.63v-0.54c0-0.84 0-1.67-0.06-2.5a96 96 0 0 0-191.9 0c-0.06 0.78-0.08 1.57-0.07 2.36v0.67a32 32 0 0 1-64 0V824c0-0.78 0-1.56-0.06-2.33a96 96 0 0 0-191.91 0c-0.05 0.78-0.07 1.56-0.06 2.35v0.68a32 32 0 0 1-64 0v-0.67a34.87 34.87 0 0 0-0.16-3.55V455.69c0-158.81 129.19-288 288-288s288 129.19 288 288v364.46q0 1 0.06 2c0.06 0.88 0.08 1.57 0.08 2.12a32 32 0 0 1-31.92 32.04z"/>
+  
+  <!-- 眼睛 -->
+  <path class="monster-eyes" d="M376.72 377.3a104 104 0 1 0 104 104 104.12 104.12 0 0 0-104-104z m0 144a40 40 0 1 1 40-40 40.05 40.05 0 0 1-40 40zM649.28 377a104 104 0 1 0 104 104 104.11 104.11 0 0 0-104-104z m0 144a40 40 0 1 1 40-40 40 40 0 0 1-40 40z"/>
+</svg>

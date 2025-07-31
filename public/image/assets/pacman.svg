@@ -1,0 +1,34 @@
+<svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <defs>
+    <style>
+      .pacman-half {
+        fill: #FFD700;
+        transform-origin: 512px 512px;
+      }
+      .pacman-half-upper {
+        animation: chomp-upper 1s ease-in-out infinite;
+      }
+      .pacman-half-lower {
+        animation: chomp-lower 1s ease-in-out infinite;
+      }
+      @keyframes chomp-upper {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(-45deg); }
+      }
+      @keyframes chomp-lower {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(45deg); }
+      }
+    </style>
+  </defs>
+  
+  <!-- 上半圆（180度，从左到右） -->
+  <path class="pacman-half pacman-half-upper" d="M112 512 A400 400 0 0 1 912 512 L512 512 Z"/>
+  
+  <!-- 下半圆（180度，从左到右） -->
+  <path class="pacman-half pacman-half-lower" d="M112 512 A400 400 0 0 0 912 512 L512 512 Z"/>
+  
+  <!-- 眼睛 -->
+  <circle cx="650" cy="250" r="40" fill="#000"/>
+  
+</svg>

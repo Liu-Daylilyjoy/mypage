@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import localFont from 'next/font/local'
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-
-const myFont = localFont({
-  src: '../../public/font/Aurora-2.ttf',
-});
 
 export const metadata: Metadata = {
   title: "Liudy",
@@ -22,9 +17,7 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"></link>
       </head>
-      <body
-        className={`${myFont.className} `}
-      >
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

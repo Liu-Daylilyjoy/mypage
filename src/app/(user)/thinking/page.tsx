@@ -11,8 +11,8 @@ export default function Thinking() {
   return (
     <>
       <ScrollProgress />
-      <div className="px-20 pt-30">
-        <div className="max-w-5xl w-[90%] mx-auto relative thinking"
+      <div className="px-20">
+        <div className="max-w-5xl w-[90%] mx-auto relative thinking pt-30"
           style={{
             columns: `${imageSize.width}px auto`,
           }}

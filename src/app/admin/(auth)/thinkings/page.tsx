@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/lib/dateUtil";
 
 interface Thinking {
   id: string;
@@ -70,16 +71,6 @@ export default function ThinkingsPage() {
     thinking.detail.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   if (loading) {
     return (
       <Maple3D />
@@ -136,9 +127,9 @@ export default function ThinkingsPage() {
           </div>
         ) : (
           filteredThinkings.map((thinking: Thinking) => (
-            <div key={thinking.id} className="bg-card border border-border overflow-hidden shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all break-inside-avoid mb-6">
+            <div key={thinking.id} className="bg-card border border-border shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all break-inside-avoid mb-6">
               {/* Cover Image with upload on hover */}
-              <div className="relative group bg-muted flex items-center justify-center overflow-hidden">
+              <div className="relative group bg-muted flex items-center justify-center">
                 {thinking.cover ? (
                   <CompressedImage
                     key={imgRefreshMap[thinking.id]}
@@ -206,11 +197,11 @@ export default function ThinkingsPage() {
                 <h3 className="font-semibold text-lg mb-2">
                   {thinking.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">
+                <span className="text-sm text-muted-foreground mb-4 whitespace-pre-wrap">
                   {thinking.detail}
-                </p>
+                </span>
 
-                <div className="flex flex-col items-end justify-between text-xs text-muted-foreground mb-4">
+                <div className="mt-3 flex flex-col items-end justify-between text-xs text-muted-foreground mb-4">
                   <span>Created at {formatDate(thinking.createdAt)}</span>
                   <span>Updated at {formatDate(thinking.updatedAt)}</span>
                 </div>

@@ -3,11 +3,15 @@
 import { SkillItemProps } from "@/components/common/Skill/SkillItem"
 import SkillPage from "@/components/common/Skill/SkillPage";
 import WelcomePage from "@/components/common/Summary/WelcomePage";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
-import Image from "next/image"; 
+import Image from "next/image";
+import Welcome from "@/components/common/Loading/Welcome";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+
+gsap.registerPlugin(ScrambleTextPlugin);
 
 const information: {
   name: string;
@@ -57,9 +61,14 @@ export default function Home() {
   const progressTooltipRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const replayRef = useRef<SVGSVGElement>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingAnimationComplete, setLoadingAnimationComplete] = useState(false);
 
   useEffect(() => {
     if (!welcomePageRef.current || !progressContainerRef.current || !progressBarRef.current || !progressTooltipRef.current || !contentRef.current || !replayRef.current) return;
+
+    setLoading(true);
+    document.documentElement.style.overflow = 'hidden';
 
     // 获取所有section元素
     const welcomePage = welcomePageRef.current;
@@ -143,10 +152,6 @@ export default function Home() {
 
     // 初始化进度条和分隔线
     addSeparators();
-    // console.log(sectionName);
-    // console.log(sectionIndex);
-    // console.log(sectionLength);
-    // console.log(subsectionSize);
 
     progressTooltip.textContent = sectionName[0] ? sectionName[0] : 'Empty';
     updateProgress();
@@ -325,6 +330,8 @@ export default function Home() {
       e.preventDefault();
     };
 
+    setLoading(false);
+
     progressContainer.addEventListener('wheel', preventScroll, { passive: false });
     progressContainer.addEventListener('mousemove', handleProgressContainerMouseMove);
     progressContainer.addEventListener('click', handleProgressContainerClick);
@@ -356,7 +363,6 @@ export default function Home() {
     const clearEvent: (() => void)[] = [];
     for (let i = 0; i < sectionRef.current.length; i++) {
       let enterHandler: () => void = () => { };
-      let leaveHandler: () => void = () => { };
       let clear = () => { };
       switch (i) {
         case 0:
@@ -396,14 +402,8 @@ export default function Home() {
           });
 
           enterHandler = contextSafe!(() => {
-            tl.resume();
+            tl.play();
           });
-          leaveHandler = contextSafe!(() => {
-            tl.pause();
-          });
-
-          sectionRef.current[i]?.addEventListener('mouseenter', enterHandler);
-          sectionRef.current[i]?.addEventListener('mouseleave', leaveHandler);
 
           clear = () => {
             split.revert();
@@ -411,13 +411,115 @@ export default function Home() {
           };
           break;
         case 1:
+          const tl1 = gsap.timeline({ paused: true });
+          tl1.from('#i-like-1', {
+            duration: 1,
+            rotate: 80,
+            y: -400,
+            ease: "bounce",
+          }).to('#hobby-1', {
+            opacity: 1,
+            scrambleText: {
+              text: "{original}",
+              chars: "lowerCase",
+            },
+            duration: 2
+          });
 
+          const tl2 = gsap.timeline({
+            paused: true,
+            repeat: -1,
+            delay: 3,
+          });
+          tl2.fromTo("#pacman", {
+            opacity: 0,
+          }, {
+            opacity: 1,
+            duration: 0.3,
+          }).to('#pacman', {
+            x: "10vw",
+            duration: 1
+          }).fromTo('#monster', {
+            opacity: 0,
+          }, {
+            opacity: 1,
+            duration: 0.3,
+          }).to('#pacman', {
+            x: "95vw",
+            duration: 2,
+          }).to('#monster', {
+            x: "70vw",
+            duration: 1,
+          }).to('#pacman', {
+            opacity: 0,
+            duration: 0.3,
+          }).to('#monster', {
+            x: '95vw',
+            duration: 0.5,
+          }).to('#monster', {
+            opacity: 0,
+            duration: 0.3,
+          });
+
+          const tl3 = gsap.timeline({
+            paused: true,
+            delay: 3,
+          });
+          tl3.fromTo('#gameController', {
+            width: '0%',
+          }, {
+            width: '100%',
+            duration: 1,
+          });
+
+          const tl4 = gsap.timeline({
+            paused: true,
+            delay: 6,
+            repeat: -1,
+          });
+          tl4.fromTo('#flight', {
+            opacity: 0,
+          }, {
+            opacity: 1,
+            duration: 0.3,
+          }).to('#flight', {
+            x: "95vw",
+            duration: 3,
+          }).to('#flight', {
+            rotate: "-90deg",
+            duration: 2,
+          }).to('#flight', {
+            y: "-100vh",
+            duration: 1,
+          }).to('#flight', {
+            opacity: 0,
+            duration: 0.3,
+          });
+
+          enterHandler = contextSafe!(() => {
+            tl1.play();
+            tl2.play();
+            tl3.play();
+            tl4.play();
+          });
+
+          clear = () => {
+            tl1.kill();
+            tl2.kill();
+            tl3.kill();
+            tl4.kill();
+          };
+
+          break;
+        case 3:
 
           break;
       }
+
+      sectionRef.current[i]?.addEventListener('mouseenter', enterHandler);
+
       clearEvent.push(() => {
         sectionRef.current[i]?.removeEventListener('mouseenter', enterHandler);
-        sectionRef.current[i]?.removeEventListener('mouseleave', leaveHandler);
         clear();
       });
     }
@@ -429,13 +531,15 @@ export default function Home() {
 
   return (
     <>
+      {(loading || !loadingAnimationComplete) &&
+        <Welcome duration={5} onComplete={() => setLoadingAnimationComplete(true)} />}
       <div className="welcome-page" ref={welcomePageRef}>
         <WelcomePage />
       </div>
       <div className="content" ref={contentRef}>
         <div className="section" data-title="Me">
           <div className="subsection" data-title="About me" ref={setRef}>
-            <div className="max-w-3xl w-full">
+            <div className="max-w-3xl px-20">
               <h1 id="title-me">Dear friend:</h1>
               <h2 id="about-me">I'm Liudy, a first-year postgraduate student with a
                 strong passion for&nbsp;
@@ -451,13 +555,26 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="subsection" data-title="playing-games" ref={setRef}>
-            <div className="max-w-3xl w-full">
-
+          <div className="subsection" data-title="hobby 1" ref={setRef}>
+            <div className="max-w-3xl px-20 flex flex-col items-center gap-4">
+              <h1 className="flex items-center">
+                <div id="i-like-1">I like&nbsp;</div>
+                <div id="hobby-1" className="text-theme-color opacity-0">playing games</div>
+              </h1>
+              <Image id="gameController" src="/image/assets/gameController.svg" alt="gameController" className="w-0 scale-50" width={100} height={100} />
             </div>
+            <Image id="pacman" src="/image/assets/pacman.svg" alt="pacman" width={50} height={50} className="opacity-0 absolute top-25 left-0" />
+            <Image id="monster" src="/image/assets/monster.svg" alt="monster" width={50} height={50} className="opacity-0 absolute top-25 left-0" />
+            <Image id="flight" src="/image/assets/flight.svg" alt="flight" width={50} height={50} className="opacity-0 absolute bottom-25 left-0" />
           </div>
-          <div className="subsection" data-title="Third of me">
-            <h1>Third of me</h1>
+          <div className="subsection" data-title="hobby 2" ref={setRef}>
+            <div className="max-w-3xl px-20">
+              <h1>I like&nbsp;</h1>
+              <h2>
+                <span className="text-theme-color">reading</span>
+                &nbsp;books
+              </h2>
+            </div>
           </div>
           <div className="subsection" data-title="Fourth of me">
             <h1>Fourth of me</h1>

@@ -55,6 +55,37 @@ export default function BlogEditPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!previewRef.current) return;
+    const anchor = previewRef.current.querySelectorAll('a');
+    const eventListeners: Array<{ element: Element; handler: (e: Event) => void }> = [];
+
+    anchor.forEach(item => {
+      const href = item.href.split('#').pop();
+      if (href) {
+        const handler = (e: Event) => {
+          e.preventDefault();
+          const target = document.querySelector(`#${href}`) as HTMLElement;
+          if (target) {
+            previewRef.current!.scrollTo({
+              top: target.offsetTop - 100,
+              behavior: 'instant'
+            });
+          }
+        };
+
+        item.addEventListener('click', handler);
+        eventListeners.push({ element: item, handler });
+      }
+    });
+
+    return () => {
+      eventListeners.forEach(({ element, handler }) => {
+        element.removeEventListener('click', handler);
+      });
+    };
+  }, [content]);
+
   if (isLoading) {
     return (
       <Maple3D />
@@ -111,7 +142,7 @@ export default function BlogEditPage() {
           <Save size={16} />
         </button>
       </div>
-      <div className="flex h-[95vh]">
+      <div className="flex h-[95vh] ">
         {/* 左侧编辑器 */}
         <div className="w-1/2 p-6 border-r border-border flex flex-col">
           <div className="mb-2 text-lg font-bold">Source</div>
@@ -150,7 +181,7 @@ export default function BlogEditPage() {
         <div className="w-1/2 p-6 flex flex-col">
           <div className="mb-2 text-lg font-bold">Markdown</div>
           <div ref={previewRef}
-            className="markdown-body overflow-auto scrollbar flex-1"
+            className="markdown-body overflow-auto scrollbar flex-1 relative"
             onScroll={() => {
               const textarea = textareaRef.current;
               const preview = previewRef.current;

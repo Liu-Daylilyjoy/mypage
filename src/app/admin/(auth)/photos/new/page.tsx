@@ -212,7 +212,7 @@ export default function NewPhotoPage() {
 
             <div className="flex gap-3 items-center border-t pt-8">
               <label htmlFor="shotTime">
-                Shot Time
+                Shot Day
               </label>
               <div className="flex flex-col gap-3">
                 <Popover open={open} onOpenChange={setOpen}>

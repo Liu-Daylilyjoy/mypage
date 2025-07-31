@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "6858b9849b01a2760fe17960",
+    "title": "Basic Redstone Circuit Tutorial - [MC] Minecraft",
+    "description": "As a beginner, I've also learned from others' redstone tutorials. However, many tutorials are either too complex or too simple (just basic circuits without logic gates). This time, I decided to explain these amazing redstone circuits from my perspective, using the most straightforward language.",
+    "createdAt": "2022-01-01T00:00:00.000Z",
+    "updatedAt": "2025-07-29T03:17:54.168Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17961",
+    "title": "Introduction to Home Flower Arranging",
+    "description": "Want to add a touch of nature and art to your home? This tutorial will guide you into the world of flower arranging, from selecting materials to color matching and styling techniques, teaching you how to decorate your living space with flowers and enhance your home's aesthetics. Even beginners can create stunning floral arrangements through this tutorial.",
+    "createdAt": "2022-01-02T00:00:00.000Z",
+    "updatedAt": "2025-07-29T03:13:27.072Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17962",
+    "title": "Getting Started with Pixel Art",
+    "description": "Want to create retro-style pixel art yourself? This tutorial will guide you through the fascinating world of pixel art. Starting from basic concepts, we'll learn how to build unique digital images using simple blocks, master color usage and composition techniques, and unleash your unlimited creativity. Whether you're a drawing beginner or a digital artist seeking new challenges, you'll find joy in this tutorial and create your own pixel masterpieces.",
+    "createdAt": "2023-01-03T00:00:00.000Z",
+    "updatedAt": "2025-07-29T03:06:43.417Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17963",
+    "title": "Japanese Language Learning for Beginners",
+    "description": "Curious about Japanese language and culture? This tutorial will guide you from zero to start learning Japanese systematically. We'll cover basic pronunciation, common vocabulary, grammar structures, and incorporate Japanese cultural tidbits, allowing you to deeply understand this fascinating country while learning the language. Whether for travel, work, or interest, this tutorial will help you take your first steps in Japanese learning easily.",
+    "createdAt": "2025-01-05T00:00:00.000Z",
+    "updatedAt": "2025-07-28T03:27:17.767Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17964",
+    "title": "AI Art Generation Guide",
+    "description": "Explore the unlimited possibilities of AI art! This tutorial will introduce you to mainstream AI art tools, from prompt writing to parameter adjustment and post-processing, teaching you step by step how to create stunning AI artworks. Whether you're an art enthusiast or professional designer, you'll find creative inspiration here.",
+    "createdAt": "2024-03-15T00:00:00.000Z",
+    "updatedAt": "2025-07-29T01:32:32.926Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17965",
+    "title": "Coffee Appreciation and Brewing",
+    "description": "Step into the aromatic world of coffee! From coffee bean selection and roasting to brewing techniques, this tutorial will comprehensively introduce coffee appreciation and brewing methods. You'll learn to distinguish coffee flavors from different regions and master professional brewing techniques like hand drip and espresso, becoming a true coffee connoisseur.",
+    "createdAt": "2024-02-20T00:00:00.000Z",
+    "updatedAt": "2025-07-29T01:49:01.602Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17966",
+    "title": "Photography Composition Techniques",
+    "description": "Elevate your photography skills! This tutorial will delve into core principles of photographic composition, from golden ratio to leading lines, from color matching to light and shadow usage, helping you master professional photographers' composition techniques to make your works more artistic and expressive.",
+    "createdAt": "2024-01-10T00:00:00.000Z",
+    "updatedAt": "2025-07-29T01:48:14.957Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17967",
+    "title": "Practical Python Data Analysis",
+    "description": "Master data analysis with Python! This tutorial will teach you how to process, analyze, and visualize data using Python. From basic library usage to practical project cases, helping you quickly grasp core data analysis skills and enhance your career competitiveness.",
+    "createdAt": "2023-12-05T00:00:00.000Z",
+    "updatedAt": "2025-07-29T01:47:51.522Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17968",
+    "title": "Home Fitness Guide",
+    "description": "Get fit at home! This tutorial will provide you with a complete home workout plan, including bodyweight exercises, small equipment usage, and dietary recommendations. Whether you're a fitness beginner or experienced, you'll find a training plan that suits you.",
+    "createdAt": "2023-11-18T00:00:00.000Z",
+    "updatedAt": "2025-07-29T02:17:18.715Z"
+  },
+  {
+    "_id": "6858b9849b01a2760fe17969",
+    "title": "Digital Marketing Basics",
+    "description": "Master core digital marketing skills! This tutorial will introduce SEO optimization, social media marketing, content marketing, and other digital marketing strategies, helping you understand how to promote products and services through online channels and enhance brand influence.",
+    "createdAt": "2023-10-22T00:00:00.000Z",
+    "updatedAt": "2025-07-29T02:20:40.622Z"
+  }
+]

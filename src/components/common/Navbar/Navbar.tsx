@@ -25,7 +25,7 @@ const navbarItems: NavbarItemProps[] = [
     href: "/photography"
   },
   {
-    icon: <a href="https://github.com/Liu-Daylilyjoy" target="_blank"><LuGithub size={30} /></a>
+    icon: <a href="https://github.com/Liu-Daylilyjoy/mypage" target="_blank"><LuGithub size={30} /></a>
   },
   {
     icon: <span className="wechat"><BsWechat size={30} /></span>
