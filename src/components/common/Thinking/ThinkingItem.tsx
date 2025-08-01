@@ -13,7 +13,7 @@ export interface ThinkingItemProps {
 
 const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) => {
   return (
-    <div key={thinking.id} className="bg-background break-inside-avoid mb-10 border border-border shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all scale">
+    <div key={thinking.id} className="bg-background break-inside-avoid mb-10 border border-border shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all">
       <CompressedImage
         src={thinking.cover.startsWith('http') ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
         alt="header cover"

@@ -1,6 +1,6 @@
 "use client"
 
-import SlowLoading from "@/components/common/Loading/SlowLoading";
+import Maple3D from "@/components/common/Loading/Maple3D";
 import { imageSize } from "@/config/ImageConfig";
 import usePhotoList from "@/hook/usePhotoList";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,35 +12,18 @@ export default function Photography() {
   const { data: photoList = [] } = usePhotoList();
   const photoContainerRef = useRef<HTMLCanvasElement>(null);
   const [drawing, setDrawing] = useState(true);
-  const [loadingAnimationComplete, setLoadingAnimationComplete] = useState(false);
+  const [maxColumn, setMaxColumn] = useState(4);
 
-  // 计算最优的列数，使得行列之积尽可能接近totalImages
-  const calculateOptimalColumns = useCallback((totalImages: number): number => {
-    if (totalImages <= 0) return 1;
+  // 根据屏幕宽度计算最优的列数
+  const calculateOptimalColumns = useCallback((): number => {
+    const screenWidth = window.innerWidth;
 
-    const sqrt = Math.sqrt(totalImages);
-    const candidates = [
-      Math.floor(sqrt),
-      Math.ceil(sqrt),
-      Math.floor(sqrt) - 1,
-      Math.ceil(sqrt) + 1
-    ].filter(col => col > 0);
-
-    let bestColumns = candidates[0];
-    let bestDiff = Math.abs(totalImages - bestColumns * Math.ceil(totalImages / bestColumns));
-
-    for (const col of candidates) {
-      const rows = Math.ceil(totalImages / col);
-      const product = col * rows;
-      const diff = Math.abs(totalImages - product);
-      if (diff < bestDiff) {
-        bestDiff = diff;
-        bestColumns = col;
-      }
-    }
-
-    return Math.max(2, Math.min(8, bestColumns));
+    return Math.floor(screenWidth / 180);
   }, []);
+
+  useEffect(() => {
+    setMaxColumn(calculateOptimalColumns());
+  }, [calculateOptimalColumns]);
 
   useEffect(() => {
     if (!photoContainerRef.current) return;
@@ -50,13 +33,14 @@ export default function Photography() {
 
     const imageNumber = photoList.length;
 
-    const maxColumn = calculateOptimalColumns(imageNumber);
+    
+
     const maxRow = Math.ceil(imageNumber / maxColumn);
 
-    const imgWidth = imageSize.width;
-    const imgHeight = imageSize.height;
+    const imgWidth = imageSize.width / 2;
+    const imgHeight = imageSize.height / 2;
 
-    const imgMargin = imageSize.margin;
+    const imgMargin = imageSize.margin / 2;
 
     const totalWidth = maxColumn * (imgWidth + imgMargin) - imgMargin;
     const totalHeight = maxRow * (imgHeight + imgMargin) - imgMargin;
@@ -106,9 +90,13 @@ export default function Photography() {
       canvas.width = canvas.clientWidth;
       canvas.height = canvas.clientHeight;
 
+      setDrawing(true);
+      setMaxColumn(calculateOptimalColumns());
+
       // 重新生成所有图片
       if (imgData.length > 0) {
         move(0, 0);
+        setDrawing(false);
       }
     }
 
@@ -261,12 +249,12 @@ export default function Photography() {
       canvas.removeEventListener('mousemove', mouseMove);
       imgs.forEach(img => { img.onload = null; });
     }
-  }, [photoList, calculateOptimalColumns]);
+  }, [photoList, maxColumn, calculateOptimalColumns]);
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] overflow-hidden">
-      {(drawing || !loadingAnimationComplete) && <SlowLoading duration={3} title="Be patient😊" subtitle="Loading photos......" onComplete={() => setLoadingAnimationComplete(true)} />}
-      <canvas className={`absolute w-full h-full cursor-pointer ${drawing ? 'invisible pointer-events-none' : ''}`} ref={photoContainerRef}></canvas>
+      {drawing && <Maple3D />}
+      <canvas className={`absolute w-full h-full ${drawing ? 'invisible pointer-events-none' : ''}`} ref={photoContainerRef}></canvas>
     </div>
   )
 }

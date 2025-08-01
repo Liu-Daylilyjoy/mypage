@@ -14,7 +14,7 @@ export default function Thinking() {
   useGSAP(() => {
     if (thinkingList.length === 0) return;
 
-    gsap.to(".scale", {
+    gsap.to(".decay", {
       opacity: 1,
       delay: 0.3
     })
@@ -28,15 +28,13 @@ export default function Thinking() {
     <>
       <ScrollProgress />
       <div className="px-20">
-        <div className="max-w-5xl w-[90%] mx-auto relative thinking pt-30"
+        <div className="max-w-5xl w-[90%] mx-auto relative thinking pt-30 decay opacity-0"
           style={{
             columns: `${imageSize.width}px auto`,
           }}
         >
           {thinkingList.map((thinking: ThinkingItemProps) => (
-            <span key={thinking.id} className="scale opacity-0">
-              <ThinkingItem thinking={thinking} />
-            </span>
+            <ThinkingItem key={thinking.id} thinking={thinking} />
           ))}
         </div>
       </div>
