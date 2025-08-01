@@ -1,6 +1,6 @@
 "use client"
 
-import Maple3D from "@/components/common/Loading/Maple3D";
+import SlowLoading from "@/components/common/Loading/SlowLoading";
 import { imageSize } from "@/config/ImageConfig";
 import usePhotoList from "@/hook/usePhotoList";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,6 +12,7 @@ export default function Photography() {
   const { data: photoList = [] } = usePhotoList();
   const photoContainerRef = useRef<HTMLCanvasElement>(null);
   const [drawing, setDrawing] = useState(true);
+  const [loadingAnimationComplete, setLoadingAnimationComplete] = useState(false);
 
   // 计算最优的列数，使得行列之积尽可能接近totalImages
   const calculateOptimalColumns = useCallback((totalImages: number): number => {
@@ -264,7 +265,7 @@ export default function Photography() {
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] overflow-hidden">
-      {drawing && <Maple3D />}
+      {(drawing || !loadingAnimationComplete) && <SlowLoading duration={3} title="Be patient😊" subtitle="Loading photos......" onComplete={() => setLoadingAnimationComplete(true)} />}
       <canvas className={`absolute w-full h-full cursor-pointer ${drawing ? 'invisible pointer-events-none' : ''}`} ref={photoContainerRef}></canvas>
     </div>
   )

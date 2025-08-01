@@ -38,11 +38,10 @@ export default function Blog() {
   useGSAP(() => {
     if (sortedYears.length === 0) return;
 
-    gsap.fromTo(".slide", {
-      opacity: 0,
-    }, {
+    gsap.to(".slide", {
       opacity: 1,
-      stagger: 0.2
+      stagger: 0.2,
+      delay: 0.3
     })
   }, [sortedYears])
 
@@ -56,10 +55,12 @@ export default function Blog() {
       <div className="px-20 pt-30">
         <div className="max-w-5xl flex flex-col items-center mx-auto">
           {sortedYears.map((year) => (
-            <div key={year} className="mb-12 w-full slide opacity-100">
-              <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40">{year}</h2>
+            <div key={year} className="mb-12 w-full">
+              <h2 className="text-3xl font-bold mb-6 border-b-2 border-primary/40 slide opacity-0">{year}</h2>
               {blogsByYear[year].map((blog: BlogItemProps) => (
-                <BlogItem key={blog.id} blog={blog} onClick={() => handleCardClick(blog.id)} />
+                <span key={blog.id} className="slide opacity-0">
+                  <BlogItem blog={blog} onClick={() => handleCardClick(blog.id)} />
+                </span>
               ))}
             </div>
           ))}

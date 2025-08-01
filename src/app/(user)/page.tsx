@@ -8,7 +8,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import Image from "next/image";
-import Welcome from "@/components/common/Loading/Welcome";
+import SlowLoading from "@/components/common/Loading/SlowLoading";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
 gsap.registerPlugin(ScrambleTextPlugin);
@@ -532,7 +532,7 @@ export default function Home() {
   return (
     <>
       {(loading || !loadingAnimationComplete) &&
-        <Welcome duration={3} onComplete={() => setLoadingAnimationComplete(true)} />}
+        <SlowLoading duration={3} onComplete={() => setLoadingAnimationComplete(true)} />}
       <div className="welcome-page" ref={welcomePageRef}>
         <WelcomePage />
       </div>

@@ -8,7 +8,7 @@ interface WelcomeProps {
   subtitle?: string;
 }
 
-const Welcome: React.FC<WelcomeProps> = ({
+const SlowLoading: React.FC<WelcomeProps> = ({
   onComplete,
   duration = 3,
   title = "Welcome",
@@ -124,4 +124,4 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 };
 
-export default Welcome;
+export default SlowLoading;
