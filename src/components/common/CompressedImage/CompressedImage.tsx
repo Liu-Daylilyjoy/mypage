@@ -9,7 +9,25 @@ interface CompressedImageProps {
   targetWidth?: number;
   quality?: number;
   fallbackIcon?: React.ReactNode;
+  enableCache?: boolean;
 }
+
+// 全局缓存，避免重复压缩相同的图片
+const compressionCache = new Map<string, string>();
+
+// 限制缓存大小的函数
+const limitCacheSize = (maxSize: number = 100) => {
+  if (compressionCache.size > maxSize) {
+    const entries = Array.from(compressionCache.entries());
+    // 删除前 20% 的缓存项
+    const deleteCount = Math.floor(maxSize * 0.2);
+    for (let i = 0; i < deleteCount; i++) {
+      const [key, url] = entries[i];
+      URL.revokeObjectURL(url);
+      compressionCache.delete(key);
+    }
+  }
+};
 
 const CompressedImage: React.FC<CompressedImageProps> = ({
   src,
@@ -17,7 +35,8 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
   className = "",
   targetWidth = 300,
   quality = 0.7,
-  fallbackIcon = <ImageIcon size={48} />
+  fallbackIcon = <ImageIcon size={48} />,
+  enableCache = true
 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -26,10 +45,20 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
 
   useEffect(() => {
     let compressedSrc: string | null = null;
+
     const compressImage = async () => {
       try {
         setLoading(true);
         setError(false);
+
+        const cacheKey = `${src}_${targetWidth}_${quality}`;
+
+        if (enableCache && compressionCache.has(cacheKey)) {
+          const cachedUrl = compressionCache.get(cacheKey)!;
+          setUrl(cachedUrl);
+          setLoading(false);
+          return;
+        }
 
         const response = await fetch(src);
         if (!response.ok) {
@@ -55,6 +84,11 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
           (blob) => {
             if (blob) {
               compressedSrc = URL.createObjectURL(blob);
+              if (enableCache) {
+                compressionCache.set(cacheKey, compressedSrc);
+                // 限制缓存大小
+                limitCacheSize();
+              }
               setUrl(compressedSrc);
             } else {
               setError(true);
@@ -74,14 +108,14 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
       compressImage();
     }
 
-    // Cleanup function to revoke object URL
     return () => {
-      if (prevCompressedSrc.current) {
+      // 只有当这个 URL 不是来自缓存时才清理
+      if (prevCompressedSrc.current && !enableCache) {
         URL.revokeObjectURL(prevCompressedSrc.current);
       }
       prevCompressedSrc.current = compressedSrc;
     };
-  }, [src, targetWidth, quality]);
+  }, [src, targetWidth, quality, enableCache]);
 
   if (loading) {
     return (

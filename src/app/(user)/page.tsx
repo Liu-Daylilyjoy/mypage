@@ -532,7 +532,7 @@ export default function Home() {
   return (
     <>
       {(loading || !loadingAnimationComplete) &&
-        <Welcome duration={5} onComplete={() => setLoadingAnimationComplete(true)} />}
+        <Welcome duration={3} onComplete={() => setLoadingAnimationComplete(true)} />}
       <div className="welcome-page" ref={welcomePageRef}>
         <WelcomePage />
       </div>

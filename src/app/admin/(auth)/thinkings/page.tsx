@@ -139,6 +139,7 @@ export default function ThinkingsPage() {
                     targetWidth={adminImageConfig.thinking.targetWidth}
                     quality={adminImageConfig.thinking.quality}
                     fallbackIcon={<ImageIcon size={48} />}
+                    enableCache={false}
                   />
                 ) : (
                   <div className="flex items-center justify-center text-muted-foreground w-full h-40">
