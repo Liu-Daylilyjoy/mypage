@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import React from 'react';
+import Link from "next/link";
+import React from "react";
 
 export interface NavbarItemProps {
   title?: string;
@@ -15,12 +15,12 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ title, href, icon }) => {
           {icon}
         </div>
       ) : (
-        <Link href={href || '/'} className="md:text-lg text-4xl mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300 origin-left">
+        <Link href={href || "/"} className="md:text-lg text-4xl mr-8 opacity-70 hover:opacity-100 hover:scale-120 hover:text-theme-color transition-all duration-300 origin-left">
           {title}
         </Link>
       )}
     </>
-  )
-}
+  );
+};
 
 export default NavbarItem;

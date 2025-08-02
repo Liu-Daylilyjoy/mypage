@@ -13,6 +13,6 @@ const usePhotoList = () => {
     error,
     isLoading
   };
-}
+};
 
 export default usePhotoList;

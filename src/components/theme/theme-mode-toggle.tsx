@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/shadcn/button"
-import { useCallback } from "react"
+import { Button } from "@/components/ui/shadcn/button";
+import { useCallback } from "react";
 
 export function ModeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = useCallback((theme: string | undefined) => {
     const transition = document.startViewTransition(() => {
-      setTheme(theme === 'dark' ? 'light' : 'dark')
-    })
+      setTheme(theme === "dark" ? "light" : "dark");
+    });
     transition.ready.then(() => {
       document.documentElement.animate({
-        clipPath: [`inset(0% 0% 0% 100%)`, `inset(0% 0% 0% 0%)`],
+        clipPath: ["inset(0% 0% 0% 100%)", "inset(0% 0% 0% 0%)"],
       }, {
         duration: 200,
-        pseudoElement: '::view-transition-new(root)',
-      })
-    })
-  }, [setTheme])
+        pseudoElement: "::view-transition-new(root)",
+      });
+    });
+  }, [setTheme]);
 
   return (
     <>
@@ -32,5 +32,5 @@ export function ModeToggle() {
         <span className="sr-only">Toggle theme</span>
       </Button>
     </>
-  )
+  );
 }

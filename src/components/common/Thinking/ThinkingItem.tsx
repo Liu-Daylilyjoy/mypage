@@ -15,7 +15,7 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
   return (
     <div key={thinking.id} className="bg-background break-inside-avoid mb-10 border border-border shadow-secondary hover:shadow-lg hover:-translate-y-1.5 transition-all">
       <CompressedImage
-        src={thinking.cover.startsWith('http') ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
+        src={thinking.cover.startsWith("http") ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
         alt="header cover"
         className="w-full h-auto"
         targetWidth={imageSize.width * 2}
@@ -28,7 +28,7 @@ const ThinkingItem: React.FC<{ thinking: ThinkingItemProps }> = ({ thinking }) =
         <span>Updated at {formatDate(thinking.updatedAt)}</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ThinkingItem;

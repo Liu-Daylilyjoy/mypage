@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
@@ -50,9 +50,9 @@ export default function AdminLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   let pathname = usePathname();
 
-  const pathnameArray = pathname.split('/');
+  const pathnameArray = pathname.split("/");
   if (pathnameArray.length > 3) {
-    pathname = pathnameArray.slice(0, 3).join('/');
+    pathname = pathnameArray.slice(0, 3).join("/");
   }
 
   const { data: session, status, update } = useSession();
@@ -67,9 +67,9 @@ export default function AdminLayout({
     const interval = setInterval(async () => {
       try {
         await update();
-        console.log('Session refreshed at:', new Date().toLocaleString());
+        console.log("Session refreshed at:", new Date().toLocaleString());
       } catch (error) {
-        console.error('Failed to refresh session:', error);
+        console.error("Failed to refresh session:", error);
       }
     }, 5 * 60 * 1000);
 
@@ -90,14 +90,14 @@ export default function AdminLayout({
       {/* Sidebar */}
       <div className={`
         fixed inset-y-0 left-0 z-50 bg-card border-r border-border transform transition-all duration-300 ease-in-out
-        ${sidebarCollapsed ? 'md:w-16 w-64' : 'w-64'}
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        ${sidebarCollapsed ? "md:w-16 w-64" : "w-64"}
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className='flex items-center justify-between border-b border-border p-2'>
-            <h1 className={`text-xl font-bold ${sidebarCollapsed ? 'md:hidden' : ''}`}>Admin</h1>
-            <div className={`flex items-center ${sidebarCollapsed ? 'justify-end w-full pr-1.5' : ''}`}>
+            <h1 className={`text-xl font-bold ${sidebarCollapsed ? "md:hidden" : ""}`}>Admin</h1>
+            <div className={`flex items-center ${sidebarCollapsed ? "justify-end w-full pr-1.5" : ""}`}>
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
                 className="hidden md:block p-2 hover:bg-accent rounded-md transition-colors"
@@ -123,8 +123,8 @@ export default function AdminLayout({
                 className={`
                   flex items-center gap-3 p-3 transition-colors h-12
                   ${pathname === item.href
-                    ? 'bg-primary text-primary-foreground'
-                    : 'hover:bg-accent'
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-accent"
                   }
                   md:px-5
                 `}
@@ -132,18 +132,18 @@ export default function AdminLayout({
                 title={sidebarCollapsed ? item.title : undefined}
               >
                 <span>{item.icon}</span>
-                <span className={`whitespace-nowrap ${sidebarCollapsed ? 'md:hidden' : ''}`}>{item.title}</span>
+                <span className={`whitespace-nowrap ${sidebarCollapsed ? "md:hidden" : ""}`}>{item.title}</span>
               </Link>
             ))}
           </nav>
 
           {/* Footer */}
           <div className='border-t border-border p-4 overflow-hidden'>
-            <div className={`flex items-center ${sidebarCollapsed ? 'md:justify-start justify-between' : 'justify-between'}`}>
+            <div className={`flex items-center ${sidebarCollapsed ? "md:justify-start justify-between" : "justify-between"}`}>
               <ModeToggle />
               <Link
                 href="/"
-                className={`whitespace-nowrap flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors ${sidebarCollapsed ? 'md:hidden' : ''}`}
+                className={`whitespace-nowrap flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors ${sidebarCollapsed ? "md:hidden" : ""}`}
               >
                 <LogOut size={16} />
                 Back to Home
@@ -154,7 +154,7 @@ export default function AdminLayout({
       </div>
 
       {/* Main content */}
-      <div className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'md:ml-16 ml-0' : 'md:ml-64 ml-0'}`}>
+      <div className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? "md:ml-16 ml-0" : "md:ml-64 ml-0"}`}>
         {/* Top bar */}
         <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-sm border-b border-border">
           <div className="flex items-center justify-between p-4">

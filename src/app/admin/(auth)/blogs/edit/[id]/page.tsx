@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -21,28 +21,28 @@ export default function BlogEditPage() {
     setIsLoading(true);
     const html = document.documentElement;
     const originalOverflow = html.style.overflow;
-    html.style.overflow = 'hidden';
+    html.style.overflow = "hidden";
 
     const getBlog = async () => {
       const blog = await fetch(`/api/blogs/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
       const blogData = await blog.json();
       setTitle(blogData.title);
       setDescription(blogData.description);
-    }
+    };
     getBlog();
 
     const getBlogContent = async () => {
       const blog = await fetch(`/api/blogs/content/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
       const blogData = await blog.json();
       if (blogData.content) setContent(blogData.content);
       setIsLoading(false);
-    }
+    };
     getBlogContent();
 
     return () => {
@@ -57,11 +57,11 @@ export default function BlogEditPage() {
 
   useEffect(() => {
     if (!previewRef.current) return;
-    const anchor = previewRef.current.querySelectorAll('a');
+    const anchor = previewRef.current.querySelectorAll("a");
     const eventListeners: Array<{ element: Element; handler: (e: Event) => void }> = [];
 
     anchor.forEach(item => {
-      const href = item.href.split('#').pop();
+      const href = item.href.split("#").pop();
       if (href) {
         const handler = (e: Event) => {
           e.preventDefault();
@@ -69,19 +69,19 @@ export default function BlogEditPage() {
           if (target) {
             previewRef.current!.scrollTo({
               top: target.offsetTop - 100,
-              behavior: 'instant'
+              behavior: "instant"
             });
           }
         };
 
-        item.addEventListener('click', handler);
+        item.addEventListener("click", handler);
         eventListeners.push({ element: item, handler });
       }
     });
 
     return () => {
       eventListeners.forEach(({ element, handler }) => {
-        element.removeEventListener('click', handler);
+        element.removeEventListener("click", handler);
       });
     };
   }, [content]);
@@ -97,28 +97,28 @@ export default function BlogEditPage() {
       setSaving(true);
       const [metaRes, contentRes] = await Promise.all([
         fetch(`/api/blogs/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title, description }),
         }),
         fetch(`/api/blogs/content/${id}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content }),
         }),
       ]);
       if (metaRes.ok && contentRes.ok) {
-        toast.success('Success!');
-        router.push('/admin/blogs');
+        toast.success("Success!");
+        router.push("/admin/blogs");
       } else {
         if (metaRes.status === 401 || contentRes.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.warning('Title or Description is empty!');
+          toast.warning("Title or Description is empty!");
         }
       }
     } catch {
-      toast.error('Failed to save!');
+      toast.error("Failed to save!");
     } finally {
       setSaving(false);
     }
@@ -128,7 +128,7 @@ export default function BlogEditPage() {
     <div className="h-screen bg-background -mt-6 relative">
       {/* 工具栏 */}
       <div className="flex items-center gap-8 absolute left-[50%] -translate-x-[50%] md:-translate-y-11 -translate-y-13 z-100">
-        <Link href="/admin/blogs" className={`whitespace-nowrap flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors`}
+        <Link href="/admin/blogs" className={"whitespace-nowrap flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md transition-colors"}
         >
           <ArrowLeft size={16} />
           Back
@@ -138,7 +138,7 @@ export default function BlogEditPage() {
           disabled={saving}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {saving ? 'Saving...' : 'Save'}
+          {saving ? "Saving..." : "Save"}
           <Save size={16} />
         </button>
       </div>

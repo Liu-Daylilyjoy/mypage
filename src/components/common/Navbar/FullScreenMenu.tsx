@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/shadcn/button"
+import { Button } from "@/components/ui/shadcn/button";
 
 import NavbarItem, { NavbarItemProps } from "./NavbarItem";
 import { MenuIcon, X } from "lucide-react";
@@ -9,8 +9,8 @@ export function FullScreenMenu({ menuItems, isOpen, setIsOpen }: { menuItems: Na
 
   const click = () => {
     setIsOpen(!isOpen);
-    circleOverlayRef.current?.classList.toggle('is-active');
-  }
+    circleOverlayRef.current?.classList.toggle("is-active");
+  };
 
   return (
     <div className="relative bottom-5">
@@ -31,5 +31,5 @@ export function FullScreenMenu({ menuItems, isOpen, setIsOpen }: { menuItems: Na
         </div>
       </div>}
     </div>
-  )
+  );
 }

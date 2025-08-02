@@ -40,7 +40,7 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [url, setUrl] = useState<string>('');
+  const [url, setUrl] = useState<string>("");
   const prevCompressedSrc = useRef<string | null>(null);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
 
         const response = await fetch(src);
         if (!response.ok) {
-          throw new Error('Failed to fetch image');
+          throw new Error("Failed to fetch image");
         }
 
         const blob = await response.blob();
@@ -71,12 +71,12 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
         const aspectRatio = img.height / img.width;
         const targetHeight = Math.round(targetWidth * aspectRatio);
 
-        const canvas = document.createElement('canvas');
+        const canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
 
-        const ctx = canvas.getContext('2d');
-        if (!ctx) throw new Error('Canvas not supported');
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("Canvas not supported");
 
         ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
@@ -95,7 +95,7 @@ const CompressedImage: React.FC<CompressedImageProps> = ({
             }
             setLoading(false);
           },
-          'image/jpeg',
+          "image/jpeg",
           quality
         );
       } catch {

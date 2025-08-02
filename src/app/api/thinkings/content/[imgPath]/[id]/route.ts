@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
-import prismadb from '@/lib/prismadb';
-import { adminAuth } from '@/lib/serverAuth';
+import fs from "fs/promises";
+import path from "path";
+import prismadb from "@/lib/prismadb";
+import { adminAuth } from "@/lib/serverAuth";
 
-const postsDir = path.join(process.cwd(), 'src', 'posts');
+const postsDir = path.join(process.cwd(), "src", "posts");
 
 export async function POST(req: Request, { params }: { params: Promise<{ imgPath: string, id: string }> }) {
   if (!await adminAuth()) {
@@ -13,17 +13,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ imgPath
 
   try {
     const formData = await req.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get("file") as File;
 
     if (!file) {
-      return Response.json({ error: 'No file uploaded' }, { status: 400 });
+      return Response.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     const fileName = file.name;
     const ext = path.extname(fileName);
     const imgPath = `${id}${ext}`;
 
-    const fullPath = path.join(postsDir, 'thinking', imgPath);
+    const fullPath = path.join(postsDir, "thinking", imgPath);
 
     const arrayBuffer = await file.arrayBuffer();
     await fs.writeFile(fullPath, Buffer.from(arrayBuffer));
@@ -35,7 +35,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ imgPath
       });
 
       // 删掉原图片
-      const oldPath = path.join(postsDir, 'thinking', cover);
+      const oldPath = path.join(postsDir, "thinking", cover);
       try {
         await fs.access(oldPath);
         await fs.unlink(oldPath);

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -7,15 +7,15 @@ import { ArrowLeft, ChevronUpIcon, Save, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import Maple3D from "@/components/common/Loading/Maple3D";
 import Image from "next/image";
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/shadcn/button"
-import { Calendar } from "@/components/ui/shadcn/calendar"
+import { Button } from "@/components/ui/shadcn/button";
+import { Calendar } from "@/components/ui/shadcn/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/shadcn/popover"
+} from "@/components/ui/shadcn/popover";
 
 interface Photo {
   id: string;
@@ -52,10 +52,10 @@ export default function PhotoEditPage() {
           setTitle(photoData.title);
           setDescription(photoData.description);
           setShotTime(new Date(photoData.shotTime));
-          setShotPlace(photoData.shotPlace || '');
+          setShotPlace(photoData.shotPlace || "");
           setTime(new Date(photoData.shotTime).toLocaleTimeString());
         } else {
-          toast.error('Failed to load photo');
+          toast.error("Failed to load photo");
         }
       } catch (error) {
         toast.error(`Failed to load photo: ${error}`);
@@ -72,12 +72,12 @@ export default function PhotoEditPage() {
       if (previewImage) {
         URL.revokeObjectURL(previewImage);
       }
-    }
+    };
   }, [previewImage]);
 
   const handleSave = async () => {
     if (!title.trim() || !description.trim()) {
-      toast.error('Title and description are required');
+      toast.error("Title and description are required");
       return;
     }
 
@@ -85,8 +85,8 @@ export default function PhotoEditPage() {
       setSaving(true);
 
       const response = await fetch(`/api/photos/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           description,
@@ -97,32 +97,32 @@ export default function PhotoEditPage() {
       });
 
       if (response.ok) {
-        toast.success('Updated successfully!');
+        toast.success("Updated successfully!");
       } else {
         if (response.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.error('Failed to update photo');
+          toast.error("Failed to update photo");
         }
       }
 
       // 更新图片
-      let newImgPath = '';
+      let newImgPath = "";
       if (selectedFile) {
         const formData = new FormData();
-        formData.append('file', selectedFile);
+        formData.append("file", selectedFile);
 
         const uploadResponse = await fetch(`/api/photos/content/${photo!.path}/${id}`, {
-          method: 'POST',
+          method: "POST",
           body: formData,
         });
 
         if (!uploadResponse.ok) {
           if (uploadResponse.status === 401) {
-            router.push('/login');
+            router.push("/login");
             return;
           } else {
-            toast.error('Failed to upload image');
+            toast.error("Failed to upload image");
             return;
           }
         }
@@ -190,7 +190,7 @@ export default function PhotoEditPage() {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={16} />
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? "Saving..." : "Save Changes"}
           </button>
         </div>
 
@@ -203,7 +203,7 @@ export default function PhotoEditPage() {
             {previewImage ? (
               <Image
                 src={previewImage}
-                alt={photo?.title || 'Preview'}
+                alt={photo?.title || "Preview"}
                 className="w-full aspect-square object-cover border border-border"
                 width={1000}
                 height={1000}
@@ -300,11 +300,11 @@ export default function PhotoEditPage() {
                       selected={shotTime}
                       captionLayout="dropdown"
                       onSelect={(shotTime) => {
-                        const [hours, minutes, seconds] = time!.split(':').map(Number);
+                        const [hours, minutes, seconds] = time!.split(":").map(Number);
                         const date = new Date(shotTime!);
                         date.setHours(hours, minutes, seconds);
-                        setShotTime(date)
-                        setOpen(false)
+                        setShotTime(date);
+                        setOpen(false);
                       }}
                     />
                   </PopoverContent>
@@ -322,7 +322,7 @@ export default function PhotoEditPage() {
                   value={time ? time : "00:00:00"}
                   onChange={(e) => {
                     const time = e.target.value;
-                    const [hours, minutes, seconds] = time.split(':').map(Number);
+                    const [hours, minutes, seconds] = time.split(":").map(Number);
                     const date = new Date(shotTime!);
                     date.setHours(hours, minutes, seconds);
                     setTime(time);

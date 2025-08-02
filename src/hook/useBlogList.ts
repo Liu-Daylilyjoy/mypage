@@ -13,6 +13,6 @@ const useBlogList = () => {
     error,
     isLoading
   };
-}
+};
 
 export default useBlogList;

@@ -16,11 +16,11 @@ hljs.registerLanguage("typescript", typescript);
 function customSlugify(s: string) {
   // 移除所有 Emoji 和其他非字母数字字符，但保留空格和连字符
   // \p{Emoji_Presentation} 是一个 Unicode 属性，用于匹配 Emoji 字符
-  const cleaned = s.replace(/\p{Emoji_Presentation}/gu, '') // 移除Emoji
-    .replace(/[^\w\s-]/g, '') // 移除其他特殊字符（保留字母数字、空格、连字符）
+  const cleaned = s.replace(/\p{Emoji_Presentation}/gu, "") // 移除Emoji
+    .replace(/[^\w\s-]/g, "") // 移除其他特殊字符（保留字母数字、空格、连字符）
     .trim(); // 移除首尾空格
 
-  return cleaned.toLowerCase().replace(/\s+/g, '-'); // 将空格转换为连字符，并转小写
+  return cleaned.toLowerCase().replace(/\s+/g, "-"); // 将空格转换为连字符，并转小写
 }
 
 const md = new MarkdownIt({
@@ -31,7 +31,7 @@ const md = new MarkdownIt({
     if (lang && hljs.getLanguage(lang)) {
       try {
         return (
-          '<pre><code>' +
+          "<pre><code>" +
           hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
           "</code></pre>"
         );
@@ -39,17 +39,17 @@ const md = new MarkdownIt({
     }
 
     return (
-      '<pre><code>' +
+      "<pre><code>" +
       md.utils.escapeHtml(str) +
       "</code></pre>"
-    )
+    );
   },
 }).use(MarkdownItKatex).use(MarkdownItAnchor, {
   permalink: MarkdownItAnchor.permalink.ariaHidden({
-    placement: 'before',
-    symbol: '#'
+    placement: "before",
+    symbol: "#"
   }),
   slugify: customSlugify
 });
 
-export { md }
+export { md };

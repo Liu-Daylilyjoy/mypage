@@ -13,6 +13,6 @@ const useThinkingList = () => {
     error,
     isLoading
   };
-}
+};
 
 export default useThinkingList;

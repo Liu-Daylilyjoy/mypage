@@ -1,6 +1,6 @@
-import SkillItem, { SkillItemProps } from "./SkillItem"
-import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText';
+import SkillItem, { SkillItemProps } from "./SkillItem";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 
@@ -9,7 +9,7 @@ export interface SkillPageProps {
 }
 
 // 在客户端代码中执行
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   gsap.registerPlugin(SplitText);
 }
 
@@ -46,7 +46,7 @@ const SkillPage: React.FC<SkillPageProps> = ({ skills }) => {
         // 清理 SplitText 生成的 DOM 元素。这很重要，防止旧的 DOM 元素残留。
         splitText.revert();
       }
-    }
+    };
   }, { scope: skillRef });
 
   return (
@@ -60,7 +60,7 @@ const SkillPage: React.FC<SkillPageProps> = ({ skills }) => {
         }
       </div>
     </>
-  )
-}
+  );
+};
 
 export default SkillPage;

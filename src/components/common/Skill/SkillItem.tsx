@@ -1,4 +1,4 @@
-import React, { memo, forwardRef } from 'react';
+import React, { memo, forwardRef } from "react";
 
 export interface SkillItemProps {
   name: string;
@@ -17,11 +17,11 @@ const SkillItem: React.FC<SkillItemProps> = memo(forwardRef<HTMLDivElement, Skil
         <div className='absolute bottom-0 right-10 text-primary/60 animate'>
           {skill.level < 60 && `I need to practice more 🙏 on ${skill.name}`}
           {skill.level >= 60 && skill.level < 100 && `I'm good at ${skill.name} 👌`}
-          {skill.level === 100 && `Interest is the best teacher 💪`}
+          {skill.level === 100 && "Interest is the best teacher 💪"}
         </div>
       </div>
     </div>
-  )
+  );
 }));
 
 export default SkillItem;

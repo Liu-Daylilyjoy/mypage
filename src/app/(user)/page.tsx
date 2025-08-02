@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { SkillItemProps } from "@/components/common/Skill/SkillItem"
+import { SkillItemProps } from "@/components/common/Skill/SkillItem";
 import SkillPage from "@/components/common/Skill/SkillPage";
 import WelcomePage from "@/components/common/Summary/WelcomePage";
 import { useEffect, useRef, useState } from "react";
@@ -17,7 +17,7 @@ const information: {
   name: string;
   skills: SkillItemProps[];
 } = {
-  name: 'Liudy',
+  name: "Liudy",
   skills: [
     {
       name: "Java",
@@ -52,7 +52,7 @@ const information: {
       level: 100,
     }
   ]
-}
+};
 
 export default function Home() {
   const welcomePageRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ export default function Home() {
     if (!welcomePageRef.current || !progressContainerRef.current || !progressBarRef.current || !progressTooltipRef.current || !contentRef.current || !replayRef.current) return;
 
     setLoading(true);
-    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.overflow = "hidden";
 
     // 获取所有section元素
     const welcomePage = welcomePageRef.current;
@@ -77,7 +77,7 @@ export default function Home() {
     const progressTooltip = progressTooltipRef.current;
     const content = contentRef.current;
     const replay = replayRef.current;
-    const sections = document.querySelectorAll('.section');
+    const sections = document.querySelectorAll(".section");
 
     let isScrolling = false;
     let currentOrder = 0;
@@ -93,8 +93,8 @@ export default function Home() {
 
     // 添加单个分隔线
     const addSeparator = (position: number) => {
-      const separator = document.createElement('div');
-      separator.className = 'separator';
+      const separator = document.createElement("div");
+      separator.className = "separator";
       separator.style.left = `${position}%`;
       progressContainer.appendChild(separator);
     };
@@ -103,19 +103,19 @@ export default function Home() {
       let count = 0;
       // 为每个section添加分隔线
       for (let i = 0; i < sections.length; i++) {
-        const subsections = sections[i].querySelectorAll('.subsection');
+        const subsections = sections[i].querySelectorAll(".subsection");
         if (subsections.length > 0) {
           const subsectionProgress = sectionProgress / subsections.length;
           for (let j = 0; j < subsections.length; j++) {
             addSeparator(sectionProgress * i + j * subsectionProgress);
             sectionLength.push(sectionProgress * i + j * subsectionProgress);
-            sectionName.push(subsections[j].getAttribute('data-title') || '');
+            sectionName.push(subsections[j].getAttribute("data-title") || "");
             sectionIndex.set(sectionName[sectionName.length - 1], { section: i, subsection: j, order: count++ });
           }
         } else {
           addSeparator(i * sectionProgress);
           sectionLength.push(i * sectionProgress);
-          sectionName.push(sections[i].getAttribute('data-title') || '');
+          sectionName.push(sections[i].getAttribute("data-title") || "");
           sectionIndex.set(sectionName[sectionName.length - 1], { section: i, subsection: 0, order: count++ });
         }
         subsectionSize.push(subsections.length);
@@ -144,7 +144,7 @@ export default function Home() {
     // 初始化section位置
     sections.forEach((section, index) => {
       (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
-      const subsections = section.querySelectorAll('.subsection');
+      const subsections = section.querySelectorAll(".subsection");
       subsections.forEach((subsection, index) => {
         (subsection as HTMLElement).style.transform = `translateX(${index * 100}vw)`;
       });
@@ -153,7 +153,7 @@ export default function Home() {
     // 初始化进度条和分隔线
     addSeparators();
 
-    progressTooltip.textContent = sectionName[0] ? sectionName[0] : 'Empty';
+    progressTooltip.textContent = sectionName[0] ? sectionName[0] : "Empty";
     updateProgress();
 
     // 处理进度条鼠标移动
@@ -180,7 +180,7 @@ export default function Home() {
       // 更新section位置
       sections.forEach((section_, index) => {
         (section_ as HTMLElement).style.transform = `translateY(${(index - currentSection) * 100}vh)`;
-        const subsections = section_.querySelectorAll('.subsection');
+        const subsections = section_.querySelectorAll(".subsection");
         if (index < currentSection) {
           subsections.forEach((subsection_, idx) => {
             (subsection_ as HTMLElement).style.transform = `translateX(${(idx - subsectionSize[index] + 1) * 100}vw)`;
@@ -213,7 +213,7 @@ export default function Home() {
 
       // 处理横向滚动
       if (subsectionSize[currentSection] > 0) {
-        const subsections = sections[currentSection].querySelectorAll('.subsection');
+        const subsections = sections[currentSection].querySelectorAll(".subsection");
         // console.log(sections.length, subsections.length);
         if (e.deltaY > 0) {
           // 向下滚动，向右移动
@@ -295,15 +295,15 @@ export default function Home() {
       }, 300);
 
       if (e.deltaY > 0) {
-        welcomePage.classList.add('disappear');
-        progressContainer.classList.add('active');
+        welcomePage.classList.add("disappear");
+        progressContainer.classList.add("active");
       }
     };
 
     const handleSections0Wheel = (e: WheelEvent) => {
       if (e.deltaY < 0) {
-        welcomePage.classList.remove('disappear');
-        progressContainer.classList.remove('active');
+        welcomePage.classList.remove("disappear");
+        progressContainer.classList.remove("active");
       }
     };
 
@@ -314,17 +314,17 @@ export default function Home() {
       updateProgress();
       sections.forEach((section, index) => {
         (section as HTMLElement).style.transform = `translateY(${index * 100}vh)`;
-        const subsections = section.querySelectorAll('.subsection');
+        const subsections = section.querySelectorAll(".subsection");
         subsections.forEach((subsection, index) => {
           (subsection as HTMLElement).style.transform = `translateX(${(index - currentSubsection) * 100}vw)`;
         });
       });
 
-      welcomePage.classList.remove('disappear');
-      progressContainer.classList.remove('active');
+      welcomePage.classList.remove("disappear");
+      progressContainer.classList.remove("active");
     };
 
-    const firstSection = sections[0].querySelectorAll('.subsection')[0] || sections[0];
+    const firstSection = sections[0].querySelectorAll(".subsection")[0] || sections[0];
 
     const preventScroll = (e: WheelEvent) => {
       e.preventDefault();
@@ -332,22 +332,22 @@ export default function Home() {
 
     setLoading(false);
 
-    progressContainer.addEventListener('wheel', preventScroll, { passive: false });
-    progressContainer.addEventListener('mousemove', handleProgressContainerMouseMove);
-    progressContainer.addEventListener('click', handleProgressContainerClick);
-    content.addEventListener('wheel', handleContentWheel);
-    welcomePage.addEventListener('wheel', handleWelcomePageWheel);
-    (firstSection as HTMLElement).addEventListener('wheel', handleSections0Wheel);
-    replay.addEventListener('click', handleReplayClick);
+    progressContainer.addEventListener("wheel", preventScroll, { passive: false });
+    progressContainer.addEventListener("mousemove", handleProgressContainerMouseMove);
+    progressContainer.addEventListener("click", handleProgressContainerClick);
+    content.addEventListener("wheel", handleContentWheel);
+    welcomePage.addEventListener("wheel", handleWelcomePageWheel);
+    (firstSection as HTMLElement).addEventListener("wheel", handleSections0Wheel);
+    replay.addEventListener("click", handleReplayClick);
 
     return () => {
-      progressContainer.removeEventListener('wheel', preventScroll);
-      progressContainer.removeEventListener('mousemove', handleProgressContainerMouseMove);
-      progressContainer.removeEventListener('click', handleProgressContainerClick);
-      content.removeEventListener('wheel', handleContentWheel);
-      welcomePage.removeEventListener('wheel', handleWelcomePageWheel);
-      (firstSection as HTMLElement).removeEventListener('wheel', handleSections0Wheel);
-      replay.removeEventListener('click', handleReplayClick);
+      progressContainer.removeEventListener("wheel", preventScroll);
+      progressContainer.removeEventListener("mousemove", handleProgressContainerMouseMove);
+      progressContainer.removeEventListener("click", handleProgressContainerClick);
+      content.removeEventListener("wheel", handleContentWheel);
+      welcomePage.removeEventListener("wheel", handleWelcomePageWheel);
+      (firstSection as HTMLElement).removeEventListener("wheel", handleSections0Wheel);
+      replay.removeEventListener("click", handleReplayClick);
     };
   }, []);
 
@@ -366,12 +366,12 @@ export default function Home() {
       let clear = () => { };
       switch (i) {
         case 0:
-          const split = SplitText.create('#about-me', {
-            type: 'words'
+          const split = SplitText.create("#about-me", {
+            type: "words"
           });
 
           const tl = gsap.timeline({ paused: true });
-          tl.from('#title-me', {
+          tl.from("#title-me", {
             x: -100,
             opacity: 0,
             duration: 2,
@@ -385,15 +385,15 @@ export default function Home() {
             ease: "back",
             stagger: 0.15,
             delay: -0.5,
-          }).to('#me', {
-            width: '30%',
+          }).to("#me", {
+            width: "30%",
             duration: 1,
-          }).fromTo('#hello-world', { x: 100 }, {
+          }).fromTo("#hello-world", { x: 100 }, {
             x: 0,
             duration: 1,
             opacity: 1,
             ease: "back",
-          }).to('#hello-world', {
+          }).to("#hello-world", {
             opacity: 0,
             duration: 1.5,
             yoyo: true,
@@ -412,12 +412,12 @@ export default function Home() {
           break;
         case 1:
           const tl1 = gsap.timeline({ paused: true });
-          tl1.from('#i-like-1', {
+          tl1.from("#i-like-1", {
             duration: 1,
             rotate: 80,
             y: -400,
             ease: "bounce",
-          }).to('#hobby-1', {
+          }).to("#hobby-1", {
             opacity: 1,
             scrambleText: {
               text: "{original}",
@@ -436,27 +436,27 @@ export default function Home() {
           }, {
             opacity: 1,
             duration: 0.3,
-          }).to('#pacman', {
+          }).to("#pacman", {
             x: "10vw",
             duration: 1
-          }).fromTo('#monster', {
+          }).fromTo("#monster", {
             opacity: 0,
           }, {
             opacity: 1,
             duration: 0.3,
-          }).to('#pacman', {
+          }).to("#pacman", {
             x: "95vw",
             duration: 2,
-          }).to('#monster', {
+          }).to("#monster", {
             x: "70vw",
             duration: 1,
-          }).to('#pacman', {
+          }).to("#pacman", {
             opacity: 0,
             duration: 0.3,
-          }).to('#monster', {
-            x: '95vw',
+          }).to("#monster", {
+            x: "95vw",
             duration: 0.5,
-          }).to('#monster', {
+          }).to("#monster", {
             opacity: 0,
             duration: 0.3,
           });
@@ -465,10 +465,10 @@ export default function Home() {
             paused: true,
             delay: 3,
           });
-          tl3.fromTo('#gameController', {
-            width: '0%',
+          tl3.fromTo("#gameController", {
+            width: "0%",
           }, {
-            width: '100%',
+            width: "100%",
             duration: 1,
           });
 
@@ -477,21 +477,21 @@ export default function Home() {
             delay: 6,
             repeat: -1,
           });
-          tl4.fromTo('#flight', {
+          tl4.fromTo("#flight", {
             opacity: 0,
           }, {
             opacity: 1,
             duration: 0.3,
-          }).to('#flight', {
+          }).to("#flight", {
             x: "95vw",
             duration: 3,
-          }).to('#flight', {
+          }).to("#flight", {
             rotate: "-90deg",
             duration: 2,
-          }).to('#flight', {
+          }).to("#flight", {
             y: "-100vh",
             duration: 1,
-          }).to('#flight', {
+          }).to("#flight", {
             opacity: 0,
             duration: 0.3,
           });
@@ -516,10 +516,10 @@ export default function Home() {
           break;
       }
 
-      sectionRef.current[i]?.addEventListener('mouseenter', enterHandler);
+      sectionRef.current[i]?.addEventListener("mouseenter", enterHandler);
 
       clearEvent.push(() => {
-        sectionRef.current[i]?.removeEventListener('mouseenter', enterHandler);
+        sectionRef.current[i]?.removeEventListener("mouseenter", enterHandler);
         clear();
       });
     }

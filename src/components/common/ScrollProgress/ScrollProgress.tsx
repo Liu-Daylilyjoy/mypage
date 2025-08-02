@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 import { LuArrowUp } from "react-icons/lu";
 
 const ScrollProgress = () => {
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
-      const currentProgress = (window.scrollY / totalHeight) * 100
-      setProgress(currentProgress)
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentProgress = (window.scrollY / totalHeight) * 100;
+      setProgress(currentProgress);
 
       const scrollPosition = window.scrollY;
       // 当滚动超过屏幕高度的三分之一时显示按钮
@@ -20,16 +20,16 @@ const ScrollProgress = () => {
       } else {
         setIsVisible(false);
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
   };
 
@@ -56,13 +56,13 @@ const ScrollProgress = () => {
         transition-all
         duration-300
         cursor-pointer
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}
       `}
       >
         <LuArrowUp size={24} />
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default ScrollProgress 
+export default ScrollProgress; 

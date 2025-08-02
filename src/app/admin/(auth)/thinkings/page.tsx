@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { Plus, Edit, Trash2, Search, Image as ImageIcon, Upload } from "lucide-react";
@@ -40,23 +40,23 @@ export default function ThinkingsPage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     setDeleteLoading(true);
-    const toastId = toast.loading('Deleting...');
+    const toastId = toast.loading("Deleting...");
     try {
       const response = await fetch(`/api/thinkings/${deleteId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (response.ok) {
-        mutate('/api/thinkings');
-        toast.success('Delete success', { id: toastId });
+        mutate("/api/thinkings");
+        toast.success("Delete success", { id: toastId });
 
-        await fetch(`/api/thinkings/content/${deleteImgPath}`, { method: 'DELETE' });
+        await fetch(`/api/thinkings/content/${deleteImgPath}`, { method: "DELETE" });
         setDeleteId(null);
         setDeleteImgPath(null);
       } else {
         if (response.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.error('Delete failed', { id: toastId });
+          toast.error("Delete failed", { id: toastId });
         }
       }
     } catch (error) {
@@ -113,7 +113,7 @@ export default function ThinkingsPage() {
         {filteredThinkings.length === 0 ? (
           <div className="w-full p-8 text-center">
             <p className="text-muted-foreground">
-              {searchTerm ? 'No matching thinking records found' : 'No thinking records'}
+              {searchTerm ? "No matching thinking records found" : "No thinking records"}
             </p>
             {!searchTerm && (
               <Link
@@ -133,7 +133,7 @@ export default function ThinkingsPage() {
                 {thinking.cover ? (
                   <CompressedImage
                     key={imgRefreshMap[thinking.id]}
-                    src={thinking.cover.startsWith('http') ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
+                    src={thinking.cover.startsWith("http") ? thinking.cover : `/api/thinkings/content/${thinking.cover}`}
                     alt={thinking.title}
                     className="w-full h-full object-cover"
                     targetWidth={adminImageConfig.thinking.targetWidth}
@@ -151,7 +151,7 @@ export default function ThinkingsPage() {
                   type="button"
                   className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"
                   onClick={() => fileInputRefs.current[thinking.id]?.click()}
-                  style={{ pointerEvents: 'auto' }}
+                  style={{ pointerEvents: "auto" }}
                 >
                   <Upload size={32} className="text-white" />
                 </button>
@@ -164,30 +164,30 @@ export default function ThinkingsPage() {
                     if (!e.target.files || !e.target.files[0]) return;
                     const file = e.target.files[0];
                     const formData = new FormData();
-                    formData.append('file', file);
+                    formData.append("file", file);
                     try {
-                      const imgPath = thinking.cover.startsWith('http') ? file.name : thinking.cover;
+                      const imgPath = thinking.cover.startsWith("http") ? file.name : thinking.cover;
                       const res = await fetch(`/api/thinkings/content/${imgPath}/${thinking.id}`, {
-                        method: 'POST',
+                        method: "POST",
                         body: formData,
                       });
                       if (res.ok) {
-                        await mutate('/api/thinkings');
+                        await mutate("/api/thinkings");
                         setImgRefreshMap(prev => ({
                           ...prev,
                           [thinking.id]: Date.now()
                         }));
-                        toast.success('Uploaded successfully');
+                        toast.success("Uploaded successfully");
                       } else {
                         if (res.status === 401) {
-                          router.push('/login');
+                          router.push("/login");
                         } else {
                           const text = await res.json();
                           toast.error(`Upload failed: ${text.error}`);
                         }
                       }
                     } catch {
-                      toast.error('Upload failed');
+                      toast.error("Upload failed");
                     }
                   }}
                 />
@@ -255,24 +255,24 @@ export default function ThinkingsPage() {
               setEditLoading(true);
               try {
                 const response = await fetch(`/api/thinkings/${editThinking.id}`, {
-                  method: 'PATCH',
-                  headers: { 'Content-Type': 'application/json' },
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ title: editTitle, detail: editDetail }),
                 });
                 if (response.ok) {
-                  mutate('/api/thinkings');
+                  mutate("/api/thinkings");
                   setEditThinking(null);
-                  toast.success('Updated successfully');
+                  toast.success("Updated successfully");
                 } else {
                   if (response.status === 401) {
-                    router.push('/login');
+                    router.push("/login");
                   } else {
                     const text = await response.json();
                     toast.error(`Failed to update: ${text.error}`);
                   }
                 }
               } catch {
-                toast.error('Failed to update');
+                toast.error("Failed to update");
               } finally {
                 setEditLoading(false);
               }
@@ -311,7 +311,7 @@ export default function ThinkingsPage() {
                 className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
                 disabled={editLoading || !editTitle || !editDetail}
               >
-                {editLoading ? 'Saving...' : 'Save'}
+                {editLoading ? "Saving..." : "Save"}
               </button>
             </DialogFooter>
           </form>
@@ -340,7 +340,7 @@ export default function ThinkingsPage() {
               onClick={handleDelete}
               disabled={deleteLoading}
             >
-              {deleteLoading ? 'Deleting...' : 'Delete'}
+              {deleteLoading ? "Deleting..." : "Delete"}
             </button>
           </DialogFooter>
         </DialogContent>

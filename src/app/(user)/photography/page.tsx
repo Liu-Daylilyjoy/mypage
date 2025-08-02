@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Maple3D from "@/components/common/Loading/Maple3D";
 import { imageSize } from "@/config/ImageConfig";
@@ -29,7 +29,7 @@ export default function Photography() {
     if (!photoContainerRef.current) return;
 
     const canvas = photoContainerRef.current;
-    const content = canvas.getContext('2d');
+    const content = canvas.getContext("2d");
 
     const imageNumber = photoList.length;
 
@@ -98,7 +98,7 @@ export default function Photography() {
         move(0, 0);
         setDrawing(false);
       }
-    }
+    };
 
     const move = (x: number, y: number) => {
       content!.clearRect(0, 0, canvas.width, canvas.height);
@@ -126,65 +126,65 @@ export default function Photography() {
         }
         content!.drawImage(img.img, sx, sy, sWidth, sHeight, img.x, img.y, imgWidth, imgHeight);
       });
-    }
+    };
 
     const showImageFullscreen = (img: { img: HTMLImageElement, i: number }) => {
-      const viewer = document.createElement('div');
-      viewer.style.position = 'fixed';
-      viewer.style.top = '0';
-      viewer.style.left = '0';
-      viewer.style.width = '100vw';
-      viewer.style.height = '100vh';
-      viewer.style.background = 'rgba(0,0,0,0.65)';
-      viewer.style.display = 'flex';
-      viewer.style.alignItems = 'center';
-      viewer.style.justifyContent = 'center';
-      viewer.style.flexDirection = 'column';
-      viewer.style.gap = '10px';
-      viewer.style.zIndex = '9999';
+      const viewer = document.createElement("div");
+      viewer.style.position = "fixed";
+      viewer.style.top = "0";
+      viewer.style.left = "0";
+      viewer.style.width = "100vw";
+      viewer.style.height = "100vh";
+      viewer.style.background = "rgba(0,0,0,0.65)";
+      viewer.style.display = "flex";
+      viewer.style.alignItems = "center";
+      viewer.style.justifyContent = "center";
+      viewer.style.flexDirection = "column";
+      viewer.style.gap = "10px";
+      viewer.style.zIndex = "9999";
 
-      const imgEl = document.createElement('img');
+      const imgEl = document.createElement("img");
       imgEl.src = img.img.src;
-      imgEl.style.maxWidth = '90%';
-      imgEl.style.maxHeight = '70%';
+      imgEl.style.maxWidth = "90%";
+      imgEl.style.maxHeight = "70%";
       viewer.appendChild(imgEl);
 
-      const title = document.createElement('h2');
-      title.style.maxWidth = '40%';
-      title.style.color = 'white';
-      title.style.fontSize = '20px';
-      title.style.fontWeight = 'bold';
+      const title = document.createElement("h2");
+      title.style.maxWidth = "40%";
+      title.style.color = "white";
+      title.style.fontSize = "20px";
+      title.style.fontWeight = "bold";
       title.textContent = photoList[img.i].title;
       viewer.appendChild(title);
 
-      const description = document.createElement('div');
-      description.style.textIndent = '2em';
-      description.style.maxWidth = '40%';
-      description.style.color = 'white';
-      description.style.fontSize = '16px';
-      description.style.fontWeight = 'normal';
+      const description = document.createElement("div");
+      description.style.textIndent = "2em";
+      description.style.maxWidth = "40%";
+      description.style.color = "white";
+      description.style.fontSize = "16px";
+      description.style.fontWeight = "normal";
       description.textContent = photoList[img.i].description;
       viewer.appendChild(description);
 
-      const date = document.createElement('span');
-      date.style.color = 'var(--theme-color)';
-      date.style.fontSize = '14px';
-      date.style.fontWeight = 'normal';
+      const date = document.createElement("span");
+      date.style.color = "var(--theme-color)";
+      date.style.fontSize = "14px";
+      date.style.fontWeight = "normal";
       date.textContent = new Date(photoList[img.i].shotTime).toLocaleDateString();
-      date.style.marginTop = '10px';
+      date.style.marginTop = "10px";
       viewer.appendChild(date);
 
-      const place = document.createElement('span');
-      place.style.color = 'var(--theme-color)';
-      place.style.fontSize = '14px';
-      place.style.fontWeight = 'normal';
+      const place = document.createElement("span");
+      place.style.color = "var(--theme-color)";
+      place.style.fontSize = "14px";
+      place.style.fontWeight = "normal";
       place.textContent = photoList[img.i].shotPlace;
       viewer.appendChild(place);
 
       document.body.appendChild(viewer);
 
-      viewer.addEventListener('click', () => document.body.removeChild(viewer));
-    }
+      viewer.addEventListener("click", () => document.body.removeChild(viewer));
+    };
 
 
     const findImg = (x: number, y: number) => {
@@ -195,20 +195,20 @@ export default function Photography() {
       );
 
       if (img) showImageFullscreen(img);
-    }
+    };
 
     const mouseDown = () => {
       movable = true;
-    }
+    };
 
     const mouseUp = (e: MouseEvent) => {
       movable = false;
       if (clickable) findImg(e.x, e.y);
-    }
+    };
 
     const mouseLeave = () => {
       movable = false;
-    }
+    };
 
     const debounce = (delay: number) => {
       let timer: NodeJS.Timeout | undefined = undefined;
@@ -219,7 +219,7 @@ export default function Photography() {
           clickable = true;
         }, delay);
       };
-    }
+    };
 
     const debounceFindImg = debounce(100);
 
@@ -231,30 +231,30 @@ export default function Photography() {
       if (movable) {
         move(e.movementX * 2, e.movementY * 2);
       }
-    }
+    };
 
     resize();
 
-    window.addEventListener('resize', resize);
-    canvas.addEventListener('mousedown', mouseDown);
-    canvas.addEventListener('mouseup', mouseUp);
-    canvas.addEventListener('mouseleave', mouseLeave);
-    canvas.addEventListener('mousemove', mouseMove);
+    window.addEventListener("resize", resize);
+    canvas.addEventListener("mousedown", mouseDown);
+    canvas.addEventListener("mouseup", mouseUp);
+    canvas.addEventListener("mouseleave", mouseLeave);
+    canvas.addEventListener("mousemove", mouseMove);
 
     return () => {
-      window.removeEventListener('resize', resize);
-      canvas.removeEventListener('mousedown', mouseDown);
-      canvas.removeEventListener('mouseup', mouseUp);
-      canvas.removeEventListener('mouseleave', mouseLeave);
-      canvas.removeEventListener('mousemove', mouseMove);
+      window.removeEventListener("resize", resize);
+      canvas.removeEventListener("mousedown", mouseDown);
+      canvas.removeEventListener("mouseup", mouseUp);
+      canvas.removeEventListener("mouseleave", mouseLeave);
+      canvas.removeEventListener("mousemove", mouseMove);
       imgs.forEach(img => { img.onload = null; });
-    }
+    };
   }, [photoList, maxColumn, calculateOptimalColumns]);
 
   return (
     <div className="relative flex justify-center items-center w-full h-[100vh] overflow-hidden">
       {drawing && <Maple3D />}
-      <canvas className={`absolute w-full h-full ${drawing ? 'invisible pointer-events-none' : ''}`} ref={photoContainerRef}></canvas>
+      <canvas className={`absolute w-full h-full ${drawing ? "invisible pointer-events-none" : ""}`} ref={photoContainerRef}></canvas>
     </div>
-  )
+  );
 }

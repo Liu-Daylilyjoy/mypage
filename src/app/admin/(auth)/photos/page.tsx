@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { Plus, Edit, Trash2, Eye, Search, Image as ImageIcon } from "lucide-react";
@@ -33,33 +33,33 @@ function PhotosPage() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const refreshId = searchParams.get('refreshId');
-  const newPath = searchParams.get('newPath');
+  const refreshId = searchParams.get("refreshId");
+  const newPath = searchParams.get("newPath");
 
   const handleDelete = async () => {
     if (!deleteId) return;
     setDeleteLoading(true);
-    const toastId = toast.loading('Deleting...');
+    const toastId = toast.loading("Deleting...");
     try {
       const response = await fetch(`/api/photos/${deleteId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       if (response.ok) {
-        mutate('/api/photos');
-        toast.success('Delete success', { id: toastId });
+        mutate("/api/photos");
+        toast.success("Delete success", { id: toastId });
 
         if (photoToDeletePath) {
           await fetch(`/api/photos/content/${photoToDeletePath}`, {
-            method: 'DELETE'
+            method: "DELETE"
           });
         }
 
         setDeleteId(null);
       } else {
         if (response.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.error('Delete failed', { id: toastId });
+          toast.error("Delete failed", { id: toastId });
         }
       }
     } catch (error) {
@@ -80,13 +80,13 @@ function PhotosPage() {
   // 模态框展开时,阻止背景页面滚动
   useEffect(() => {
     if (selectedPhoto) {
-      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflow = "";
     }
 
     return () => {
-      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflow = "";
     };
   }, [selectedPhoto]);
 
@@ -96,12 +96,12 @@ function PhotosPage() {
   );
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     });
   };
 
@@ -147,7 +147,7 @@ function PhotosPage() {
         {filteredPhotos.length === 0 ? (
           <div className="col-span-full p-8 text-center">
             <p className="text-muted-foreground">
-              {searchTerm ? 'No matching photo found' : 'No photos'}
+              {searchTerm ? "No matching photo found" : "No photos"}
             </p>
             {!searchTerm && (
               <Link
@@ -301,7 +301,7 @@ function PhotosPage() {
               onClick={handleDelete}
               disabled={deleteLoading}
             >
-              {deleteLoading ? 'Deleting...' : 'Delete'}
+              {deleteLoading ? "Deleting..." : "Delete"}
             </button>
           </DialogFooter>
         </DialogContent>
@@ -315,5 +315,5 @@ export default function Page() {
     <Suspense fallback={<Maple3D />}>
       <PhotosPage />
     </Suspense>
-  )
+  );
 }

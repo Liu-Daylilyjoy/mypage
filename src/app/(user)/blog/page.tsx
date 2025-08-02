@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import BlogItem, { BlogItemProps } from "@/components/common/Blog/BlogItem"
-import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress"
-import useBlogList from "@/hook/useBlogList"
-import { useMemo } from "react"
-import { parseISO, format } from 'date-fns'
-import { useRouter } from "next/navigation"
-import { useGSAP } from "@gsap/react"
-import gsap from "gsap"
-import Maple3D from "@/components/common/Loading/Maple3D"
+import BlogItem, { BlogItemProps } from "@/components/common/Blog/BlogItem";
+import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress";
+import useBlogList from "@/hook/useBlogList";
+import { useMemo } from "react";
+import { parseISO, format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import Maple3D from "@/components/common/Loading/Maple3D";
 
 export default function Blog() {
   const { data: blogList = [], isLoading } = useBlogList();
@@ -21,7 +21,7 @@ export default function Blog() {
       if (!acc[year]) {
         acc[year] = [];
       }
-      acc[year].push({ ...blog, createdAt: format(date, 'yyyy-MM-dd') });
+      acc[year].push({ ...blog, createdAt: format(date, "yyyy-MM-dd") });
       return acc;
     }, {} as Record<string, BlogItemProps[]>);
 
@@ -32,8 +32,8 @@ export default function Blog() {
 
   const router = useRouter();
   const handleCardClick = (id: string) => {
-    router.push(`/blog/${id}`)
-  }
+    router.push(`/blog/${id}`);
+  };
 
   useGSAP(() => {
     if (sortedYears.length === 0) return;
@@ -42,11 +42,11 @@ export default function Blog() {
       opacity: 1,
       stagger: 0.2,
       delay: 0.3
-    })
-  }, [sortedYears])
+    });
+  }, [sortedYears]);
 
   if (isLoading) {
-    return <Maple3D />
+    return <Maple3D />;
   }
 
   return (
@@ -67,5 +67,5 @@ export default function Blog() {
         </div>
       </div>
     </>
-  )
+  );
 }

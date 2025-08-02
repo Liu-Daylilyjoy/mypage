@@ -19,7 +19,7 @@ const WelcomePage = () => {
     const textElement = textRef.current;
     if (!textElement) return;
 
-    let currentText = '';
+    let currentText = "";
     let index = 0;
     let isDeleting = false;
     const typingSpeed = 50; // 打字速度的倒数
@@ -54,12 +54,12 @@ const WelcomePage = () => {
       } else if (isDeleting && index > 0) {
         // 删除阶段
         textElement!.textContent = currentText.substring(0, index - 1);
-        index -= deletingSpeed
+        index -= deletingSpeed;
         if (index < 0) {
           index = 0;
         }
       } else {
-        textElement!.textContent = '';
+        textElement!.textContent = "";
         // 删除完成，重置状态并选择新的文字
         currentText = getRandomText();
         sleep(2000).then(() => {
@@ -100,6 +100,6 @@ const WelcomePage = () => {
     </div>
 
   );
-}
+};
 
 export default memo(WelcomePage);

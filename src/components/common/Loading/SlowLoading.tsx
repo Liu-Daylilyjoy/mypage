@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 interface WelcomeProps {
   onComplete?: () => void;

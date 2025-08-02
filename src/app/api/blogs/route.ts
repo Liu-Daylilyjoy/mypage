@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const blogs = await prismadb.blog.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc"
       }
     });
 

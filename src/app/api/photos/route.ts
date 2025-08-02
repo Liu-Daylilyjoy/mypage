@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const photos = await prismadb.photo.findMany({
       orderBy: {
-        shotTime: 'desc'
+        shotTime: "desc"
       }
     });
 

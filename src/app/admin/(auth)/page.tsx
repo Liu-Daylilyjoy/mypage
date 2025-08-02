@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { FileText, Lightbulb, Camera, RefreshCw } from "lucide-react";
@@ -57,7 +57,7 @@ export default function AdminPage() {
             ) : (
               <RefreshCw size={16} />
             )}
-            {refreshing ? 'Refreshing...' : 'Refresh'}
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
         </div>
       </div>

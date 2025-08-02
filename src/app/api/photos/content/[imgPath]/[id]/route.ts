@@ -1,31 +1,31 @@
-import fs from 'fs/promises';
-import path from 'path';
-import prismadb from '@/lib/prismadb';
-import { adminAuth } from '@/lib/serverAuth';
-import { NextResponse } from 'next/server';
+import fs from "fs/promises";
+import path from "path";
+import prismadb from "@/lib/prismadb";
+import { adminAuth } from "@/lib/serverAuth";
+import { NextResponse } from "next/server";
 
-const postsDir = path.join(process.cwd(), 'src', 'posts');
+const postsDir = path.join(process.cwd(), "src", "posts");
 
 export async function POST(req: Request, { params }: { params: Promise<{ imgPath: string, id: string }> }) {
   if (!await adminAuth()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const { id, imgPath: cover } = await params;
 
   try {
     const formData = await req.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get("file") as File;
 
     if (!file) {
-      return Response.json({ error: 'No file uploaded' }, { status: 400 });
+      return Response.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     const fileName = file.name;
     const ext = path.extname(fileName);
     const newImgPath = `${id}${ext}`;
 
-    const fullPath = path.join(postsDir, 'photography', newImgPath);
+    const fullPath = path.join(postsDir, "photography", newImgPath);
 
     const arrayBuffer = await file.arrayBuffer();
     await fs.writeFile(fullPath, Buffer.from(arrayBuffer));
@@ -38,7 +38,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ imgPath
       });
 
       // 删除旧图片
-      const oldPath = path.join(postsDir, 'photography', cover);
+      const oldPath = path.join(postsDir, "photography", cover);
       try {
         await fs.access(oldPath);
         await fs.unlink(oldPath);

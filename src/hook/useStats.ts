@@ -1,5 +1,5 @@
-import useSWR from 'swr';
-import fetcher from '@/lib/fetcher';
+import useSWR from "swr";
+import fetcher from "@/lib/fetcher";
 
 interface VisitData {
   page: string;
@@ -14,7 +14,7 @@ interface StatsData {
 }
 
 const useStats = () => {
-  const { data, error, isLoading, mutate } = useSWR<StatsData>('/api/stats', fetcher, {
+  const { data, error, isLoading, mutate } = useSWR<StatsData>("/api/stats", fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

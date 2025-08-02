@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,31 +34,31 @@ export default function NewThinkingPage() {
     setLoading(true);
     try {
       // 1. 提交文本，获取id
-      const res = await fetch('/api/thinkings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/thinkings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: formData.title, detail: formData.detail, cover: formData.cover }),
       });
       if (res.status === 401) {
-        router.push('/login');
+        router.push("/login");
       } else if (!res.ok) {
-        throw new Error('Create thinking failed');
+        throw new Error("Create thinking failed");
       }
       const { id } = await res.json();
 
       // 2. 上传图片（如果有）
       if (coverFile) {
         const formDataObj = new FormData();
-        formDataObj.append('file', coverFile);
+        formDataObj.append("file", coverFile);
         const imgRes = await fetch(`/api/thinkings/content/${coverFile.name}/${id}`, {
-          method: 'POST',
+          method: "POST",
           body: formDataObj,
         });
-        if (!imgRes.ok) throw new Error('Upload image failed');
+        if (!imgRes.ok) throw new Error("Upload image failed");
       }
 
-      toast.success('Create thinking success');
-      router.push('/admin/thinkings');
+      toast.success("Create thinking success");
+      router.push("/admin/thinkings");
     } catch (error) {
       toast.error(`Create thinking failed: ${error}`);
     } finally {
@@ -77,11 +77,11 @@ export default function NewThinkingPage() {
   function isValidImageUrl(url: string) {
     if (!url) return false;
     // 本地 object URL
-    if (url.startsWith('blob:')) return true;
+    if (url.startsWith("blob:")) return true;
     // http(s) 图片链接
     try {
       const u = new URL(url);
-      return u.protocol === 'http:' || u.protocol === 'https:';
+      return u.protocol === "http:" || u.protocol === "https:";
     } catch {
       return false;
     }
@@ -108,7 +108,7 @@ export default function NewThinkingPage() {
             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Save size={16} />
-            {loading ? 'Saving...' : 'Save'}
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default function NewThinkingPage() {
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) => handleChange('title', e.target.value)}
+                  onChange={(e) => handleChange("title", e.target.value)}
                   className="w-full px-3 py-2 border border-border bg-background focus:outline-none focus:ring-2 focus:ring-theme-color"
                   placeholder="Enter the title"
                   required
@@ -132,7 +132,7 @@ export default function NewThinkingPage() {
                 <label className="block text-lg font-medium mb-2">Detail<span className="text-red-500">*</span></label>
                 <textarea
                   value={formData.detail}
-                  onChange={(e) => handleChange('detail', e.target.value)}
+                  onChange={(e) => handleChange("detail", e.target.value)}
                   className="w-full h-100 px-3 py-2 border border-border bg-background focus:outline-none focus:ring-2 focus:ring-theme-color resize-none"
                   placeholder="Enter your thinking"
                   rows={12}

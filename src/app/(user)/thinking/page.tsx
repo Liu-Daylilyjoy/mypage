@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import ScrollProgress from "@/components/common/ScrollProgress/ScrollProgress";
 import ThinkingItem, { ThinkingItemProps } from "@/components/common/Thinking/ThinkingItem";
@@ -17,11 +17,11 @@ export default function Thinking() {
     gsap.to(".decay", {
       opacity: 1,
       delay: 0.3
-    })
-  }, [thinkingList])
+    });
+  }, [thinkingList]);
 
   if (isLoading) {
-    return <Maple3D />
+    return <Maple3D />;
   }
 
   return (
@@ -39,5 +39,5 @@ export default function Thinking() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { ModeToggle } from "@/components/theme/theme-mode-toggle";
 import { useState, useEffect, useRef } from "react";
@@ -30,7 +30,7 @@ const navbarItems: NavbarItemProps[] = [
   {
     icon: <span className="wechat"><BsWechat size={30} /></span>
   }
-]
+];
 
 const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -51,7 +51,7 @@ const Navbar = () => {
       } else {
         setIsVisible(true);
       }
-    }
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
       // 如果鼠标在屏幕顶部 100px 范围内
@@ -66,18 +66,18 @@ const Navbar = () => {
           setIsVisible(isOpen);
         }
       }
-    }
+    };
 
     // 鼠标悬停在navbar上时禁止滚动
     const container = containerRef.current;
-    container.addEventListener('wheel', preventScroll, { passive: false });
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    container.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('wheel', preventScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("wheel", preventScroll);
     };
   }, [isOpen]);
 
@@ -97,8 +97,8 @@ const Navbar = () => {
         px-8
         transition-all
         duration-300
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}
-        ${isMouseAtTop ? 'bg-background/40 backdrop-blur-[3px] shadow-[0_0px_7px_0_var(--color-shadow)]' : 'bg-transparent'}
+        ${isVisible ? "translate-y-0" : "-translate-y-full"}
+        ${isMouseAtTop ? "bg-background/40 backdrop-blur-[3px] shadow-[0_0px_7px_0_var(--color-shadow)]" : "bg-transparent"}
         `}>
       <div className="absolute left-4">
         <svg className="signature max-md:hidden" width="90" height="60" viewBox="0 0 334 186" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,7 +115,7 @@ const Navbar = () => {
       </div>
       <ModeToggle />
     </div>
-  )
-}
+  );
+};
 
 export default Navbar;

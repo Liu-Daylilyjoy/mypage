@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@gsap/react": "^2.1.2",
     "@prisma/client": "^6.10.1",
     "@radix-ui/react-collapsible": "^1.1.11",
@@ -27,7 +30,9 @@
     "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
     "highlight.js": "^11.11.1",
+    "husky": "^9.1.7",
     "katex": "^0.16.22",
+    "lint-staged": "^16.1.2",
     "lucide-react": "^0.511.0",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
@@ -61,5 +66,14 @@
   },
   "overrides": {
     "react-is": "^19.0.0"
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "pnpx --no-install commitlint --edit $1"
+    }
   }
 }

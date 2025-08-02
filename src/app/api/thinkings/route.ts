@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const thinkings = await prismadb.thinking.findMany({
       orderBy: {
-        createdAt: 'desc'
+        createdAt: "desc"
       }
     });
 

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState, useEffect, Suspense } from "react";
 import { Plus, Edit, Trash2, Eye, Search } from "lucide-react";
@@ -30,7 +30,7 @@ function BlogsPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const quickCreate = useSearchParams().get('quickCreate') === 'true';
+  const quickCreate = useSearchParams().get("quickCreate") === "true";
 
   useEffect(() => {
     if (quickCreate) {
@@ -42,23 +42,23 @@ function BlogsPage() {
     setDeleting(true);
     try {
       const response = await fetch(`/api/blogs/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
-        mutate('/api/blogs');
-        toast.success('Blog deleted successfully!');
+        mutate("/api/blogs");
+        toast.success("Blog deleted successfully!");
 
-        fetch(`/api/blogs/content/${id}`, { method: 'DELETE' });
+        fetch(`/api/blogs/content/${id}`, { method: "DELETE" });
       } else {
         if (response.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.error('Delete failed');
+          toast.error("Delete failed");
         }
       }
     } catch {
-      toast.error('Delete failed');
+      toast.error("Delete failed");
     } finally {
       setDeleting(false);
       setDeleteId(null);
@@ -69,9 +69,9 @@ function BlogsPage() {
     e.preventDefault();
     setCreating(true);
     try {
-      const response = await fetch('/api/blogs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),
       });
       if (response.ok) {
@@ -79,18 +79,18 @@ function BlogsPage() {
         setShowModal(false);
         setTitle("");
         setDescription("");
-        toast.success('Blog created successfully!');
-        mutate('/api/blogs'); // 列表自动刷新
+        toast.success("Blog created successfully!");
+        mutate("/api/blogs"); // 列表自动刷新
         router.push(`/admin/blogs/edit/${data.id}`);
       } else {
         if (response.status === 401) {
-          router.push('/login');
+          router.push("/login");
         } else {
-          toast.error('Failed to create blog');
+          toast.error("Failed to create blog");
         }
       }
     } catch {
-      toast.error('Failed to create blog');
+      toast.error("Failed to create blog");
     } finally {
       setCreating(false);
     }
@@ -102,12 +102,12 @@ function BlogsPage() {
   );
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     });
   };
 
@@ -164,7 +164,7 @@ function BlogsPage() {
                     className="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
                     disabled={creating || !title || !description}
                   >
-                    {creating ? 'Creating...' : 'Create'}
+                    {creating ? "Creating..." : "Create"}
                   </button>
                 </DialogFooter>
               </form>
@@ -190,7 +190,7 @@ function BlogsPage() {
         {filteredBlogs.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-muted-foreground">
-              {searchTerm ? 'No matching blog found' : 'No blog articles'}
+              {searchTerm ? "No matching blog found" : "No blog articles"}
             </p>
             {!searchTerm && (
               <Link
@@ -301,7 +301,7 @@ function BlogsPage() {
               onClick={() => deleteId && handleDelete(deleteId)}
               disabled={deleting}
             >
-              {deleting ? 'Deleting...' : 'Delete'}
+              {deleting ? "Deleting..." : "Delete"}
             </button>
           </DialogFooter>
         </DialogContent>
@@ -315,5 +315,5 @@ export default function Page() {
     <Suspense fallback={<Maple3D />}>
       <BlogsPage />
     </Suspense>
-  )
+  );
 }

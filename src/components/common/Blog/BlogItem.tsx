@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo } from "react";
 
 export interface BlogItemProps {
   id: string;
@@ -25,7 +25,7 @@ const BlogItem: React.FC<{ blog: BlogItemProps, onClick: () => void }> =
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
 export default memo(BlogItem);
