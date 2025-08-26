@@ -92,13 +92,21 @@ mypage/
 
 ## 项目演示
 [网页进入动画](./readmeVideo/loading.mp4)
+
 [首页竖向+横向滚动,展示个人信息](./readmeVideo/home.mp4)
+
 [首页窗口进度条,可点击跳转](./readmeVideo/home-nav.mp4)
+
 [博客页面,支持多种markdown语法](./readmeVideo/blog.mp4)
+
 [个人思考页面,采用瀑布流布局,自定义图片压缩组件保证页面流畅性](./readmeVideo/thinking.mp4)
+
 [照片页面,设计了无限滑动效果,利用svg优化滑动性能](./readmeVideo/photography.mp4)
+
 [流畅的主题切换动画](./readmeVideo/theme-switch.mp4)
+
 [后台管理页面,利用next-auth鉴权](./readmeVideo/admin.mp4)
+
 [博客,思考,摄影编辑页面,界面美观,博客页面设计了同步滑动效果,实时预览](./readmeVideo/edit.mp4)
 
 ## 🚀 快速开始
